@@ -375,9 +375,12 @@
                         <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - ${dayData.date}</div>
                         <div style="color:#4A90E2;font-size:24px;margin-bottom:12px;">得分: ${dayData.score}/${dayData.total}</div>`;
                     
-                    dayData.questions.forEach(q => {
+                    // 只显示错题，按题号排序
+                    const wrongQs = dayData.questions.filter(q => dayData.wrongQuestions.includes(q.num)).sort((a,b) => a.num - b.num);
+                    
+                    wrongQs.forEach(q => {
                         const userAns = dayData.userAnswers[q.num] || '未答';
-                        const isWrong = dayData.wrongQuestions.includes(q.num);
+                        const isWrong = true;
                         const explanations = {
                             1: "过去进行时: was/were + doing，表示过去某个时刻正在进行的动作",
                             2: "条件句主将从现: if从句用一般现在时，主句用will + 动词原形",
