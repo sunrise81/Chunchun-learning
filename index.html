@@ -6,593 +6,140 @@
     <title>纯纯英语练习</title>
     <style>
         * { box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5;
-        }
+        body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
         .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #333; font-size: 24px; }
-        .date { color: #666; font-size: 14px; }
-        .question-card {
-            background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .question-title { font-weight: bold; margin-bottom: 12px; font-size: 16px; }
-        .options { display: flex; flex-direction: column; gap: 8px; }
-        .option {
-            display: flex; align-items: center; padding: 12px;
-            border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;
-            position: relative;
-        }
-        .option:hover { border-color: #4A90E2; background: #f0f7ff; }
-        .option.selected { border-color: #4A90E2; background: #e8f4ff; }
-        .option.selected::before { content: "✓"; position: absolute; right: 12px; color: #4A90E2; font-weight: bold; }
-        .option .radio {
-            width: 20px; height: 20px; border: 2px solid #999; border-radius: 50%;
-            margin-right: 12px; display: flex; align-items: center; justify-content: center;
-        }
-        .option.selected .radio { border-color: #4A90E2; }
-        .option.selected .radio::after {
-            content: ''; width: 10px; height: 10px; background: #4A90E2; border-radius: 50%;
-        }
-        .option .text { flex: 1; }
-        .input-area { margin-top: 12px; }
-        .input-area textarea {
-            width: 100%; min-height: 80px; padding: 12px;
-            border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; resize: vertical;
-        }
-        .input-area textarea:focus { outline: none; border-color: #4A90E2; }
-        .btn-group { display: flex; gap: 12px; margin-top: 20px; }
-        .submit-btn, .export-btn {
-            flex: 1; padding: 16px; color: white; border: none;
-            border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
-        .submit-btn { background: #4A90E2; }
-        .submit-btn:hover { background: #357ABD; }
-        .export-btn { background: #52c41a; }
-        .export-btn:hover { background: #389e0d; }
-        .lock-btn { flex: 1; padding: 16px; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; background: #fa8c16; }
-        .lock-btn:hover { background: #d46b08; }
-        .option.disabled { opacity: 0.6; pointer-events: none; }
-        .result {
-            display: none; text-align: center; padding: 30px;
-            background: white; border-radius: 12px; margin-top: 20px;
-        }
-        .result.show { display: block; }
-        .score { font-size: 48px; font-weight: bold; color: #4A90E2; }
-        .score-detail { color: #666; margin: 16px 0; }
-        .wrong-list { text-align: left; margin-top: 20px; }
-        .wrong-item {
-            background: #fff5f5; padding: 12px; border-radius: 8px;
-            margin-bottom: 8px; border-left: 4px solid #ff4d4f;
-        }
-        .correct-answer { color: #52c41a; font-weight: bold; }
-        .tab-bar {
-            display: flex; background: white; border-radius: 12px; overflow: hidden;
-            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; background: #f5f5f5; }
+        .tab-container { display: flex; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 16px; }
         .tab.active { background: #4A90E2; color: white; }
-        .export-result {
-            display: none; background: #f0f0f0; padding: 16px; border-radius: 8px;
-            margin-top: 16px; word-break: break-all; font-size: 14px;
-        }
-        .export-result.show { display: block; }
-        .copy-tip {
-            color: #52c41a; font-size: 12px; margin-top: 8px; text-align: center;
-        }
+        .question-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .question-title { font-weight: bold; margin-bottom: 12px; }
+        .options { display: flex; flex-direction: column; gap: 8px; }
+        .option { padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; }
+        .option.selected { border-color: #4A90E2; background: #e8f4ff; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: #4A90E2; color: white; }
+        .btn-green { background: #52c41a; color: white; }
+        .result { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; }
+        .score { font-size: 36px; color: #4A90E2; font-weight: bold; }
+        .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
+        .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
+        .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🦞 纯纯英语练习</h1>
-        <div class="date">Day 1 | 2026年3月20日</div>
+        <p>Day 1 | 2026年3月20日</p>
     </div>
-
-    <div class="tab-bar">
-        <div class="tab active" onclick="showSection('choice', this)">选择题</div>
-        <div class="tab" onclick="showSection('translate', this)">翻译题</div>
-        <div class="tab" onclick="showSection('history', this)">📜 历史</div>
+    
+    <div class="tab-container">
+        <button class="tab active" onclick="showTab('quiz')">选择题</button>
+        <button class="tab" onclick="showTab('history')">📜 历史</button>
     </div>
-
-    <div id="history-section" style="display: none;">
-        <div class="question-card">
-            <div class="question-title">📜 答题历史</div>
-            <div id="history-list">加载中...</div>
-        </div>
+    
+    <div id="quiz-section">
+        <div id="questions"></div>
+        <button class="btn btn-blue" onclick="submitQuiz()">提交答案</button>
     </div>
-
-    <div id="choice-section">
-        <div class="question-card">
-            <div class="question-title">1. —What were you doing at 7:00 yesterday evening?—I ______ TV with my family.</div>
-            <div class="options">
-                <div class="option" data-q="1" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. watch</div>
-                </div>
-                <div class="option" data-q="1" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. watched</div>
-                </div>
-                <div class="option" data-q="1" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. was watching</div>
-                </div>
-                <div class="option" data-q="1" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. am watching</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="question-card">
-            <div class="question-title">2. If it ______ tomorrow, we will stay at home.</div>
-            <div class="options">
-                <div class="option" data-q="2" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. rain</div>
-                </div>
-                <div class="option" data-q="2" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. rains</div>
-                </div>
-                <div class="option" data-q="2" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. rained</div>
-                </div>
-                <div class="option" data-q="2" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. will rain</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="question-card">
-            <div class="question-title">The Summer Camp（完形填空）</div>
-            <div style="color: #666; font-size: 14px; margin-bottom: 12px;">Last summer, Tom (5)______ to a summer camp. He (6)______ there for two weeks. Every day, he (7)______ sports and (8)______ English. He (9)______ many new friends. He (10)______ the camp very much.</div>
-            
-            <div class="question-title" style="font-size: 14px;">5.</div>
-            <div class="options">
-                <div class="option" data-q="5" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. go</div>
-                </div>
-                <div class="option" data-q="5" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. goes</div>
-                </div>
-                <div class="option" data-q="5" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. went</div>
-                </div>
-                <div class="option" data-q="5" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. going</div>
-                </div>
-            </div>
-
-            <div class="question-title" style="font-size: 14px; margin-top: 16px;">6.</div>
-            <div class="options">
-                <div class="option" data-q="6" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. stay</div>
-                </div>
-                <div class="option" data-q="6" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. stays</div>
-                </div>
-                <div class="option" data-q="6" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. stayed</div>
-                </div>
-                <div class="option" data-q="6" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. staying</div>
-                </div>
-            </div>
-
-            <div class="question-title" style="font-size: 14px; margin-top: 16px;">7.</div>
-            <div class="options">
-                <div class="option" data-q="7" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. play</div>
-                </div>
-                <div class="option" data-q="7" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. plays</div>
-                </div>
-                <div class="option" data-q="7" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. played</div>
-                </div>
-                <div class="option" data-q="7" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. playing</div>
-                </div>
-            </div>
-
-            <div class="question-title" style="font-size: 14px; margin-top: 16px;">8.</div>
-            <div class="options">
-                <div class="option" data-q="8" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. learn</div>
-                </div>
-                <div class="option" data-q="8" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. learns</div>
-                </div>
-                <div class="option" data-q="8" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. learned</div>
-                </div>
-                <div class="option" data-q="8" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. learning</div>
-                </div>
-            </div>
-
-            <div class="question-title" style="font-size: 14px; margin-top: 16px;">9.</div>
-            <div class="options">
-                <div class="option" data-q="9" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. make</div>
-                </div>
-                <div class="option" data-q="9" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. makes</div>
-                </div>
-                <div class="option" data-q="9" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. made</div>
-                </div>
-                <div class="option" data-q="9" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. making</div>
-                </div>
-            </div>
-
-            <div class="question-title" style="font-size: 14px; margin-top: 16px;">10.</div>
-            <div class="options">
-                <div class="option" data-q="10" data-a="A" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">A. enjoy</div>
-                </div>
-                <div class="option" data-q="10" data-a="B" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">B. enjoys</div>
-                </div>
-                <div class="option" data-q="10" data-a="C" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">C. enjoyed</div>
-                </div>
-                <div class="option" data-q="10" data-a="D" onclick="selectOption(this)">
-                    <div class="radio"></div><div class="text">D. enjoying</div>
-                </div>
-            </div>
-        </div>
+    
+    <div id="history-section" style="display:none;">
+        <div id="history-list"></div>
     </div>
-
-    <div id="translate-section" style="display: none;">
-        <div class="question-card">
-            <div class="question-title">3. 明天如果不下雨，我们就去公园。</div>
-            <div class="input-area">
-                <textarea id="answer3" placeholder="请写出答案..."></textarea>
-            </div>
-        </div>
-
-        <div class="question-card">
-            <div class="question-title">4. 不要在墙上乱画。</div>
-            <div class="input-area">
-                <textarea id="answer4" placeholder="请写出答案..."></textarea>
-            </div>
-        </div>
-    </div>
-
-    <div class="btn-group">
-        <button class="submit-btn" onclick="submitAnswers()">查看得分</button>
-        <button class="export-btn" onclick="exportAnswers()">📋 一键导出</button>
-        <button class="lock-btn" onclick="lockAnswers()">🔒 确认答案</button>
-    </div>
-    <div id="lockMsg" style="display:none; text-align:center; color:#52c41a; margin-top:10px; font-weight:bold;">🔒 答案已锁定，无法修改</div>
-
-    <div class="export-result" id="exportResult">
-        <div style="font-weight: bold; margin-bottom: 8px;">👇 复制以下内容发给小虾老师：</div>
-        <div id="exportText"></div>
-        <div class="copy-tip">↑ 点击上方文本可复制</div>
-    </div>
-
-    <div class="result" id="result">
-        <div class="score" id="score">0分</div>
-        <div class="score-detail" id="scoreDetail"></div>
-        <div class="wrong-list" id="wrongList"></div>
-    </div>
-
+    
     <script>
-        const correctAnswers = {
-            '1': 'C', '2': 'B', '5': 'C', '6': 'C', '7': 'C', '8': 'C', '9': 'C', '10': 'C'
-        };
-        
-        let userAnswers = {};
-
-        function selectOption(el) {
-            const q = el.dataset.q;
-            const a = el.dataset.a;
-            document.querySelectorAll(`.option[data-q="${q}"]`).forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-            userAnswers[q] = a;
-        }
-        
-        // 移动端触摸支持 - 防误触
-        document.addEventListener('DOMContentLoaded', function() {
-            var touchStartX = 0;
-            var touchStartY = 0;
-            
-            document.querySelectorAll('.option').forEach(function(el) {
-                el.addEventListener('touchstart', function(e) {
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                }, {passive: true});
-                el.addEventListener('touchend', function(e) {
-                    const touchEndX = e.changedTouches[0].clientX;
-                    const touchEndY = e.changedTouches[0].clientY;
-                    const diffX = Math.abs(touchEndX - touchStartX);
-                    const diffY = Math.abs(touchEndY - touchStartY);
-                    // 只有移动距离很小才算点击，防止滑动误触
-                    if (diffX < 10 && diffY < 10) {
-                        e.preventDefault();
-                        selectOption(this);
-                    }
-                }, {passive: false});
-            });
-            document.querySelectorAll('.tab').forEach(function(el) {
-                el.addEventListener('touchend', function(e) {
-                    const touchEndX = e.changedTouches[0].clientX;
-                    const touchEndY = e.changedTouches[0].clientY;
-                    const diffX = Math.abs(touchEndX - touchStartX);
-                    const diffY = Math.abs(touchEndY - touchStartY);
-                    if (diffX < 10 && diffY < 10) {
-                        e.preventDefault();
-                        const section = this.textContent.includes('翻译') ? 'translate' : 'choice';
-                        showSection(section, this);
-                    }
-                }, {passive: false});
-            });
-        });
-
-        function showSection(section, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            if (el) el.classList.add('active');
-            document.getElementById('choice-section').style.display = section === 'choice' ? 'block' : 'none';
-            document.getElementById('translate-section').style.display = section === 'translate' ? 'block' : 'none';
-            document.getElementById('history-section').style.display = section === 'history' ? 'block' : 'none';
-            if (section === 'history') {
-                loadHistory();
-            }
-        }
-        
-        // 嵌入所有历史数据 - 放在前面
-        const historyData = [
-            {day:1,attempt:1,date:"2026-03-20",score:8,total:44,wrongCount:8,wrongList:["第1题-过去进行时","第2题-条件句主将从现","第3题-翻译题未答","第4题-翻译题未答","第5题-过去式went","第7题-过去式played","第9题-过去式made","第10题-第三人称单数"]},
-            {day:1,attempt:2,date:"2026-03-20",score:12,total:44,wrongCount:6,wrongList:["第1题","第3题","第4题","第7题","第8题","第10题"]},
-            {day:1,attempt:3,date:"2026-03-20",score:20,total:44,wrongCount:5,wrongList:["第1题","第3题","第4题","第7题","第8题"]},
-            {day:1,attempt:4,date:"2026-03-20",score:28,total:44,wrongCount:3,wrongList:["第1题","第3题","第4题"]}
+        // 题目数据
+        const questions = [
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park."},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall."},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
-        // 简化的题目数据
-        const questionsData = {
-            1: [
-                {num:1,type:"选择",content:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",options:["A. watch","B. watched","C. was watching","D. am watching"],answer:"C"},
-                {num:2,type:"选择",content:"If it ______ tomorrow, we will stay at home.",options:["A. rain","B. rains","C. rained","D. will rain"],answer:"B"},
-                {num:3,type:"翻译",content:"明天如果不下雨，我们就去公园。",answer:"If it doesn't rain tomorrow, we will go to the park."},
-                {num:4,type:"翻译",content:"不要在墙上乱画。",answer:"Don't draw on the wall."},
-                {num:5,type:"选择",content:"Last summer, Tom ______ to a summer camp.",options:["A. go","B. goes","C. went","D. going"],answer:"C"},
-                {num:6,type:"选择",content:"He ______ there for two weeks.",options:["A. stay","B. stays","C. stayed","D. staying"],answer:"C"},
-                {num:7,type:"选择",content:"Every day, he ______ sports.",options:["A. play","B. plays","C. played","D. playing"],answer:"C"},
-                {num:8,type:"选择",content:"He ______ English every day.",options:["A. learn","B. learns","C. learned","D. learning"],answer:"B"},
-                {num:9,type:"选择",content:"She ______ many new friends.",options:["A. make","B. makes","C. made","D. making"],answer:"C"},
-                {num:10,type:"选择",content:"He ______ the camp very much.",options:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],answer:"B"}
-            ]
-        };
+        // 历史数据
+        const historyData = [
+            {day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
+            {day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+            {day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
+            {day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+        ];
         
-        function loadHistory() {
-            // 使用嵌入的历史数据
-            const list = document.getElementById('history-list');
-            if (!historyData || historyData.length === 0) {
-                list.innerHTML = '<div style="text-align:center;color:#666;">暂无历史记录</div>';
-                return;
-            }
-            let html = '';
-            [...historyData].reverse().forEach((item, idx) => {
-                        html += `<div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;border:2px solid #4A90E2;" onclick="showDayDetail(${item.day}, ${idx})" ontouchstart="showDayDetail(${item.day}, ${idx})">
-                            <div style="font-weight:bold;">Day ${item.day} - 第${idx+1}次答题 - ${item.date}</div>
-                            <div style="color:#4A90E2;font-size:20px;font-weight:bold;">得分: ${item.score}/${item.total}分</div>
-                            <div style="color:#666;font-size:12px;">错题: ${item.wrongCount}道</div>
-                            <div style="color:#4A90E2;font-size:14px;margin-top:8px;">👉 点击查看错题详情</div>
-                        </div>`;
-                    });
-                    list.innerHTML = html;
-        }
+        const userAnswers = {};
         
-        function showDayDetail(day, index) {
-            const dayData = historyData[index];
-            if (!dayData) {
-                document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">未找到数据</div>';
-                return;
-            }
-                    
-                    // 使用嵌入的题目数据
-                    const questions = questionsData[day] || questionsData[1];
-                    
-                    let html = `<div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:12px;">
-                        <button onclick="loadHistory()" style="background:#666;color:white;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;">← 返回历史</button>
-                        <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - 第${(index||0)+1}次答题 - ${dayData.date}</div>
-                        <div style="color:#4A90E2;font-size:24px;margin-bottom:12px;">得分: ${dayData.score}/${dayData.total}</div>
-                        <div style="color:#ff4d4f;font-size:14px;margin-bottom:12px;">错题数: ${dayData.wrongCount}道</div>`;
-                    
-                    // 只显示错题，按题号排序
-                    const wrongNums = dayData.wrongList.map(w => parseInt(w.replace(/[^0-9]/g,'')) || 0).filter(n => n > 0);
-                    const wrongQs = questions.filter(q => wrongNums.includes(q.num)).sort((a,b) => a.num - b.num);
-                    
-                    wrongQs.forEach(q => {
-                        const userAns = dayData.userAnswers[q.num] || '未答';
-                        const isWrong = true;
-                        const explanations = {
-                            1: "过去进行时: was/were + doing，表示过去某个时刻正在进行的动作",
-                            2: "条件句主将从现: if从句用一般现在时，主句用will + 动词原形",
-                            3: "翻译题: 明天如果不下雨 = If it doesn't rain, we will go",
-                            4: "介词搭配: 不要在墙上画 = Don't draw ON the wall (不是in)",
-                            5: "过去式: go的过去式是went",
-                            7: "过去式: play的过去式是played",
-                            8: "第三人称单数: he learns English (要加s)",
-                            9: "过去式: make的过去式是made",
-                            10: "第三人称单数: he enjoys (要加s)"
-                        };
-                        const correctAns = q.answer;
-                        html += `<div style="background:${isWrong ? '#fff5f5' : '#f5fff5'};padding:12px;border-radius:8px;margin-bottom:12px;border-left:4px solid ${isWrong ? '#ff4d4f' : '#52c41a'};">
-                            <div style="font-weight:bold;margin-bottom:8px;font-size:15px;">
-                                ${q.num}. ${q.content}
-                            </div>
-                            ${q.options ? `<div style="color:#666;font-size:12px;margin:8px 0;padding:6px;background:#f5f5f5;border-radius:4px;">${q.options.join(' ')}</div>` : ''}
-                            <div style="margin-top:8px;padding:8px;background:white;border-radius:6px;">
-                                <div><span style="color:${isWrong ? '#ff4d4f' : '#52c41a'};font-weight:bold;">你的答案:</span> ${userAns || '未答'} ${isWrong ? '❌' : '✅'}</div>
-                                ${isWrong ? `<div style="margin-top:4px;"><span style="color:#52c41a;font-weight:bold;">正确答案:</span> <span style="color:#52c41a;font-weight:bold;font-size:16px;">${correctAns}</span></div>` : ''}
-                            </div>
-                            ${isWrong && explanations[q.num] ? `<div style="margin-top:8px;padding:10px;background:#fffbe6;border-radius:6px;font-size:13px;color:#fa8c16;border:1px solid #ffe58f;">💡 ${explanations[q.num]}</div>` : ''}
-                        </div>`;
-                    });
-                    
-                    // 详细点评
-                    const wrongCount = dayData.wrongQuestions.length;
-                    const topics = {
-                        "过去进行时": "was/were + doing 表示过去正在进行的动作",
-                        "条件句主将从现": "if从句用现在时，主句用将来时",
-                        "动词过去式": "不规则动词要单独记忆",
-                        "第三人称单数": "he/she/it 后动词要加 s/es",
-                        "介词搭配": "在墙上画 = draw on the wall"
-                    };
-                    let reviewTips = "<ul style='margin:8px 0;padding-left:20px;'>";
-                    dayData.wrongList.forEach(w => {
-                        for (const [topic, tip] of Object.entries(topics)) {
-                            if (w.includes(topic) || w.includes("第"+w+"题")) {
-                                reviewTips += `<li style='margin:4px 0;'>${topic}: ${tip}</li>`;
-                            }
-                        }
-                    });
-                    reviewTips += "</ul>";
-                    
-                    html += `<div style="margin-top:16px;padding:16px;background:linear-gradient(135deg,#e8f4ff,#f0f5ff);border-radius:12px;">
-                        <div style="font-weight:bold;font-size:16px;margin-bottom:8px;">📚 老师点评</div>
-                        <div style="color:#52c41a;font-size:18px;margin-bottom:8px;">得分: ${dayData.score}/${dayData.total}</div>
-                        <div style="color:#666;margin-bottom:12px;">错 ${wrongCount} 题，继续加油！💪</div>
-                        <div style="background:white;padding:12px;border-radius:8px;">
-                            <div style="font-weight:bold;margin-bottom:8px;">需要复习的知识点:</div>
-                            ${reviewTips}
-                        </div>
-                    </div>`;
-                    
-                    html += `<button onclick="loadHistory()" style="margin-top:12px;padding:10px;background:#4A90E2;color:white;border:none;border-radius:8px;width:100%;">返回列表</button></div>`;
-                    
-                    document.getElementById('history-list').innerHTML = html;
-        }
-
-        function calculateScore() {
-            let score = 0;
-            let wrongList = [];
-            
-            for (let q in correctAnswers) {
-                if (userAnswers[q] === correctAnswers[q]) {
-                    score += 4;
-                } else {
-                    wrongList.push({num: q, your: userAnswers[q] || '未答', correct: correctAnswers[q]});
-                }
-            }
-
-            const ans3 = document.getElementById('answer3').value.toLowerCase();
-            const ans4 = document.getElementById('answer4').value.toLowerCase();
-            
-            if (ans3.includes("doesn't") && ans3.includes("rain")) score += 6;
-            else wrongList.push({num: '3', your: ans3 || '未答', correct: "If it doesn't rain, we will go"});
-            
-            if ((ans4.includes("don't") || ans4.includes("dont")) && ans4.includes("draw")) score += 6;
-            else wrongList.push({num: '4', your: ans4 || '未答', correct: "Don't draw on the wall"});
-
-            return { score, wrongList, total: 44 };
-        }
-
-        let answersLocked = false;
-
-        function lockAnswers() {
-            answersLocked = true;
-            document.querySelectorAll('.option').forEach(function(el) {
-                el.classList.add('disabled');
-            });
-            document.querySelectorAll('textarea').forEach(function(el) {
-                el.disabled = true;
-            });
-            document.getElementById('lockMsg').style.display = 'block';
-            // 隐藏锁定按钮
-            document.querySelector('.lock-btn').style.display = 'none';
-        }
-
-        function submitAnswers() {
-            const { score, wrongList, total } = calculateScore();
-            const resultDiv = document.getElementById('result');
-            document.getElementById('score').textContent = score + '分';
-            document.getElementById('scoreDetail').textContent = `共10题，得 ${score}/${total} 分`;
-            
-            if (wrongList.length === 0) {
-                document.getElementById('wrongList').innerHTML = '<div style="color: #52c41a; text-align: center;">🎉 全部正确！太棒了！</div>';
-            } else {
-                let html = '<div style="font-weight: bold; margin-bottom: 12px;">📝 错题解析：</div>';
-                wrongList.forEach(w => {
-                    html += `<div class="wrong-item"><strong>第${w.num}题</strong><br>你的答案：${w.your}<br><span class="correct-answer">正确答案：${w.correct}</span></div>`;
-                });
-                document.getElementById('wrongList').innerHTML = html;
-            }
-            
-            resultDiv.classList.add('show');
-            resultDiv.scrollIntoView({behavior: 'smooth'});
-        }
-
-        function exportAnswers() {
-            const { score, total } = calculateScore();
-            const ans3 = document.getElementById('answer3').value || '未答';
-            const ans4 = document.getElementById('answer4').value || '未答';
-            
-            let exportText = `【纯纯英语 Day 1 答题结果】
-
-日期：2026年3月20日
-
-1. ${userAnswers['1'] || '未答'}
-2. ${userAnswers['2'] || '未答'}
-3. ${ans3}
-4. ${ans4}
-5. ${userAnswers['5'] || '未答'}
-6. ${userAnswers['6'] || '未答'}
-7. ${userAnswers['7'] || '未答'}
-8. ${userAnswers['8'] || '未答'}
-9. ${userAnswers['9'] || '未答'}
-10. ${userAnswers['10'] || '未答'}
-
-得分：${score}/${total}分`;
-
-            document.getElementById('exportText').textContent = exportText;
-            document.getElementById('exportResult').classList.add('show');
-            document.getElementById('exportResult').scrollIntoView({behavior: 'smooth'});
-            
-            // 自动复制
-            navigator.clipboard.writeText(exportText).then(() => {
-                document.querySelector('.copy-tip').textContent = '✅ 已自动复制并提交！小虾老师会自动批改~';
-            }).catch(() => {
-                document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
-            });
-            
-            // 方法：用图片URL携带数据（绕过CORS）
-            // 数据编码到URL参数中
-            const submitUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + 
-                encodeURIComponent(new Date().toISOString().split('T')[0]) +
-                '&day=1&score=' + score + '&total=' + total +
-                '&answers=' + encodeURIComponent(exportText.substring(0, 500));
-            
-            // 创建隐藏图片来发送数据
-            const img = document.createElement('img');
-            img.src = submitUrl;
-            img.style.display = 'none';
-            img.onload = function() {
-                console.log('提交成功');
-            };
-            img.onerror = function() {
-                console.log('提交失败（正常，webhook.site只支持POST）');
-            };
-            document.body.appendChild(img);
-            
-            // Google Form - 预填URL
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/viewform?usp=pp_url' +
-                '&entry.2006960552=' + encodeURIComponent(new Date().toISOString().split('T')[0]) +
-                '&entry.1222766399=' + encodeURIComponent(exportText.substring(0, 1000)) +
-                '&entry.1205699284=' + encodeURIComponent(score + '/' + total);
-            
-            // 显示发送界面
-            const tipEl = document.querySelector('.copy-tip');
-            tipEl.innerHTML = `
-                <div style="text-align:center;padding:16px;">
-                    <div style="font-size:18px;color:#52c41a;margin-bottom:12px;">✅ 答案已准备好！</div>
-                    <a href="${formUrl}" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#4A90E2,#1890ff);color:white;text-decoration:none;border-radius:12px;font-size:16px;box-sizing:border-box;">
-                        📝 提交到Google表单
-                    </a>
-                    <div style="font-size:12px;color:#888;margin-top:8px;">点击自动填入答案，提交即可</div>
+        function renderQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = questions.map(q => `
+                <div class="question-card">
+                    <div class="question-title">${q.n}. ${q.c}</div>
+                    ${q.o ? `<div class="options">${q.o.map(o => `<div class="option" onclick="selectAnswer(${q.n},'${o.charAt(0)}',this)">${o}</div>`).join('')}</div>` : `<input type="text" id="a${q.n}" placeholder="请输入答案" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;">`}
                 </div>
+            `).join('');
+        }
+        
+        function selectAnswer(n, ans, el) {
+            userAnswers[n] = ans;
+            el.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+        
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+            document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
+            if (tab === 'history') renderHistory();
+        }
+        
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = historyData.map((h, i) => `
+                <div class="history-item" onclick="showDetail(${i})">
+                    <div><b>第${i+1}次答题</b></div>
+                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/44</div>
+                    <div>错题: ${h.wrongCount}道</div>
+                </div>
+            `).join('');
+        }
+        
+        function showDetail(idx) {
+            const h = historyData[idx];
+            const list = document.getElementById('history-list');
+            const wrongQs = questions.filter(q => h.wrongList.includes(q.n));
+            list.innerHTML = `
+                <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
+                ${wrongQs.map(q => `
+                    <div class="detail-item">
+                        <div><b>${q.n}. ${q.c}</b></div>
+                        ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
+                        <div style="color:#ff4d4f;">你的答案: ${userAnswers[q.n] || '未答'}</div>
+                        <div style="color:#52c41a;">正确答案: ${q.a}</div>
+                    </div>
+                `).join('')}
             `;
         }
+        
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach(q => {
+                if (q.o) {
+                    const ans = userAnswers[q.n];
+                    if (ans === q.a) score += 4;
+                } else {
+                    const ans = document.getElementById('a' + q.n).value.toLowerCase();
+                    if (ans.includes("doesn't") || ans.includes("rain")) score += 6;
+                    if ((ans.includes("don't") || ans.includes("dont")) && ans.includes("draw")) score += 6;
+                }
+            });
+            alert('得分: ' + score + '/44');
+        }
+        
+        renderQuestions();
     </script>
 </body>
 </html>
