@@ -51,6 +51,9 @@
         .submit-btn:hover { background: #357ABD; }
         .export-btn { background: #52c41a; }
         .export-btn:hover { background: #389e0d; }
+        .lock-btn { flex: 1; padding: 16px; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; background: #fa8c16; }
+        .lock-btn:hover { background: #d46b08; }
+        .option.disabled { opacity: 0.6; pointer-events: none; }
         .result {
             display: none; text-align: center; padding: 30px;
             background: white; border-radius: 12px; margin-top: 20px;
@@ -249,7 +252,9 @@
     <div class="btn-group">
         <button class="submit-btn" onclick="submitAnswers()">查看得分</button>
         <button class="export-btn" onclick="exportAnswers()">📋 一键导出</button>
+        <button class="lock-btn" onclick="lockAnswers()">🔒 确认答案</button>
     </div>
+    <div id="lockMsg" style="display:none; text-align:center; color:#52c41a; margin-top:10px; font-weight:bold;">🔒 答案已锁定，无法修改</div>
 
     <div class="export-result" id="exportResult">
         <div style="font-weight: bold; margin-bottom: 8px;">👇 复制以下内容发给小虾老师：</div>
@@ -344,6 +349,21 @@
             else wrongList.push({num: '4', your: ans4 || '未答', correct: "Don't draw on the wall"});
 
             return { score, wrongList, total: 44 };
+        }
+
+        let answersLocked = false;
+
+        function lockAnswers() {
+            answersLocked = true;
+            document.querySelectorAll('.option').forEach(function(el) {
+                el.classList.add('disabled');
+            });
+            document.querySelectorAll('textarea').forEach(function(el) {
+                el.disabled = true;
+            });
+            document.getElementById('lockMsg').style.display = 'block';
+            // 隐藏锁定按钮
+            document.querySelector('.lock-btn').style.display = 'none';
         }
 
         function submitAnswers() {
