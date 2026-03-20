@@ -145,7 +145,231 @@
                     <div class="radio"></div><div class="text">D. going</div>
                 </div>
             </div>
+
+            <div class="question-title" style="font-size: 14px; margin-top: 16px;">6.</div>
+            <div class="options">
+                <div class="option" data-q="6" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. stay</div>
+                </div>
+                <div class="option" data-q="6" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. stays</div>
+                </div>
+                <div class="option" data-q="6" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. stayed</div>
+                </div>
+                <div class="option" data-q="6" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. staying</div>
+                </div>
+            </div>
+
+            <div class="question-title" style="font-size: 14px; margin-top: 16px;">7.</div>
+            <div class="options">
+                <div class="option" data-q="7" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. play</div>
+                </div>
+                <div class="option" data-q="7" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. plays</div>
+                </div>
+                <div class="option" data-q="7" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. played</div>
+                </div>
+                <div class="option" data-q="7" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. playing</div>
+                </div>
+            </div>
+
+            <div class="question-title" style="font-size: 14px; margin-top: 16px;">8.</div>
+            <div class="options">
+                <div class="option" data-q="8" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. learn</div>
+                </div>
+                <div class="option" data-q="8" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. learns</div>
+                </div>
+                <div class="option" data-q="8" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. learned</div>
+                </div>
+                <div class="option" data-q="8" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. learning</div>
+                </div>
+            </div>
+
+            <div class="question-title" style="font-size: 14px; margin-top: 16px;">9.</div>
+            <div class="options">
+                <div class="option" data-q="9" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. make</div>
+                </div>
+                <div class="option" data-q="9" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. makes</div>
+                </div>
+                <div class="option" data-q="9" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. made</div>
+                </div>
+                <div class="option" data-q="9" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. making</div>
+                </div>
+            </div>
+
+            <div class="question-title" style="font-size: 14px; margin-top: 16px;">10.</div>
+            <div class="options">
+                <div class="option" data-q="10" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. enjoy</div>
+                </div>
+                <div class="option" data-q="10" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. enjoys</div>
+                </div>
+                <div class="option" data-q="10" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. enjoyed</div>
+                </div>
+                <div class="option" data-q="10" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. enjoying</div>
+                </div>
+            </div>
         </div>
     </div>
-  </body>
+
+    <div id="translate-section" style="display: none;">
+        <div class="question-card">
+            <div class="question-title">3. 明天如果不下雨，我们就去公园。</div>
+            <div class="input-area">
+                <textarea id="answer3" placeholder="请写出答案..."></textarea>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-title">4. 不要在墙上乱画。</div>
+            <div class="input-area">
+                <textarea id="answer4" placeholder="请写出答案..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="submit-btn" onclick="submitAnswers()">查看得分</button>
+        <button class="export-btn" onclick="exportAnswers()">📋 一键导出</button>
+    </div>
+
+    <div class="export-result" id="exportResult">
+        <div style="font-weight: bold; margin-bottom: 8px;">👇 复制以下内容发给小虾老师：</div>
+        <div id="exportText"></div>
+        <div class="copy-tip">↑ 点击上方文本可复制</div>
+    </div>
+
+    <div class="result" id="result">
+        <div class="score" id="score">0分</div>
+        <div class="score-detail" id="scoreDetail"></div>
+        <div class="wrong-list" id="wrongList"></div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            '1': 'C', '2': 'B', '5': 'C', '6': 'C', '7': 'C', '8': 'C', '9': 'C', '10': 'C'
+        };
+        
+        let userAnswers = {};
+
+        function selectOption(el) {
+            const q = el.dataset.q;
+            const a = el.dataset.a;
+            document.querySelectorAll(`.option[data-q="${q}"]`).forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            userAnswers[q] = a;
+        }
+        
+        // 移动端触摸支持
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.option').forEach(function(el) {
+                el.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    selectOption(this);
+                }, {passive: false});
+            });
+        });
+
+        function showSection(section) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('choice-section').style.display = section === 'choice' ? 'block' : 'none';
+            document.getElementById('translate-section').style.display = section === 'translate' ? 'block' : 'none';
+        }
+
+        function calculateScore() {
+            let score = 0;
+            let wrongList = [];
+            
+            for (let q in correctAnswers) {
+                if (userAnswers[q] === correctAnswers[q]) {
+                    score += 4;
+                } else {
+                    wrongList.push({num: q, your: userAnswers[q] || '未答', correct: correctAnswers[q]});
+                }
+            }
+
+            const ans3 = document.getElementById('answer3').value.toLowerCase();
+            const ans4 = document.getElementById('answer4').value.toLowerCase();
+            
+            if (ans3.includes("doesn't") && ans3.includes("rain")) score += 6;
+            else wrongList.push({num: '3', your: ans3 || '未答', correct: "If it doesn't rain, we will go"});
+            
+            if ((ans4.includes("don't") || ans4.includes("dont")) && ans4.includes("draw")) score += 6;
+            else wrongList.push({num: '4', your: ans4 || '未答', correct: "Don't draw on the wall"});
+
+            return { score, wrongList, total: 44 };
+        }
+
+        function submitAnswers() {
+            const { score, wrongList, total } = calculateScore();
+            const resultDiv = document.getElementById('result');
+            document.getElementById('score').textContent = score + '分';
+            document.getElementById('scoreDetail').textContent = `共10题，得 ${score}/${total} 分`;
+            
+            if (wrongList.length === 0) {
+                document.getElementById('wrongList').innerHTML = '<div style="color: #52c41a; text-align: center;">🎉 全部正确！太棒了！</div>';
+            } else {
+                let html = '<div style="font-weight: bold; margin-bottom: 12px;">📝 错题解析：</div>';
+                wrongList.forEach(w => {
+                    html += `<div class="wrong-item"><strong>第${w.num}题</strong><br>你的答案：${w.your}<br><span class="correct-answer">正确答案：${w.correct}</span></div>`;
+                });
+                document.getElementById('wrongList').innerHTML = html;
+            }
+            
+            resultDiv.classList.add('show');
+            resultDiv.scrollIntoView({behavior: 'smooth'});
+        }
+
+        function exportAnswers() {
+            const { score, total } = calculateScore();
+            const ans3 = document.getElementById('answer3').value || '未答';
+            const ans4 = document.getElementById('answer4').value || '未答';
+            
+            let exportText = `【纯纯英语 Day 1 答题结果】
+
+日期：2026年3月20日
+
+1. ${userAnswers['1'] || '未答'}
+2. ${userAnswers['2'] || '未答'}
+3. ${ans3}
+4. ${ans4}
+5. ${userAnswers['5'] || '未答'}
+6. ${userAnswers['6'] || '未答'}
+7. ${userAnswers['7'] || '未答'}
+8. ${userAnswers['8'] || '未答'}
+9. ${userAnswers['9'] || '未答'}
+10. ${userAnswers['10'] || '未答'}
+
+得分：${score}/${total}分`;
+
+            document.getElementById('exportText').textContent = exportText;
+            document.getElementById('exportResult').classList.add('show');
+            document.getElementById('exportResult').scrollIntoView({behavior: 'smooth'});
+            
+            // 自动复制
+            navigator.clipboard.writeText(exportText).then(() => {
+                document.querySelector('.copy-tip').textContent = '✅ 已自动复制！直接发给小虾老师~';
+            }).catch(() => {
+                document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
+            });
+        }
+    </script>
+</body>
 </html>
