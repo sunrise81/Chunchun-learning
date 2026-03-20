@@ -8,7 +8,7 @@
         * { box-sizing: border-box; }
         body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
         .header { text-align: center; margin-bottom: 20px; }
-        .tab-container { display: flex; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab-container { display: flex; margin-bottom: 20px; }
         .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 16px; }
         .tab.active { background: #4A90E2; color: white; }
         .question-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -21,7 +21,6 @@
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
         .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
-        .exp-box { background: #fffbe6; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; white-space: pre-wrap; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -46,16 +45,16 @@
     
     <script>
         const questions = [
-            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"✅ 选C. was watching\n\n📝 详解：题目问"昨晚7点你在做什么？"，时间状语是"at 7:00 yesterday evening"，表示过去某个具体时间点正在进行的动作，要用过去进行时。\n\n🔑 公式：was/were + 动词ing形式\n- I → was watching"},
-            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"✅ 选B. rains\n\n📝 详解：这是条件句，主将从现。\n- if从句用一般现在时\n- 主句用will + 动词原形"},
-            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"✅ 参考答案：If it doesn't rain tomorrow, we will go to the park.\n\n📝 翻译要点：\n1. "如果不下雨" → if it doesn't rain\n2. "就去公园" → we will go to the park"},
-            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"✅ 参考答案：Don't draw on the wall.\n\n📝 翻译要点：\n1. "不要" → Don't\n2. "在墙上画" → draw on the wall（介词用on）"},
-            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"✅ 选C. went\n\n📝 详解：时间状语是"Last summer"，要用过去式。\n🔑 go的过去式是不规则变化went"},
-            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"✅ 选C. stayed\n\n📝 详解：用过去式，stay → stayed"},
-            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"✅ 选C. played\n\n📝 详解：用过去式，play → played"},
-            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"✅ 选B. learns\n\n📝 详解：主语是He（第三人称单数），动词要加s。\n🔑 learn → learns"},
-            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"✅ 选C. made\n\n📝 详解：用过去式，make → made"},
-            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"✅ 选B. enjoys\n\n📝 详解：第三人称单数，enjoy → enjoys"}
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park."},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall."},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
         const historyData = [
@@ -114,9 +113,8 @@
                     <div class="detail-item">
                         <div><b>${q.n}. ${q.c}</b></div>
                         ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${userAnswers[q.n] || '未答'}</div>
+                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: 未答</div>
                         <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
-                        <div class="exp-box">${q.exp}</div>
                     </div>
                 `).join('')}
             `;
