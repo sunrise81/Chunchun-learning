@@ -74,19 +74,51 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
-        // 历史数据
+        // 历史数据 - 优先从GitHub加载，否则用本地存储
         let historyData = JSON.parse(localStorage.getItem('chunchun_quiz_history') || '[]');
-        if (historyData.length === 0) {
-            historyData = [
-                {type:'quiz',day:1,score:26,wrongCount:4,wrongList:[2,3,4],date:'2026/3/20',time:'21:33'}
-            ];
-        }
         let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
-        if (clozeHistory.length === 0) {
-            clozeHistory = [
-                {type:'cloze',day:1,score:20,wrongCount:4,wrongList:[2,6,7,9],date:'2026/3/20',time:'21:50'}
-            ];
+        
+        // 从GitHub加载历史记录
+        async function loadHistoryFromGitHub() {
+            try {
+                const resp = await fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json');
+                const data = await resp.json();
+                if (data.quiz && data.quiz.length > 0) {
+                    historyData = data.quiz.map(q => ({
+                        type: 'quiz',
+                        day: 1,
+                        score: q.score,
+                        wrongCount: Object.keys(q.analysis || {}).length,
+                        date: q.date,
+                        time: '21:33'
+                    }));
+                }
+                if (data.cloze && data.cloze.length > 0) {
+                    clozeHistory = data.cloze.map(c => ({
+                        type: 'cloze',
+                        day: 1,
+                        score: c.score,
+                        wrongCount: 9 - (c.score / 4),
+                        date: c.date,
+                        time: '21:50'
+                    }));
+                }
+            } catch(e) {
+                console.log('从GitHub加载历史失败，使用本地数据');
+            }
         }
+        
+        // 页面加载时自动从GitHub同步历史
+        let historyLoaded = false;
+        
+        async function ensureHistoryLoaded() {
+            if (!historyLoaded) {
+                await loadHistoryFromGitHub();
+                historyLoaded = true;
+            }
+        }
+        
+        loadHistoryFromGitHub();
         
         const userAnswers = {};
         
@@ -125,7 +157,8 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 .catch(() => null);
         }
         
-        function renderHistory() {
+        async function renderHistory() {
+            await ensureHistoryLoaded();
             const list = document.getElementById('history-list');
             const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
             if (allHistory.length === 0) {
