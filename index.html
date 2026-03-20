@@ -351,10 +351,11 @@
                     }
                     let html = '';
                     data.reverse().forEach((item, idx) => {
-                        html += `<div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;cursor:pointer;" onclick="showDayDetail(${item.day}, ${idx})">
+                        html += `<div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;cursor:pointer;border:2px solid #4A90E2;" onclick="showDayDetail(${item.day}, ${idx})">
                             <div style="font-weight:bold;">Day ${item.day} - 第${idx+1}次答题 - ${item.date}</div>
-                            <div style="color:#4A90E2;font-size:18px;">${item.score}/${item.total}分</div>
+                            <div style="color:#4A90E2;font-size:20px;font-weight:bold;">得分: ${item.score}/${item.total}分</div>
                             <div style="color:#666;font-size:12px;">错题: ${item.wrongCount}道</div>
+                            <div style="color:#4A90E2;font-size:14px;margin-top:8px;">👉 点击查看错题详情</div>
                         </div>`;
                     });
                     list.innerHTML = html;
@@ -371,8 +372,10 @@
                     const dayData = data[index] || data.find(d => d.day === day);
                     if (!dayData) return;
                     let html = `<div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:12px;">
-                        <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - ${dayData.date}</div>
-                        <div style="color:#4A90E2;font-size:24px;margin-bottom:12px;">得分: ${dayData.score}/${dayData.total}</div>`;
+                        <button onclick="loadHistory()" style="background:#666;color:white;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;">← 返回历史</button>
+                        <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - 第${(index||0)+1}次答题 - ${dayData.date}</div>
+                        <div style="color:#4A90E2;font-size:24px;margin-bottom:12px;">得分: ${dayData.score}/${dayData.total}</div>
+                        <div style="color:#ff4d4f;font-size:14px;margin-bottom:12px;">错题数: ${dayData.wrongQuestions.length}道</div>`;
                     
                     // 只显示错题，按题号排序
                     const wrongQs = dayData.questions.filter(q => dayData.wrongQuestions.includes(q.num)).sort((a,b) => a.num - b.num);
