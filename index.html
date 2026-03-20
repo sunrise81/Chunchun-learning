@@ -22,9 +22,11 @@
         .option {
             display: flex; align-items: center; padding: 12px;
             border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+            position: relative;
         }
         .option:hover { border-color: #4A90E2; background: #f0f7ff; }
         .option.selected { border-color: #4A90E2; background: #e8f4ff; }
+        .option.selected::before { content: "✓"; position: absolute; right: 12px; color: #4A90E2; font-weight: bold; }
         .option .radio {
             width: 20px; height: 20px; border: 2px solid #999; border-radius: 50%;
             margin-right: 12px; display: flex; align-items: center; justify-content: center;
@@ -276,19 +278,39 @@
             userAnswers[q] = a;
         }
         
-        // 移动端触摸支持
+        // 移动端触摸支持 - 防误触
         document.addEventListener('DOMContentLoaded', function() {
+            var touchStartX = 0;
+            var touchStartY = 0;
+            
             document.querySelectorAll('.option').forEach(function(el) {
                 el.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    selectOption(this);
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, {passive: true});
+                el.addEventListener('touchend', function(e) {
+                    const touchEndX = e.changedTouches[0].clientX;
+                    const touchEndY = e.changedTouches[0].clientY;
+                    const diffX = Math.abs(touchEndX - touchStartX);
+                    const diffY = Math.abs(touchEndY - touchStartY);
+                    // 只有移动距离很小才算点击，防止滑动误触
+                    if (diffX < 10 && diffY < 10) {
+                        e.preventDefault();
+                        selectOption(this);
+                    }
                 }, {passive: false});
             });
             document.querySelectorAll('.tab').forEach(function(el) {
-                el.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    const section = this.textContent.includes('翻译') ? 'translate' : 'choice';
-                    showSection(section, this);
+                el.addEventListener('touchend', function(e) {
+                    const touchEndX = e.changedTouches[0].clientX;
+                    const touchEndY = e.changedTouches[0].clientY;
+                    const diffX = Math.abs(touchEndX - touchStartX);
+                    const diffY = Math.abs(touchEndY - touchStartY);
+                    if (diffX < 10 && diffY < 10) {
+                        e.preventDefault();
+                        const section = this.textContent.includes('翻译') ? 'translate' : 'choice';
+                        showSection(section, this);
+                    }
                 }, {passive: false});
             });
         });
