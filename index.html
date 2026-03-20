@@ -361,16 +361,23 @@
                     list.innerHTML = html;
                 })
                 .catch(err => {
-                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:#666;">加载失败</div>';
+                    console.error('Load error:', err);
+                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:#666;">加载失败: ' + err.message + '</div>';
                 });
         }
         
         function showDayDetail(day, index) {
+            console.log('showDayDetail called:', day, index);
+            document.getElementById('history-list').innerHTML = '<div style="text-align:center;padding:20px;">加载中...</div>';
             fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-detail.json')
                 .then(r => r.json())
                 .then(data => {
+                    console.log('Data loaded:', data);
                     const dayData = data[index] || data.find(d => d.day === day);
-                    if (!dayData) return;
+                    if (!dayData) {
+                        document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">未找到数据</div>';
+                        return;
+                    }
                     let html = `<div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:12px;">
                         <button onclick="loadHistory()" style="background:#666;color:white;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;">← 返回历史</button>
                         <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - 第${(index||0)+1}次答题 - ${dayData.date}</div>
