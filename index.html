@@ -451,14 +451,30 @@
             
             // 自动复制
             navigator.clipboard.writeText(exportText).then(() => {
-                document.querySelector('.copy-tip').textContent = '✅ 已自动复制！直接发给小虾老师~';
+                document.querySelector('.copy-tip').textContent = '✅ 已自动复制并提交！小虾老师会自动批改~';
             }).catch(() => {
                 document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
             });
             
-            // 自动提交（简化版：复制到剪贴板即可）
-            // 注意：由于技术限制，目前需要手动发送答案给我
-            // 未来可以升级为全自动通知
+            // 自动提交到服务器（通知小虾老师）
+            fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'chunchun-english-answer',
+                    date: new Date().toISOString().split('T')[0],
+                    day: 1,
+                    answers: exportText,
+                    score: score,
+                    total: total
+                })
+            }).then(r => {
+                console.log('已通知小虾老师');
+            }).catch(err => {
+                console.log('通知失败', err);
+            });
         }
     </script>
 </body>
