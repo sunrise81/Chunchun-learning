@@ -366,26 +366,49 @@
                 });
         }
         
+        // 简化的题目数据
+        const questionsData = {
+            1: [
+                {num:1,type:"选择",content:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",options:["A. watch","B. watched","C. was watching","D. am watching"],answer:"C"},
+                {num:2,type:"选择",content:"If it ______ tomorrow, we will stay at home.",options:["A. rain","B. rains","C. rained","D. will rain"],answer:"B"},
+                {num:3,type:"翻译",content:"明天如果不下雨，我们就去公园。",answer:"If it doesn't rain tomorrow, we will go to the park."},
+                {num:4,type:"翻译",content:"不要在墙上乱画。",answer:"Don't draw on the wall."},
+                {num:5,type:"选择",content:"Last summer, Tom ______ to a summer camp.",options:["A. go","B. goes","C. went","D. going"],answer:"C"},
+                {num:6,type:"选择",content:"He ______ there for two weeks.",options:["A. stay","B. stays","C. stayed","D. staying"],answer:"C"},
+                {num:7,type:"选择",content:"Every day, he ______ sports.",options:["A. play","B. plays","C. played","D. playing"],answer:"C"},
+                {num:8,type:"选择",content:"He ______ English every day.",options:["A. learn","B. learns","C. learned","D. learning"],answer:"B"},
+                {num:9,type:"选择",content:"She ______ many new friends.",options:["A. make","B. makes","C. made","D. making"],answer:"C"},
+                {num:10,type:"选择",content:"He ______ the camp very much.",options:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],answer:"B"}
+            ]
+        };
+        
         function showDayDetail(day, index) {
             console.log('showDayDetail called:', day, index);
             document.getElementById('history-list').innerHTML = '<div style="text-align:center;padding:20px;">加载中...</div>';
-            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-detail.json')
+            
+            // 加载历史数据
+            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history.json')
                 .then(r => r.json())
                 .then(data => {
-                    console.log('Data loaded:', data);
-                    const dayData = data[index] || data.find(d => d.day === day);
+                    const reversed = data.reverse();
+                    const dayData = reversed[index];
                     if (!dayData) {
                         document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">未找到数据</div>';
                         return;
                     }
+                    
+                    // 使用嵌入的题目数据
+                    const questions = questionsData[day] || questionsData[1];
+                    
                     let html = `<div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:12px;">
                         <button onclick="loadHistory()" style="background:#666;color:white;border:none;padding:8px 16px;border-radius:6px;margin-bottom:12px;">← 返回历史</button>
                         <div style="font-weight:bold;font-size:18px;margin-bottom:12px;">Day ${dayData.day} - 第${(index||0)+1}次答题 - ${dayData.date}</div>
                         <div style="color:#4A90E2;font-size:24px;margin-bottom:12px;">得分: ${dayData.score}/${dayData.total}</div>
-                        <div style="color:#ff4d4f;font-size:14px;margin-bottom:12px;">错题数: ${dayData.wrongQuestions.length}道</div>`;
+                        <div style="color:#ff4d4f;font-size:14px;margin-bottom:12px;">错题数: ${dayData.wrongCount}道</div>`;
                     
                     // 只显示错题，按题号排序
-                    const wrongQs = dayData.questions.filter(q => dayData.wrongQuestions.includes(q.num)).sort((a,b) => a.num - b.num);
+                    const wrongNums = dayData.wrongList.map(w => parseInt(w.replace(/[^0-9]/g,'')) || 0).filter(n => n > 0);
+                    const wrongQs = questions.filter(q => wrongNums.includes(q.num)).sort((a,b) => a.num - b.num);
                     
                     wrongQs.forEach(q => {
                         const userAns = dayData.userAnswers[q.num] || '未答';
@@ -447,6 +470,10 @@
                     html += `<button onclick="loadHistory()" style="margin-top:12px;padding:10px;background:#4A90E2;color:white;border:none;border-radius:8px;width:100%;">返回列表</button></div>`;
                     
                     document.getElementById('history-list').innerHTML = html;
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">加载失败</div>';
                 });
         }
 
