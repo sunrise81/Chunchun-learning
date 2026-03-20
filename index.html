@@ -8,8 +8,8 @@
         * { box-sizing: border-box; }
         body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
         .header { text-align: center; margin-bottom: 20px; }
-        .tab-container { display: flex; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 16px; }
+        .tab-container { display: flex; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 14px; }
         .tab.active { background: #4A90E2; color: white; }
         .question-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .question-title { font-weight: bold; margin-bottom: 12px; }
@@ -21,6 +21,8 @@
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
         .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
+        .cloze-input { width: 100px; padding: 8px; border: 2px solid #4A90E2; border-radius: 6px; font-size: 14px; }
+        .cloze-text { background: #f0f7ff; padding: 15px; border-radius: 8px; line-height: 2.2; }
     </style>
 </head>
 <body>
@@ -31,12 +33,23 @@
     
     <div class="tab-container">
         <button class="tab active" onclick="showTab('quiz', this)">选择题</button>
+        <button class="tab" onclick="showTab('cloze', this)">完形填空</button>
         <button class="tab" onclick="showTab('history', this)">📜 历史</button>
     </div>
     
     <div id="quiz-section">
         <div id="questions"></div>
         <button class="btn btn-blue" onclick="submitQuiz()">提交答案</button>
+    </div>
+    
+    <div id="cloze-section" style="display:none;">
+        <div class="question-card">
+            <div class="question-title">📖 完形填空 (10空，共40分)</div>
+            <div class="cloze-text">
+Tom is a 12-year-old boy. Last summer, he <input type="text" id="c1" class="cloze-input" placeholder="1"> to a summer camp. Every morning, he <input type="text" id="c2" class="cloze-input" placeholder="2"> up at 6:30 and <input type="text" id="c3" class="cloze-input" placeholder="3"> breakfast with his friends. They <input type="text" id="c4" class="cloze-input" placeholder="4"> games and <input type="text" id="c5" class="cloze-input" placeholder="5"> in the lake every day. Tom <input type="text" id="c6" class="cloze-input" placeholder="6"> many new friends at the camp. His best friend <input type="text" id="c7" class="cloze-input" placeholder="7"> Jack. They <input type="text" id="c8" class="cloze-input" placeholder="8"> reading stories together at night. The camp <input type="text" id="c9" class="cloze-input" placeholder="9"> fun and Tom can't wait to go back next year.
+            </div>
+        </div>
+        <button class="btn btn-blue" onclick="submitCloze()">提交完形填空</button>
     </div>
     
     <div id="history-section" style="display:none;">
@@ -87,6 +100,7 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+            document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
             document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
             if (tab === 'history') renderHistory();
         }
@@ -133,6 +147,34 @@
                 }
             });
             alert('得分: ' + score + '/44');
+        }
+        
+        function submitCloze() {
+            const answers = {
+                1: document.getElementById('c1').value.toLowerCase().trim(),
+                2: document.getElementById('c2').value.toLowerCase().trim(),
+                3: document.getElementById('c3').value.toLowerCase().trim(),
+                4: document.getElementById('c4').value.toLowerCase().trim(),
+                5: document.getElementById('c5').value.toLowerCase().trim(),
+                6: document.getElementById('c6').value.toLowerCase().trim(),
+                7: document.getElementById('c7').value.toLowerCase().trim(),
+                8: document.getElementById('c8').value.toLowerCase().trim(),
+                9: document.getElementById('c9').value.toLowerCase().trim()
+            };
+            const correct = {
+                1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'swam',
+                6: 'made', 7: 'was', 8: 'enjoyed', 9: 'was'
+            };
+            let score = 0;
+            let wrong = [];
+            for (let i = 1; i <= 9; i++) {
+                if (answers[i] === correct[i]) {
+                    score += 4;
+                } else {
+                    wrong.push(i + ':' + (answers[i] || '空'));
+                }
+            }
+            alert('完形填空得分: ' + score + '/36\n错题: ' + wrong.join(', '));
         }
         
         renderQuestions();
