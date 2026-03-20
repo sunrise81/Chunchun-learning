@@ -1,0 +1,25 @@
+[
+  {
+    "day": 1,
+    "date": "2026-03-20",
+    "questions": [
+      {"num": 1, "type": "选择", "content": "What were you doing at 7:00 yesterday evening? I ______ TV with my family.", "options": ["A. watch", "B. watched", "C. was watching", "D. am watching"], "answer": "C"},
+      {"num": 2, "type": "选择", "content": "If it ______ tomorrow, we will stay at home.", "options": ["A. rain", "B. rains", "C. rained", "D. will rain"], "answer": "B"},
+      {"num": 3, "type": "翻译", "content": "明天如果不下雨，我们就去公园。", "answer": "If it doesn't rain, we will go"},
+      {"num": 4, "type": "翻译", "content": "不要在墙上乱画。", "answer": "Don't draw on the wall"},
+      {"num": 5, "type": "选择", "content": "Last summer, Tom ______ to a summer camp.", "options": ["A. go", "B. goes", "C. went", "D. going"], "answer": "C"},
+      {"num": 6, "type": "选择", "content": "He ______ there for two weeks.", "options": ["A. stay", "B. stays", "C. stayed", "D. staying"], "answer": "C"},
+      {"num": 7, "type": "选择", "content": "Every day, he ______ sports.", "options": ["A. play", "B. plays", "C. played", "D. playing"], "answer": "C"},
+      {"num": 8, "type": "选择", "content": "He ______ English every day.", "options": ["A. learn", "B. learns", "C. learned", "D. learning"], "answer": "C"},
+      {"num": 9, "type": "选择", "content": "She ______ many new friends.", "options": ["A. make", "B. makes", "C. made", "D. making"], "answer": "C"},
+      {"num": 10, "type": "选择", "content": "He ______ the camp very much.", "options": ["A. enjoy", "B. enjoys", "C. enjoyed", "D. enjoying"], "answer": "C"}
+    ],
+    "userAnswers": {"1": "B", "2": "D", "5": "D", "6": "C", "7": "A", "8": "C", "9": "B", "10": "B"},
+    "score": 8,
+    "total": 44,
+    "wrongQuestions": [1, 2, 3, 4, 5, 7, 9, 10],
+    "wrongTopics": ["过去进行时", "条件句主将从现", "动词过去式", "翻译题"],
+    "comment": "需加强：过去进行时、条件句主将从现、动词过去式。翻译题要加油哦！",
+    "reviewStatus": "pending"
+  }
+]
