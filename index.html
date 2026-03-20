@@ -78,11 +78,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         let historyData = JSON.parse(localStorage.getItem('chunchun_quiz_history') || '[]');
         if (historyData.length === 0) {
             historyData = [
-                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9],date:'2026/3/20',time:'19:39'},
-                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10],date:'2026/3/20',time:'19:41'},
-                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10],date:'2026/3/20',time:'19:45'},
-                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8],date:'2026/3/20',time:'19:51'},
-                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4],date:'2026/3/20',time:'19:52'}
+                {type:'quiz',day:1,score:26,wrongCount:4,wrongList:[2,3,4],date:'2026/3/20',time:'21:33'}
             ];
         }
         let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
