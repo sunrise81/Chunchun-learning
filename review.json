@@ -1,0 +1,16 @@
+{
+  "schedule": [
+    {"day": 1, "type": "新知识", "topics": ["过去进行时", "条件句主将从现"]},
+    {"day": 2, "type": "复习+新知识", "reviewTopics": ["过去进行时"], "newTopics": ["现在完成时"]},
+    {"day": 4, "type": "复习", "reviewTopics": ["过去进行时", "条件句主将从现"]},
+    {"day": 7, "type": "复习", "reviewTopics": ["过去进行时", "条件句主将从现", "现在完成时"]},
+    {"day": 15, "type": "综合复习", "reviewTopics": ["所有错题"]}
+  ],
+  "currentDay": 1,
+  "wrongTopics": {
+    "过去进行时": ["Day1第1题"],
+    "条件句主将从现": ["Day1第2题"],
+    "动词过去式": ["Day1第5、7、9题"],
+    "第三人称单数": ["Day1第10题"]
+  }
+}
