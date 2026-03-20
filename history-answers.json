@@ -29,6 +29,17 @@
         "6": {"correct": "C", "explanation": "stay的过去式是stayed，不是B"},
         "8": {"correct": "B", "explanation": "第三人称单数：he learns，不是C"}
       }
+    },
+    {
+      "date": "2026/3/20",
+      "score": 24,
+      "answers": {"1": "B", "2": "B", "3": "If", "4": "Don't", "5": "C", "6": "C", "7": "B", "8": "B", "9": "C", "10": "B"},
+      "analysis": {
+        "1": {"correct": "C", "explanation": "❌ 错误！答B watched不对。\n【语法】过去进行时：were/was + doing。What were you doing... 正在做什么，用was watching。"},
+        "3": {"correct": "If it doesn't rain tomorrow, we will go to the park.", "explanation": "⚠️ 部分正确：你写了If，得2分。\n【语法】完整翻译：If it doesn't rain tomorrow, we will go to the park.\n- if引导条件句\n- doesn't rain（否定）\n- tomorrow（明天）\n- we will go（我们去）\n- to the park（去公园）"},
+        "4": {"correct": "Don't draw on the wall.", "explanation": "⚠️ 部分正确：你写了Don't，得2分。\n【语法】完整翻译：Don't draw on the wall.\n- Don't + 动词原形（表示否定命令）\n- draw（画）\n- on the wall（在墙上）"},
+        "7": {"correct": "C", "explanation": "❌ 错误！答B不对。\n【语法】Every day表示习惯性动作，用一般现在时。主语是he，第三人称单数，所以用plays，不是play也不是B。"}
+      }
     }
   ],
   "cloze": [
@@ -51,13 +62,13 @@
       "analysis": [
         {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went。\n【语法】Last summer表示过去时间，动词要用过去式。不规则变化：go→went。"},
         {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错误！填了原形wake，应该填过去式woke。\n【语法】wake up是短语，过去式是woke up。不规则变化：wake→woke。"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。\n【语法】had breakfast是固定搭配，表示吃早餐。不规则变化：have→had。"},
-        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。\n【语法】题目说过去每天的动作，要用过去式。规则变化：play→played。"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。\n【语法】had breakfast是固定搭配，表示吃早餐。"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。\n【语法】过去每天的动作要用过去式。规则变化：play→played。"},
         {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错误！填了原形swim，应该填过去式swam。\n【语法】不规则变化：swim→swam。记忆口诀：swim-swam-swum。"},
-        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made。\n【语法】made many friends交了很多朋友。不规则变化：make→made。"},
-        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词的过去式，主语是单数用was。\n【语法】His best friend是单数，所以用was。不规则变化：be→was/were。"},
-        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed。\n【语法】They enjoyed reading stories他们喜欢读故事。规则变化：enjoy→enjoyed（直接加ed）。"},
-        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词的过去式，主语是单数用was。\n【语法】The camp是单数，所以用was。"}
+        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made。"},
+        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"},
+        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed。"},
+        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"}
       ]
     },
     {
@@ -66,14 +77,14 @@
       "answers": {"1": "go", "2": "woke", "3": "had", "4": "空", "5": "空", "6": "空", "7": "空", "8": "空", "9": "空"},
       "analysis": [
         {"n": 1, "correct": "went", "hint": "go", "explanation": "❌ 错误！填了原形go，应该填过去式went。\n【语法】Last summer表示过去时间，动词要用过去式。不规则变化：go→went。"},
-        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "✅ 正确！wake的过去式是woke。\n【语法】wake up是短语，过去式是woke up。"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。\n【语法】had breakfast是固定搭配，表示吃早餐。"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "✅ 正确！wake的过去式是woke。"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。"},
         {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 漏答！应该填played。\n【语法】过去每天的动作要用过去式。规则变化：play→played。"},
-        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 漏答！应该填swam。\n【语法】不规则变化：swim→swam。"},
-        {"n": 6, "correct": "made", "hint": "make", "explanation": "❌ 漏答！应该填made。\n【语法】made many friends交了很多朋友。"},
-        {"n": 7, "correct": "was", "hint": "be", "explanation": "❌ 漏答！应该填was。\n【语法】His best friend是单数，用was。"},
-        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "❌ 漏答！应该填enjoyed。\n【语法】规则变化：enjoy→enjoyed。"},
-        {"n": 9, "correct": "was", "hint": "be", "explanation": "❌ 漏答！应该填was。\n【语法】The camp是单数，用was。"}
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 漏答！应该填swam。"},
+        {"n": 6, "correct": "made", "hint": "make", "explanation": "❌ 漏答！应该填made。"},
+        {"n": 7, "correct": "was", "hint": "be", "explanation": "❌ 漏答！应该填was。"},
+        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "❌ 漏答！应该填enjoyed。"},
+        {"n": 9, "correct": "was", "hint": "be", "explanation": "❌ 漏答！应该填was。"}
       ]
     }
   ]
