@@ -100,9 +100,9 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                         type: 'cloze',
                         day: 1,
                         score: c.score,
-                        wrongCount: 9 - (c.score / 4),
+                        wrongCount: c.analysis ? c.analysis.length : 0,
                         date: c.date,
-                        time: '21:50',
+                        time: '22:02',
                         userAnswers: c.answers
                     }));
                 }
