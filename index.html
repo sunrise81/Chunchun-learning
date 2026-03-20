@@ -114,14 +114,11 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             if (tab === 'history') renderHistory();
         }
         
-        // 从GitHub加载解析（禁用缓存）
+        // 从GitHub加载解析
         let serverAnalysis = null;
         function loadServerAnalysis() {
             if (serverAnalysis) return Promise.resolve(serverAnalysis);
-            return fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json?t=' + Date.now(), {
-                cache: 'no-store',
-                headers: {'Cache-Control': 'no-cache'}
-            })
+            return fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
                 .then(r => r.json())
                 .then(data => { serverAnalysis = data; return data; })
                 .catch(() => null);
