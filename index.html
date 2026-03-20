@@ -78,15 +78,18 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
-        // 历史数据：选择题 + 完形填空
-        const historyData = [
-            {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
-            {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
-            {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
-            {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
-            {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
-        ];
-        const clozeHistory = []; // 完形填空历史
+        // 历史数据：选择题 + 完形填空（从localStorage读取）
+        let historyData = JSON.parse(localStorage.getItem('chunchun_quiz_history') || '[]');
+        if (historyData.length === 0) {
+            historyData = [
+                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
+                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
+                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
+                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+            ];
+        }
+        let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
         
         const userAnswers = {};
         
@@ -145,7 +148,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     ${h.wrongList.map(w => `
                         <div class="detail-item">
                             <div><b>第${w.n}空</b> (提示: ${w.hint})</div>
-                            <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${w.ans}</div>
+                            <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers ? h.userAnswers[w.n] : w.ans}</div>
                             <div style="color:#52c41a;margin-top:4px;">正确答案: ${w.correct}</div>
                         </div>
                     `).join('')}
@@ -226,7 +229,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 }
             });
             
-            // 保存到历史（包含用户答案）
+            // 保存到历史（包含用户答案）+ 持久化存储
             const userAns = {};
             questions.forEach(q => {
                 if (q.o) userAns[q.n] = userAnswers[q.n] || '未答';
@@ -241,6 +244,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 userAnswers:userAns,
                 date:new Date().toLocaleDateString()
             });
+            localStorage.setItem('chunchun_quiz_history', JSON.stringify(historyData));
             
             // 发给小虾老师
             const msg = `【纯纯英语 Day 1 答题结果】\n\n日期：${new Date().toLocaleDateString()}\n\n${answerText}\n得分：${score}/44`;
@@ -275,7 +279,8 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     wrongList.push({n:i, ans:answers[i]||'空', correct:clozeCorrect[i], hint:clozeHints[i]});
                 }
             }
-            clozeHistory.push({type:'cloze',day:1,score:score,wrongCount:wrongList.length,wrongList:wrongList,date:new Date().toLocaleDateString()});
+            clozeHistory.push({type:'cloze',day:1,score:score,wrongCount:wrongList.length,wrongList:wrongList,userAnswers:answers,date:new Date().toLocaleDateString()});
+            localStorage.setItem('chunchun_cloze_history', JSON.stringify(clozeHistory));
             
             // 发给小虾老师
             let clozeMsg = '【纯纯英语 Day 1 完形填空结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n';
