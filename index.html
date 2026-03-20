@@ -419,23 +419,9 @@
                 document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
             });
             
-            // 自动提交到服务器（后台通知小虾老师）
-            fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    answers: exportText,
-                    date: new Date().toISOString()
-                })
-            }).then(r => r.json()).then(data => {
-                console.log('已通知小虾老师', data);
-                document.querySelector('.copy-tip').textContent = '✅ 已提交！小虾老师会自动批改~';
-            }).catch(err => {
-                console.log('通知失败', err);
-                document.querySelector('.copy-tip').textContent = '⚠️ 提交失败，请复制发给小虾老师';
-            });
+            // 自动提交（简化版：复制到剪贴板即可）
+            // 注意：由于技术限制，目前需要手动发送答案给我
+            // 未来可以升级为全自动通知
         }
     </script>
 </body>
