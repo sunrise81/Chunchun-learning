@@ -91,7 +91,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                         wrongList: Object.keys(q.analysis || {}).map(k => parseInt(k)),
                         wrongCount: Object.keys(q.analysis || {}).length,
                         date: q.date,
-                        time: '21:33',
+                        time: q.time || '21:33',
                         userAnswers: q.answers
                     }));
                 }
@@ -102,7 +102,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                         score: c.score,
                         wrongCount: c.analysis ? c.analysis.length : 0,
                         date: c.date,
-                        time: '22:02',
+                        time: c.time || '22:02',
                         userAnswers: c.answers
                     }));
                 }
