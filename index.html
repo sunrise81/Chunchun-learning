@@ -92,6 +92,14 @@
     <div class="tab-bar">
         <div class="tab active" onclick="showSection('choice', this)">选择题</div>
         <div class="tab" onclick="showSection('translate', this)">翻译题</div>
+        <div class="tab" onclick="showSection('history', this)">📜 历史</div>
+    </div>
+
+    <div id="history-section" style="display: none;">
+        <div class="question-card">
+            <div class="question-title">📜 答题历史</div>
+            <div id="history-list">加载中...</div>
+        </div>
     </div>
 
     <div id="choice-section">
@@ -325,6 +333,35 @@
             if (el) el.classList.add('active');
             document.getElementById('choice-section').style.display = section === 'choice' ? 'block' : 'none';
             document.getElementById('translate-section').style.display = section === 'translate' ? 'block' : 'none';
+            document.getElementById('history-section').style.display = section === 'history' ? 'block' : 'none';
+            if (section === 'history') {
+                loadHistory();
+            }
+        }
+        
+        function loadHistory() {
+            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history.json')
+                .then(r => r.json())
+                .then(data => {
+                    const list = document.getElementById('history-list');
+                    if (!data || data.length === 0) {
+                        list.innerHTML = '<div style="text-align:center;color:#666;">暂无历史记录</div>';
+                        return;
+                    }
+                    let html = '';
+                    data.reverse().forEach(item => {
+                        html += `<div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;">
+                            <div style="font-weight:bold;">${item.date}</div>
+                            <div style="color:#4A90E2;font-size:18px;">${item.score}/${item.total}分</div>
+                            <div style="color:#666;font-size:12px;">错题: ${item.wrongCount}道</div>
+                            <div style="color:#888;font-size:12px;margin-top:8px;">${item.comment || ''}</div>
+                        </div>`;
+                    });
+                    list.innerHTML = html;
+                })
+                .catch(err => {
+                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:#666;">加载失败</div>';
+                });
         }
 
         function calculateScore() {
