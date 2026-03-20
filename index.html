@@ -420,19 +420,21 @@
             });
             
             // 自动提交到服务器（后台通知小虾老师）
-            const formData = new FormData();
-            formData.append('access_key', 'c8a5f2b0-5b3a-4d1e-9f0a-3b5c7e8d1f2a');
-            formData.append('subject', '纯纯英语 Day 1 答题结果');
-            formData.append('from_name', '纯纯英语练习');
-            formData.append('答案', exportText);
-            
-            fetch('https://api.web3forms.com/submit', {
+            fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    answers: exportText,
+                    date: new Date().toISOString()
+                })
             }).then(r => r.json()).then(data => {
                 console.log('已通知小虾老师', data);
+                document.querySelector('.copy-tip').textContent = '✅ 已提交！小虾老师会自动批改~';
             }).catch(err => {
                 console.log('通知失败', err);
+                document.querySelector('.copy-tip').textContent = '⚠️ 提交失败，请复制发给小虾老师';
             });
         }
     </script>
