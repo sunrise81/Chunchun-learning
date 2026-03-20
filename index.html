@@ -18,13 +18,10 @@
         .option.selected { border-color: #4A90E2; background: #e8f4ff; }
         .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .btn-blue { background: #4A90E2; color: white; }
-        .btn-green { background: #52c41a; color: white; }
-        .result { background: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; }
-        .score { font-size: 36px; color: #4A90E2; font-weight: bold; }
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
-        .exp-box { background: #fffbe6; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; color: #333; white-space: pre-wrap; line-height: 1.6; }
         .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
+        .exp-box { background: #fffbe6; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; white-space: pre-wrap; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -34,9 +31,8 @@
     </div>
     
     <div class="tab-container">
-        <button class="tab active" onclick="showTab('quiz')">选择题</button>
-        <button class="tab" onclick="showTab('cloze')">完形填空</button>
-        <button class="tab" onclick="showTab('history')">📜 历史</button>
+        <button class="tab active" onclick="showTab('quiz', this)">选择题</button>
+        <button class="tab" onclick="showTab('history', this)">📜 历史</button>
     </div>
     
     <div id="quiz-section">
@@ -44,37 +40,24 @@
         <button class="btn btn-blue" onclick="submitQuiz()">提交答案</button>
     </div>
     
-    <div id="cloze-section" style="display:none;">
-        <div class="question-card">
-            <div class="question-title">📖 完形填空</div>
-            <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin:15px 0;line-height:2;">
-                Tom is a 12-year-old boy. Last summer, he <input type="text" id="c1" placeholder="1" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> to a summer camp near the lake. Every morning, he <input type="text" id="c2" placeholder="2" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> up at 6:30 and <input type="text" id="c3" placeholder="3" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> breakfast with his friends. They <input type="text" id="c4" placeholder="4" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> games, <input type="text" id="c5" placeholder="5" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> new skills, and <input type="text" id="c6" placeholder="6" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> in the lake every day.<br><br>
-                Tom <input type="text" id="c7" placeholder="7" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> many new friends at the camp. His best friend <input type="text" id="c8" placeholder="8" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> Jack. They <input type="text" id="c9" placeholder="9" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> reading stories together at night. The camp <input type="text" id="c10" placeholder="10" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> fun and Tom can't wait to go back next year.
-            </div>
-        </div>
-        <button class="btn btn-blue" onclick="submitCloze()">提交完形填空</button>
-    </div>
-    
     <div id="history-section" style="display:none;">
         <div id="history-list"></div>
     </div>
     
     <script>
-        // 题目数据含详细解析
         const questions = [
-            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"✅ 选C. was watching\n\n📝 详解：题目问"昨晚7点你在做什么？"，时间状语是"at 7:00 yesterday evening"，表示过去某个具体时间点正在进行的动作，要用过去进行时。\n\n🔑 公式：was/were + 动词ing形式\n- I → was watching\n- you → were watching\n\n❌ A.watch 是一般现在时，表示习惯动作\n❌ B.watched 是一般过去时，表示已经完成的动作\n❌ D.am watching 是现在进行时，表示现在正在做的动作"},
-            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"✅ 选B. rains\n\n📝 详解：这是条件句，主将从现。\n- if从句用一般现在时（不管明天是否真的下雨）\n- 主句用will + 动词原形（表示将来的可能性）\n\n🔑 公式：If + 主语 + 动词现在式，主语 + will + 动词原形\n- If it rains → 主句will stay\n\n❌ A.rain 缺少第三人称单数的s\n❌ C.rained 是过去式，不能用于将来条件\n❌ D.will rain 不能用在if从句中"},
-            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"✅ 参考答案：If it doesn't rain tomorrow, we will go to the park.\n\n📝 翻译要点：\n1. "如果不下雨" → if it doesn't rain（否定要加doesn't，动词还原）\n2. "明天" → tomorrow（放在条件句中，通常不重复说tomorrow，主句用will表示将来）\n3. "就去公园" → we will go to the park\n\n🔑 常见错误：\n❌ if it won't rain（will不能用在if从句中）\n❌ we go（不是将来时）"},
-            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"✅ 参考答案：Don't draw on the wall.\n\n📝 翻译要点：\n1. "不要" → Don't（祈使句否定）\n2. "在墙上画" → draw on the wall（介词用on，表示表面）\n\n🔑 介词搭配：\n- draw ON the wall（在墙面上画）\n- draw IN the wall（在墙里面画）\n\n❌ 容易错用成 in the wall"},
-            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"✅ 选C. went\n\n📝 详解：时间状语是"Last summer"（去年夏天），表示过去的动作，要用过去式。\n\n🔑 go的过去式是不规则变化：\n- go → went → gone\n\n❌ A.go 一般现在时\n❌ B.goes 第三人称单数，现在时\n❌ D.going 动名词/现在分词"},
-            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"✅ 选C. stayed\n\n📝 详解：句子说的是过去的事情（"在那里待了两周"），要用过去式。\n\n🔑 stay的过去式：stay → stayed（直接加ed）\n\n❌ A.stay 原形\n❌ B.stays 第三人称单数\n❌ D.staying 动名词"},
-            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"✅ 选C. played\n\n📝 详解：时间状语是"Every day"（每天），但这句话描述的是一个事实或习惯。注意：如果描述现在的习惯用一般现在时，但如果语境是过去（例如讲一个故事），则用过去式。\n\n🔑 play的过去式：play → played（规则变化，直接加ed）\n\n❌ A.play 原形\n❌ B.plays 第三人称单数\n❌ D.playing 动名词"},
-            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"✅ 选B. learns\n\n📝 详解：主语是"He"（第三人称单数），时间状语是"every day"（每天，现在时的标志），所以动词要加s。\n\n🔑 第三人称单数规则：\n- 一般动词 + s（如：learns, reads, plays）\n- 以s/x/z/ch/sh结尾 + es（如：watches, goes）\n- 辅音字母+y结尾，y变i + es（如：studies）\n\n❌ A.learn 缺少s\n❌ C.learned 是过去式\n❌ D.learning 动名词"},
-            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"✅ 选C. made\n\n📝 详解：根据上下文，这里描述的是过去发生的事（她交了很多新朋友），要用过去式。\n\n🔑 make的不规则过去式：\n- make → made → made\n\n❌ A.make 原形\n❌ B.makes 第三人称单数\n❌ D.making 动名词"},
-            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"✅ 选B. enjoys\n\n📝 详解：主语是"He"（第三人称单数），句子说的是现在的习惯或爱好，要用一般现在时。\n\n🔑 enjoy的第三人称单数：\n- enjoy → enjoys（以元音字母+y结尾，直接加s）\n\n❌ A.enjoy 原形\n❌ C.enjoyed 是过去式\n❌ D.enjoying 动名词"}
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"✅ 选C. was watching\n\n📝 详解：题目问"昨晚7点你在做什么？"，时间状语是"at 7:00 yesterday evening"，表示过去某个具体时间点正在进行的动作，要用过去进行时。\n\n🔑 公式：was/were + 动词ing形式\n- I → was watching"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"✅ 选B. rains\n\n📝 详解：这是条件句，主将从现。\n- if从句用一般现在时\n- 主句用will + 动词原形"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"✅ 参考答案：If it doesn't rain tomorrow, we will go to the park.\n\n📝 翻译要点：\n1. "如果不下雨" → if it doesn't rain\n2. "就去公园" → we will go to the park"},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"✅ 参考答案：Don't draw on the wall.\n\n📝 翻译要点：\n1. "不要" → Don't\n2. "在墙上画" → draw on the wall（介词用on）"},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"✅ 选C. went\n\n📝 详解：时间状语是"Last summer"，要用过去式。\n🔑 go的过去式是不规则变化went"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"✅ 选C. stayed\n\n📝 详解：用过去式，stay → stayed"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"✅ 选C. played\n\n📝 详解：用过去式，play → played"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"✅ 选B. learns\n\n📝 详解：主语是He（第三人称单数），动词要加s。\n🔑 learn → learns"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"✅ 选C. made\n\n📝 详解：用过去式，make → made"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"✅ 选B. enjoys\n\n📝 详解：第三人称单数，enjoy → enjoys"}
         ];
         
-        // 历史数据
         const historyData = [
             {day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
             {day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
@@ -101,11 +84,10 @@
             el.classList.add('selected');
         }
         
-        function showTab(tab) {
+        function showTab(tab, btn) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            btn.classList.add('active');
             document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
-            document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
             document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
             if (tab === 'history') renderHistory();
         }
@@ -153,35 +135,6 @@
                 }
             });
             alert('得分: ' + score + '/44');
-        }
-        
-        function submitCloze() {
-            const answers = {
-                1: document.getElementById('c1').value.toLowerCase().trim(),
-                2: document.getElementById('c2').value.toLowerCase().trim(),
-                3: document.getElementById('c3').value.toLowerCase().trim(),
-                4: document.getElementById('c4').value.toLowerCase().trim(),
-                5: document.getElementById('c5').value.toLowerCase().trim(),
-                6: document.getElementById('c6').value.toLowerCase().trim(),
-                7: document.getElementById('c7').value.toLowerCase().trim(),
-                8: document.getElementById('c8').value.toLowerCase().trim(),
-                9: document.getElementById('c9').value.toLowerCase().trim(),
-                10: document.getElementById('c10').value.toLowerCase().trim()
-            };
-            const correct = {
-                1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'learned',
-                6: 'swam', 7: 'made', 8: 'was called', 9: 'enjoyed', 10: 'was'
-            };
-            let score = 0;
-            let wrong = [];
-            for (let i = 1; i <= 10; i++) {
-                if (answers[i] === correct[i] || answers[i] === correct[i].replace(' was ', ' ')) {
-                    score += 4;
-                } else {
-                    wrong.push(i);
-                }
-            }
-            alert('完形填空得分: ' + score + '/40\n错题: ' + wrong.join(', '));
         }
         
         renderQuestions();
