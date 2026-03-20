@@ -88,6 +88,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                         type: 'quiz',
                         day: 1,
                         score: q.score,
+                        wrongList: Object.keys(q.analysis || {}).map(k => parseInt(k)),
                         wrongCount: Object.keys(q.analysis || {}).length,
                         date: q.date,
                         time: '21:33',
