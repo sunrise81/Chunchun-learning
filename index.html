@@ -251,7 +251,18 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=44&answers=' + encodeURIComponent(msg);
             fetch(webhookUrl).then(() => console.log('已发送')).catch(() => console.log('发送失败'));
             
-            alert('得分: ' + score + '/44\n已提交给小虾老师！');
+            // 从GitHub获取小虾老师的批改解析
+            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
+                .then(r => r.json())
+                .then(data => {
+                    const latest = data.quiz[data.quiz.length-1];
+                    if (latest) {
+                        alert('得分: ' + score + '/44\n已提交给小虾老师！\n\n💡 查看历史记录可以看到小虾老师的详细解析！');
+                    } else {
+                        alert('得分: ' + score + '/44\n已提交给小虾老师！');
+                    }
+                })
+                .catch(() => alert('得分: ' + score + '/44\n已提交给小虾老师！'));
         }
         
         // 完形填空答案
