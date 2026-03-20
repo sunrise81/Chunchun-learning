@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纯纯英语练习</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5;
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #333; font-size: 24px; }
+        .date { color: #666; font-size: 14px; }
+        .question-card {
+            background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .question-title { font-weight: bold; margin-bottom: 12px; font-size: 16px; }
+        .options { display: flex; flex-direction: column; gap: 8px; }
+        .option {
+            display: flex; align-items: center; padding: 12px;
+            border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .option:hover { border-color: #4A90E2; background: #f0f7ff; }
+        .option.selected { border-color: #4A90E2; background: #e8f4ff; }
+        .option .radio {
+            width: 20px; height: 20px; border: 2px solid #999; border-radius: 50%;
+            margin-right: 12px; display: flex; align-items: center; justify-content: center;
+        }
+        .option.selected .radio { border-color: #4A90E2; }
+        .option.selected .radio::after {
+            content: ''; width: 10px; height: 10px; background: #4A90E2; border-radius: 50%;
+        }
+        .option .text { flex: 1; }
+        .input-area { margin-top: 12px; }
+        .input-area textarea {
+            width: 100%; min-height: 80px; padding: 12px;
+            border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; resize: vertical;
+        }
+        .input-area textarea:focus { outline: none; border-color: #4A90E2; }
+        .btn-group { display: flex; gap: 12px; margin-top: 20px; }
+        .submit-btn, .export-btn {
+            flex: 1; padding: 16px; color: white; border: none;
+            border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        .submit-btn { background: #4A90E2; }
+        .submit-btn:hover { background: #357ABD; }
+        .export-btn { background: #52c41a; }
+        .export-btn:hover { background: #389e0d; }
+        .result {
+            display: none; text-align: center; padding: 30px;
+            background: white; border-radius: 12px; margin-top: 20px;
+        }
+        .result.show { display: block; }
+        .score { font-size: 48px; font-weight: bold; color: #4A90E2; }
+        .score-detail { color: #666; margin: 16px 0; }
+        .wrong-list { text-align: left; margin-top: 20px; }
+        .wrong-item {
+            background: #fff5f5; padding: 12px; border-radius: 8px;
+            margin-bottom: 8px; border-left: 4px solid #ff4d4f;
+        }
+        .correct-answer { color: #52c41a; font-weight: bold; }
+        .tab-bar {
+            display: flex; background: white; border-radius: 12px; overflow: hidden;
+            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; background: #f5f5f5; }
+        .tab.active { background: #4A90E2; color: white; }
+        .export-result {
+            display: none; background: #f0f0f0; padding: 16px; border-radius: 8px;
+            margin-top: 16px; word-break: break-all; font-family: monospace; font-size: 12px;
+        }
+        .export-result.show { display: block; }
+        .copy-tip {
+            color: #52c41a; font-size: 12px; margin-top: 8px; text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦞 纯纯英语练习</h1>
+        <div class="date">Day 1 | 2026年3月20日</div>
+    </div>
+
+    <div class="tab-bar">
+        <div class="tab active" onclick="showSection('choice')">选择题</div>
+        <div class="tab" onclick="showSection('translate')">翻译题</div>
+    </div>
+
+    <div id="choice-section">
+        <div class="question-card">
+            <div class="question-title">1. —What were you doing at 7:00 yesterday evening?—I ______ TV with my family.</div>
+            <div class="options">
+                <div class="option" data-q="1" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. watch</div>
+                </div>
+                <div class="option" data-q="1" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. watched</div>
+                </div>
+                <div class="option" data-q="1" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. was watching</div>
+                </div>
+                <div class="option" data-q="1" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. am watching</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-title">2. If it ______ tomorrow, we will stay at home.</div>
+            <div class="options">
+                <div class="option" data-q="2" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. rain</div>
+                </div>
+                <div class="option" data-q="2" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. rains</div>
+                </div>
+                <div class="option" data-q="2" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. rained</div>
+                </div>
+                <div class="option" data-q="2" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. will rain</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-title">The Summer Camp（完形填空）</div>
+            <div style="color: #666; font-size: 14px; margin-bottom: 12px;">Last summer, Tom (5)______ to a summer camp. He (6)______ there for two weeks. Every day, he (7)______ sports and (8)______ English. He (9)______ many new friends. He (10)______ the camp very much.</div>
+            
+            <div class="question-title" style="font-size: 14px;">5.</div>
+            <div class="options">
+                <div class="option" data-q="5" data-a="A" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">A. go</div>
+                </div>
+                <div class="option" data-q="5" data-a="B" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">B. goes</div>
+                </div>
+                <div class="option" data-q="5" data-a="C" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">C. went</div>
+                </div>
+                <div class="option" data-q="5" data-a="D" onclick="selectOption(this)">
+                    <div class="radio"></div><div class="text">D. going</div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
