@@ -340,17 +340,14 @@
         }
         
         function loadHistory() {
-            // 加载简要历史
-            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history.json')
-                .then(r => r.json())
-                .then(data => {
-                    const list = document.getElementById('history-list');
-                    if (!data || data.length === 0) {
-                        list.innerHTML = '<div style="text-align:center;color:#666;">暂无历史记录</div>';
-                        return;
-                    }
-                    let html = '';
-                    data.reverse().forEach((item, idx) => {
+            // 使用嵌入的历史数据
+            const list = document.getElementById('history-list');
+            if (!historyData || historyData.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#666;">暂无历史记录</div>';
+                return;
+            }
+            let html = '';
+            [...historyData].reverse().forEach((item, idx) => {
                         html += `<div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;border:2px solid #4A90E2;" onclick="showDayDetail(${item.day}, ${idx})" ontouchstart="showDayDetail(${item.day}, ${idx})">
                             <div style="font-weight:bold;">Day ${item.day} - 第${idx+1}次答题 - ${item.date}</div>
                             <div style="color:#4A90E2;font-size:20px;font-weight:bold;">得分: ${item.score}/${item.total}分</div>
@@ -359,11 +356,6 @@
                         </div>`;
                     });
                     list.innerHTML = html;
-                })
-                .catch(err => {
-                    console.error('Load error:', err);
-                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:#666;">加载失败: ' + err.message + '</div>';
-                });
         }
         
         // 简化的题目数据
@@ -382,20 +374,20 @@
             ]
         };
         
+        // 嵌入所有历史数据
+        const historyData = [
+            {day:1,attempt:1,date:"2026-03-20",score:8,total:44,wrongCount:8,wrongList:["第1题-过去进行时","第2题-条件句主将从现","第3题-翻译题未答","第4题-翻译题未答","第5题-过去式went","第7题-过去式played","第9题-过去式made","第10题-第三人称单数"]},
+            {day:1,attempt:2,date:"2026-03-20",score:12,total:44,wrongCount:6,wrongList:["第1题","第3题","第4题","第7题","第8题","第10题"]},
+            {day:1,attempt:3,date:"2026-03-20",score:20,total:44,wrongCount:5,wrongList:["第1题","第3题","第4题","第7题","第8题"]},
+            {day:1,attempt:4,date:"2026-03-20",score:28,total:44,wrongCount:3,wrongList:["第1题","第3题","第4题"]}
+        ];
+        
         function showDayDetail(day, index) {
-            console.log('showDayDetail called:', day, index);
-            document.getElementById('history-list').innerHTML = '<div style="text-align:center;padding:20px;">加载中...</div>';
-            
-            // 加载历史数据
-            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history.json')
-                .then(r => r.json())
-                .then(data => {
-                    const reversed = data.reverse();
-                    const dayData = reversed[index];
-                    if (!dayData) {
-                        document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">未找到数据</div>';
-                        return;
-                    }
+            const dayData = historyData[index];
+            if (!dayData) {
+                document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">未找到数据</div>';
+                return;
+            }
                     
                     // 使用嵌入的题目数据
                     const questions = questionsData[day] || questionsData[1];
@@ -470,11 +462,6 @@
                     html += `<button onclick="loadHistory()" style="margin-top:12px;padding:10px;background:#4A90E2;color:white;border:none;border-radius:8px;width:100%;">返回列表</button></div>`;
                     
                     document.getElementById('history-list').innerHTML = html;
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    document.getElementById('history-list').innerHTML = '<div style="text-align:center;color:red;">加载失败</div>';
-                });
         }
 
         function calculateScore() {
