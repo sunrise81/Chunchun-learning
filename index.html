@@ -23,6 +23,7 @@
         .score { font-size: 36px; color: #4A90E2; font-weight: bold; }
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
+        .exp-box { background: #fffbe6; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; color: #333; white-space: pre-wrap; line-height: 1.6; }
         .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
     </style>
 </head>
@@ -47,18 +48,18 @@
     </div>
     
     <script>
-        // 题目数据含解析
+        // 题目数据含详细解析
         const questions = [
-            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"💡 过去进行时：was/were + doing，表示过去某个时刻正在进行的动作"},
-            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"💡 条件句主将从现：if从句用一般现在时，主句用will + 动词原形"},
-            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"💡 翻译要点：doesn't rain（否定），we will go（将来时）"},
-            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"💡 介词搭配：在墙上画 = draw on the wall（不是in）"},
-            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"💡 过去式：go的过去式是不规则变化went"},
-            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"💡 过去式：stay → stayed"},
-            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"💡 规则动词过去式：play → played（直接加ed）"},
-            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"💡 第三人称单数：he/she/it 后动词要加s，learn → learns"},
-            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"💡 不规则动词过去式：make → made"},
-            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"💡 第三人称单数：he enjoys（加es）"}
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"✅ 选C. was watching\n\n📝 详解：题目问"昨晚7点你在做什么？"，时间状语是"at 7:00 yesterday evening"，表示过去某个具体时间点正在进行的动作，要用过去进行时。\n\n🔑 公式：was/were + 动词ing形式\n- I → was watching\n- you → were watching\n\n❌ A.watch 是一般现在时，表示习惯动作\n❌ B.watched 是一般过去时，表示已经完成的动作\n❌ D.am watching 是现在进行时，表示现在正在做的动作"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"✅ 选B. rains\n\n📝 详解：这是条件句，主将从现。\n- if从句用一般现在时（不管明天是否真的下雨）\n- 主句用will + 动词原形（表示将来的可能性）\n\n🔑 公式：If + 主语 + 动词现在式，主语 + will + 动词原形\n- If it rains → 主句will stay\n\n❌ A.rain 缺少第三人称单数的s\n❌ C.rained 是过去式，不能用于将来条件\n❌ D.will rain 不能用在if从句中"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"✅ 参考答案：If it doesn't rain tomorrow, we will go to the park.\n\n📝 翻译要点：\n1. "如果不下雨" → if it doesn't rain（否定要加doesn't，动词还原）\n2. "明天" → tomorrow（放在条件句中，通常不重复说tomorrow，主句用will表示将来）\n3. "就去公园" → we will go to the park\n\n🔑 常见错误：\n❌ if it won't rain（will不能用在if从句中）\n❌ we go（不是将来时）"},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"✅ 参考答案：Don't draw on the wall.\n\n📝 翻译要点：\n1. "不要" → Don't（祈使句否定）\n2. "在墙上画" → draw on the wall（介词用on，表示表面）\n\n🔑 介词搭配：\n- draw ON the wall（在墙面上画）\n- draw IN the wall（在墙里面画）\n\n❌ 容易错用成 in the wall"},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"✅ 选C. went\n\n📝 详解：时间状语是"Last summer"（去年夏天），表示过去的动作，要用过去式。\n\n🔑 go的过去式是不规则变化：\n- go → went → gone\n\n❌ A.go 一般现在时\n❌ B.goes 第三人称单数，现在时\n❌ D.going 动名词/现在分词"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"✅ 选C. stayed\n\n📝 详解：句子说的是过去的事情（"在那里待了两周"），要用过去式。\n\n🔑 stay的过去式：stay → stayed（直接加ed）\n\n❌ A.stay 原形\n❌ B.stays 第三人称单数\n❌ D.staying 动名词"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"✅ 选C. played\n\n📝 详解：时间状语是"Every day"（每天），但这句话描述的是一个事实或习惯。注意：如果描述现在的习惯用一般现在时，但如果语境是过去（例如讲一个故事），则用过去式。\n\n🔑 play的过去式：play → played（规则变化，直接加ed）\n\n❌ A.play 原形\n❌ B.plays 第三人称单数\n❌ D.playing 动名词"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"✅ 选B. learns\n\n📝 详解：主语是"He"（第三人称单数），时间状语是"every day"（每天，现在时的标志），所以动词要加s。\n\n🔑 第三人称单数规则：\n- 一般动词 + s（如：learns, reads, plays）\n- 以s/x/z/ch/sh结尾 + es（如：watches, goes）\n- 辅音字母+y结尾，y变i + es（如：studies）\n\n❌ A.learn 缺少s\n❌ C.learned 是过去式\n❌ D.learning 动名词"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"✅ 选C. made\n\n📝 详解：根据上下文，这里描述的是过去发生的事（她交了很多新朋友），要用过去式。\n\n🔑 make的不规则过去式：\n- make → made → made\n\n❌ A.make 原形\n❌ B.makes 第三人称单数\n❌ D.making 动名词"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"✅ 选B. enjoys\n\n📝 详解：主语是"He"（第三人称单数），句子说的是现在的习惯或爱好，要用一般现在时。\n\n🔑 enjoy的第三人称单数：\n- enjoy → enjoys（以元音字母+y结尾，直接加s）\n\n❌ A.enjoy 原形\n❌ C.enjoyed 是过去式\n❌ D.enjoying 动名词"}
         ];
         
         // 历史数据
@@ -119,7 +120,7 @@
                         ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
                         <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${userAnswers[q.n] || '未答'}</div>
                         <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
-                        <div style="background:#fffbe6;padding:10px;border-radius:6px;margin-top:8px;font-size:13px;color:#fa8c16;">${q.exp}</div>
+                        <div class="exp-box">${q.exp}</div>
                     </div>
                 `).join('')}
             `;
