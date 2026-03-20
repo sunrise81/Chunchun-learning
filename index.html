@@ -82,6 +82,11 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             ];
         }
         let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
+        if (clozeHistory.length === 0) {
+            clozeHistory = [
+                {type:'cloze',day:1,score:20,wrongCount:4,wrongList:[2,6,7,9],date:'2026/3/20',time:'21:50'}
+            ];
+        }
         
         const userAnswers = {};
         
