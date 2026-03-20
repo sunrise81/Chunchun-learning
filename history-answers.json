@@ -6,7 +6,7 @@
       "answers": {"1": "C", "2": "A", "3": "If it doesn't rain tomorrow we go to park", "4": "Don't draw in the wall", "5": "C", "6": "C", "7": "C", "8": "C", "9": "B", "10": "B"},
       "analysis": {
         "1": {"correct": "C", "explanation": "✅ 正确！过去进行时：were/was + doing。"},
-        "2": {"correct": "B", "explanation": "❌ 错误！if条件句，主将从现。正确：If it rains, we will stay at home."},
+        "2": {"correct": "B", "explanation": "❌ 错误！if条件句，主将从现。"},
         "3": {"correct": "If it doesn't rain tomorrow, we will go to the park.", "explanation": "⚠️ 部分正确！we go → we will go"},
         "4": {"correct": "Don't draw on the wall.", "explanation": "⚠️ 部分正确！in → on"},
         "5": {"correct": "C", "explanation": "✅ 正确！"},
@@ -24,15 +24,15 @@
       "score": 20,
       "answers": {"1": "went", "2": "waked", "3": "had", "4": "played", "5": "swam", "6": "maked", "7": "is", "8": "enjoyed", "9": "is"},
       "analysis": [
-        {"n": 1, "correct": "went", "explanation": "✅ 正确！go→went"},
-        {"n": 2, "correct": "woke", "explanation": "❌ 错误！wake的过去式是woke，不是waked。记忆：wake-woke-woken"},
-        {"n": 3, "correct": "had", "explanation": "✅ 正确！have→had"},
-        {"n": 4, "correct": "played", "explanation": "✅ 正确！play→played"},
-        {"n": 5, "correct": "swam", "explanation": "✅ 正确！swim→swam"},
-        {"n": 6, "correct": "made", "explanation": "❌ 错误！make的过去式是made，不是maked！"},
-        {"n": 7, "correct": "was", "explanation": "❌ 错误！过去时间，用was（不是is）。"},
-        {"n": 8, "correct": "enjoyed", "explanation": "✅ 正确！enjoy→enjoyed"},
-        {"n": 9, "correct": "was", "explanation": "❌ 错误！过去时间，用was（不是is）。"}
+        {"n": 1, "hint": "go", "userAnswer": "went", "correct": "went", "explanation": "✅ 正确！go→went"},
+        {"n": 2, "hint": "wake", "userAnswer": "waked", "correct": "woke", "explanation": "❌ 错误！wake的过去式是woke，不是waked。记忆：wake-woke-woken"},
+        {"n": 3, "hint": "have", "userAnswer": "had", "correct": "had", "explanation": "✅ 正确！have→had"},
+        {"n": 4, "hint": "play", "userAnswer": "played", "correct": "played", "explanation": "✅ 正确！play→played"},
+        {"n": 5, "hint": "swim", "userAnswer": "swam", "correct": "swam", "explanation": "✅ 正确！swim→swam"},
+        {"n": 6, "hint": "make", "userAnswer": "maked", "correct": "made", "explanation": "❌ 错误！make的过去式是made，不是maked！"},
+        {"n": 7, "hint": "be", "userAnswer": "is", "correct": "was", "explanation": "❌ 错误！过去时间，用was（不是is）。"},
+        {"n": 8, "hint": "enjoy", "userAnswer": "enjoyed", "correct": "enjoyed", "explanation": "✅ 正确！enjoy→enjoyed"},
+        {"n": 9, "hint": "be", "userAnswer": "is", "correct": "was", "explanation": "❌ 错误！过去时间，用was（不是is）。"}
       ]
     }
   ]
