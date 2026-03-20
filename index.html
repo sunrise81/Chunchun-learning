@@ -511,8 +511,8 @@
             // Google Form - 预填URL
             const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/viewform?usp=pp_url' +
                 '&entry.2006960552=' + encodeURIComponent(new Date().toISOString().split('T')[0]) +
-                '&entry.1222766399=' + encodeURIComponent(exportText.substring(0, 500)) +
-                '&entry.1205699284=' + score + '/' + total;
+                '&entry.1222766399=' + encodeURIComponent(exportText.substring(0, 1000)) +
+                '&entry.1205699284=' + encodeURIComponent(score + '/' + total);
             
             // 显示发送界面
             const tipEl = document.querySelector('.copy-tip');
