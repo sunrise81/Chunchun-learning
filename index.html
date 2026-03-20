@@ -85,8 +85,8 @@
     </div>
 
     <div class="tab-bar">
-        <div class="tab active" onclick="showSection('choice')">选择题</div>
-        <div class="tab" onclick="showSection('translate')">翻译题</div>
+        <div class="tab active" onclick="showSection('choice', this)">选择题</div>
+        <div class="tab" onclick="showSection('translate', this)">翻译题</div>
     </div>
 
     <div id="choice-section">
@@ -284,11 +284,18 @@
                     selectOption(this);
                 }, {passive: false});
             });
+            document.querySelectorAll('.tab').forEach(function(el) {
+                el.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    const section = this.textContent.includes('翻译') ? 'translate' : 'choice';
+                    showSection(section, this);
+                }, {passive: false});
+            });
         });
 
-        function showSection(section) {
+        function showSection(section, el) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            if (el) el.classList.add('active');
             document.getElementById('choice-section').style.display = section === 'choice' ? 'block' : 'none';
             document.getElementById('translate-section').style.display = section === 'translate' ? 'block' : 'none';
         }
