@@ -78,11 +78,11 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         let historyData = JSON.parse(localStorage.getItem('chunchun_quiz_history') || '[]');
         if (historyData.length === 0) {
             historyData = [
-                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9],date:'2026/3/20'},
-                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10],date:'2026/3/20'},
-                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10],date:'2026/3/20'},
-                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8],date:'2026/3/20'},
-                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4],date:'2026/3/20'}
+                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9],date:'2026/3/20',time:'19:39'},
+                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10],date:'2026/3/20',time:'19:41'},
+                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10],date:'2026/3/20',time:'19:45'},
+                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8],date:'2026/3/20',time:'19:51'},
+                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4],date:'2026/3/20',time:'19:52'}
             ];
         }
         let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
@@ -134,7 +134,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             allHistory.reverse();
             list.innerHTML = allHistory.map((h, i) => `
                 <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
-                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
+                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date||''} ${h.time||''}</span></div>
                     <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
                     <div>错题: ${h.wrongCount}道</div>
                 </div>
@@ -256,7 +256,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             });
             const userAns = {};
             questions.forEach(q => { userAns[q.n] = userAnswers[q.n] || (q.o ? '未答' : document.getElementById('a' + q.n).value || '未答'); });
-            historyData.push({type:'quiz',day:1,score, wrongCount:wrongList.length, wrongList, userAnswers:userAns, date:new Date().toLocaleDateString()});
+            historyData.push({type:'quiz',day:1,score, wrongCount:wrongList.length, wrongList, userAnswers:userAns, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})});
             localStorage.setItem('chunchun_quiz_history', JSON.stringify(historyData));
             
             const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=44&answers=' + encodeURIComponent('【纯纯英语 Day 1 答题结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n' + answerText + '\n得分：' + score + '/44');
@@ -276,7 +276,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 if (ans === clozeCorrect[i]) score += 4;
                 else wrongList.push({n:i, correct:clozeCorrect[i], hint:clozeHints[i]});
             }
-            clozeHistory.push({type:'cloze',day:1,score,wrongCount:wrongList.length,wrongList,userAnswers:answers,date:new Date().toLocaleDateString()});
+            clozeHistory.push({type:'cloze',day:1,score,wrongCount:wrongList.length,wrongList,userAnswers:answers,date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})});
             localStorage.setItem('chunchun_cloze_history', JSON.stringify(clozeHistory));
             
             let answerText = '';
