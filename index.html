@@ -20,10 +20,10 @@
         .btn-blue { background: #4A90E2; color: white; }
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
-        .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
-        .cloze-input { width: 90px; padding: 6px; border: 2px solid #4A90E2; border-radius: 6px; font-size: 14px; margin: 0 3px; }
-        .cloze-text { background: #f0f7ff; padding: 15px; border-radius: 8px; line-height: 2.8; }
-        .cloze-hint { color: #4A90E2; font-weight: bold; font-size: 13px; }
+        .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; cursor:pointer; }
+        .cloze-input { width:90px; padding:6px; border:2px solid #4A90E2; border-radius:6px; font-size:14px; margin:0 3px; }
+        .cloze-text { background:#f0f7ff; padding:15px; border-radius:8px; line-height:2.8; }
+        .cloze-hint { color:#4A90E2; font-weight:bold; font-size:13px; }
     </style>
 </head>
 <body>
@@ -47,7 +47,7 @@
         <div class="question-card">
             <div class="question-title">📖 完形填空 (9空，共36分)</div>
             <div style="background:#fff3e0;padding:10px;border-radius:8px;margin-bottom:15px;font-size:13px;">
-                💡 提示：括号里是动词原形，请根据上下文填写正确的形式
+                💡 提示：括号里是动词原形，请根据上下文填写正确的过去式
             </div>
             <div class="cloze-text">
 Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span> <input type="text" id="c1" class="cloze-input" placeholder="填词"> to a summer camp. Every morning, he <span class="cloze-hint">2 (wake)</span> <input type="text" id="c2" class="cloze-input" placeholder="填词"> up at 6:30 and <span class="cloze-hint">3 (have)</span> <input type="text" id="c3" class="cloze-input" placeholder="填词"> breakfast with his friends. They <span class="cloze-hint">4 (play)</span> <input type="text" id="c4" class="cloze-input" placeholder="填词"> games and <span class="cloze-hint">5 (swim)</span> <input type="text" id="c5" class="cloze-input" placeholder="填词"> in the lake every day. Tom <span class="cloze-hint">6 (make)</span> <input type="text" id="c6" class="cloze-input" placeholder="填词"> many new friends at the camp. His best friend <span class="cloze-hint">7 (be)</span> <input type="text" id="c7" class="cloze-input" placeholder="填词"> Jack. They <span class="cloze-hint">8 (enjoy)</span> <input type="text" id="c8" class="cloze-input" placeholder="填词"> reading stories together at night. The camp <span class="cloze-hint">9 (be)</span> <input type="text" id="c9" class="cloze-input" placeholder="填词"> fun and Tom can't wait to go back next year.
@@ -64,12 +64,8 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         const questions = [
             {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C"},
             {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B"},
-            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",points:[
-                {key:"doesn't",p:2},{key:"rain",p:2},{key:"will go",p:2}
-            ]},
-            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",points:[
-                {key:"don't",p:2},{key:"draw",p:2},{key:"wall",p:2}
-            ]},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",points:[{key:"doesn't",p:2},{key:"rain",p:2},{key:"will go",p:2}]},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",points:[{key:"don't",p:2},{key:"draw",p:2},{key:"wall",p:2}]},
             {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C"},
             {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C"},
             {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C"},
@@ -78,15 +74,15 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
-        // 历史数据：选择题 + 完形填空（从localStorage读取）
+        // 历史数据
         let historyData = JSON.parse(localStorage.getItem('chunchun_quiz_history') || '[]');
         if (historyData.length === 0) {
             historyData = [
-                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
-                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
-                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
-                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
-                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+                {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9],date:'2026/3/20'},
+                {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10],date:'2026/3/20'},
+                {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10],date:'2026/3/20'},
+                {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8],date:'2026/3/20'},
+                {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4],date:'2026/3/20'}
             ];
         }
         let clozeHistory = JSON.parse(localStorage.getItem('chunchun_cloze_history') || '[]');
@@ -118,251 +114,140 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             if (tab === 'history') renderHistory();
         }
         
-        function renderHistory() {
-            const list = document.getElementById('history-list');
-            // 优先从GitHub获取解析
-            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
+        // 从GitHub加载解析
+        let serverAnalysis = null;
+        function loadServerAnalysis() {
+            if (serverAnalysis) return Promise.resolve(serverAnalysis);
+            return fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
                 .then(r => r.json())
-                .then(serverData => {
-                    // 合并本地和服务器数据
-                    const serverQuiz = serverData.quiz || [];
-                    const serverCloze = serverData.cloze || [];
-                    const allHistory = [...historyData.map((h,i)=>({...h,attemptType:'选择题',serverIndex:i})), ...clozeHistory.map((h,i)=>({...h,attemptType:'完形填空',serverIndex:i}))];
-                    allHistory.reverse();
-                    if (allHistory.length === 0) {
-                        list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录<br><br>请先完成答题并提交</div>';
-                        return;
-                    }
-                    list.innerHTML = allHistory.map((h, i) => `
-                        <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
-                            <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
-                            <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
-                            <div>错题: ${h.wrongCount}道</div>
-                        </div>
-                    `).join('');
-                })
-                .catch(() => {
-                    // 如果获取失败，用本地数据
-                    const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
-                    if (allHistory.length === 0) {
-                        list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录</div>';
-                        return;
-                    }
-                    allHistory.reverse();
-                    list.innerHTML = allHistory.map((h, i) => `
-                        <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
-                            <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
-                            <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
-                            <div>错题: ${h.wrongCount}道</div>
-                        </div>
-                    `).join('');
-                });
+                .then(data => { serverAnalysis = data; return data; })
+                .catch(() => null);
         }
         
-        // 从GitHub获取解析数据
-        let serverAnalysis = {quiz:[], cloze:[]};
-        fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
-            .then(r => r.json())
-            .then(data => {
-                serverAnalysis = data;
-            })
-            .catch(() => console.log('无法获取解析'));
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
+            if (allHistory.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录<br><br>请先完成答题并提交</div>';
+                return;
+            }
+            allHistory.reverse();
+            list.innerHTML = allHistory.map((h, i) => `
+                <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
+                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
+                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
+                    <div>错题: ${h.wrongCount}道</div>
+                </div>
+            `).join('');
+        }
         
         function showDetail(idx) {
             const allHistory = [...historyData, ...clozeHistory];
             const h = allHistory[idx];
             const list = document.getElementById('history-list');
+            list.innerHTML = '<div style="text-align:center;padding:20px;">正在加载小虾老师的解析...</div>';
             
-            if (h.type === 'cloze') {
-                // 尝试从服务器获取解析
-                const clozeData = serverAnalysis.cloze || [];
-                const serverItem = clozeData.find(c => c.score === h.score);
-                
-                if (serverItem && serverItem.analysis) {
-                    // 使用服务器的详细解析
-                    list.innerHTML = `
-                        <button class="back-btn" onclick="renderHistory()">← 返回</button>
-                        <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
-                        ${serverItem.analysis.map(a => `
-                            <div class="detail-item" style="border-left-color:${a.correct === a.explanation.split(' ')[0] ? '#52c41a' : '#ff4d4f'}">
-                                <div><b>第${a.n}空</b> (提示: ${a.hint})</div>
-                                <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers ? h.userAnswers[a.n] : '未填'}</div>
-                                <div style="color:#52c41a;margin-top:4px;">正确答案: ${a.correct}</div>
-                                <div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;line-height:1.6;">
-                                    ${a.explanation.replace(/\n/g, '<br>')}
-                                </div>
-                            </div>
-                        `).join('')}
-                    `;
-                } else {
-                    // 回退到本地显示
-                    list.innerHTML = `
-                        <button class="back-btn" onclick="renderHistory()">← 返回</button>
-                        <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
-                        ${h.wrongList.length === 0 ? '<div style="text-align:center;color:#52c41a;padding:20px;">🎉 全对！</div>' : ''}
-                        ${h.wrongList.map(w => `
-                            <div class="detail-item">
-                                <div><b>第${w.n}空</b> (提示: ${w.hint})</div>
-                                <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers ? h.userAnswers[w.n] : w.ans}</div>
-                                <div style="color:#52c41a;margin-top:4px;">正确答案: ${w.correct}</div>
-                            </div>
-                        `).join('')}
-                    `;
-                }
-            } else {
-                // 选择题
-                const quizData = serverAnalysis.quiz || [];
-                const serverItem = quizData.find(q => q.score === h.score);
-                
-                list.innerHTML = `
-                    <button class="back-btn" onclick="renderHistory()">← 返回</button>
-                    <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
-                    ${h.wrongList.length === 0 ? '<div style="text-align:center;color:#52c41a;padding:20px;">🎉 全对！</div>' : ''}
-                    ${h.wrongList.map(w => {
-                        if (typeof w === 'object') {
-                            const q = questions.find(qq => qq.n === w.n);
-                            return `
-                                <div class="detail-item">
-                                    <div style="color:#fa8c16;margin-bottom:8px;">【翻译题】</div>
-                                    <div><b>${q.n}. ${q.c}</b></div>
-                                    <div style="background:#fff3e0;padding:10px;border-radius:6px;margin:8px 0;">
-                                        <div style="color:#666;">得分: ${w.score}/${w.total}</div>
-                                        <div style="color:#52c41a;margin-top:4px;">✓ 已得分: ${w.correct.join(', ')}</div>
-                                        <div style="color:#ff4d4f;margin-top:4px;">✗ 未得分: ${w.wrong.join(', ')}</div>
+            loadServerAnalysis().then(data => {
+                if (h.type === 'cloze') {
+                    const clozeData = (serverAnalysis?.cloze || []).find(c => c.score === h.score);
+                    if (clozeData?.analysis) {
+                        list.innerHTML = `
+                            <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                            <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
+                            ${clozeData.analysis.map(a => `
+                                <div class="detail-item" style="border-left-color:${a.explanation.includes('✅')?'#52c41a':'#ff4d4f'}">
+                                    <div><b>第${a.n}空</b> (提示: ${a.hint})</div>
+                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers?.[a.n] || '未填'}</div>
+                                    <div style="color:#52c41a;margin-top:4px;">正确答案: ${a.correct}</div>
+                                    <div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;line-height:1.6;">
+                                        ${a.explanation.replace(/\n/g,'<br>')}
                                     </div>
-                                    <div style="color:#52c41a;">正确答案: ${q.a}</div>
-                                    ${serverItem && serverItem.analysis && serverItem.analysis[w.n] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${serverItem.analysis[w.n].explanation}</div>` : ''}
                                 </div>
-                            `;
-                        } else {
+                            `).join('')}
+                        `;
+                    } else {
+                        list.innerHTML = `
+                            <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                            <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
+                            <div style="color:#666;">暂无详细解析</div>
+                        `;
+                    }
+                } else {
+                    const quizData = (serverAnalysis?.quiz || []).find(q => q.score === h.score);
+                    list.innerHTML = `
+                        <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                        <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">选择题得分: ${h.score}/44</div>
+                        ${h.wrongList.map(w => {
                             const q = questions.find(qq => qq.n === w);
                             return `
                                 <div class="detail-item">
                                     <div style="color:#1890ff;margin-bottom:8px;">【选择题】</div>
                                     <div><b>${q.n}. ${q.c}</b></div>
                                     ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers ? h.userAnswers[q.n] : '未答'}</div>
+                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers?.[q.n] || '未答'}</div>
                                     <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
-                                    ${serverItem && serverItem.analysis && serverItem.analysis[w] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${serverItem.analysis[w].explanation}</div>` : ''}
+                                    ${quizData?.analysis?.[w] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${quizData.analysis[w].explanation}</div>` : ''}
                                 </div>
                             `;
-                        }
-                    }).join('')}
-                `;
-            }
+                        }).join('')}
+                    `;
+                }
+            });
         }
         
         function submitQuiz() {
-            let score = 0;
-            let wrongList = [];
-            let answerText = '';
+            let score = 0, wrongList = [], answerText = '';
             questions.forEach(q => {
                 if (q.o) {
                     const ans = userAnswers[q.n] || '未答';
                     answerText += q.n + '. ' + ans + '\n';
-                    if (ans === q.a) {
-                        score += 4;
-                    } else {
-                        wrongList.push(q.n);
-                    }
+                    if (ans === q.a) score += 4;
+                    else wrongList.push(q.n);
                 } else {
-                    // 翻译题 - 分段得分
                     const ans = document.getElementById('a' + q.n).value || '未答';
                     answerText += q.n + '. ' + ans + '\n';
-                    let qScore = 0;
-                    let correctPoints = [];
-                    let wrongPoints = [];
+                    let qScore = 0, correctPoints = [], wrongPoints = [];
                     const ansLower = ans.toLowerCase();
                     if (q.points) {
                         q.points.forEach(p => {
-                            if (ansLower.includes(p.key)) {
-                                qScore += p.p;
-                                correctPoints.push(p.key);
-                            } else {
-                                wrongPoints.push(p.key);
-                            }
+                            if (ansLower.includes(p.key)) { qScore += p.p; correctPoints.push(p.key); }
+                            else wrongPoints.push(p.key);
                         });
                     }
                     score += qScore;
-                    if (qScore < 6) {
-                        wrongList.push({n:q.n, score:qScore, total:6, correct:correctPoints, wrong:wrongPoints});
-                    }
+                    if (qScore < 6) wrongList.push({n:q.n, score:qScore, total:6, correct:correctPoints, wrong:wrongPoints});
                 }
             });
-            
-            // 保存到历史（包含用户答案）+ 持久化存储
             const userAns = {};
-            questions.forEach(q => {
-                if (q.o) userAns[q.n] = userAnswers[q.n] || '未答';
-                else userAns[q.n] = document.getElementById('a' + q.n).value || '未答';
-            });
-            historyData.push({
-                type:'quiz',
-                day:1,
-                score:score,
-                wrongCount:wrongList.length,
-                wrongList:wrongList,
-                userAnswers:userAns,
-                date:new Date().toLocaleDateString()
-            });
+            questions.forEach(q => { userAns[q.n] = userAnswers[q.n] || (q.o ? '未答' : document.getElementById('a' + q.n).value || '未答'); });
+            historyData.push({type:'quiz',day:1,score, wrongCount:wrongList.length, wrongList, userAnswers:userAns, date:new Date().toLocaleDateString()});
             localStorage.setItem('chunchun_quiz_history', JSON.stringify(historyData));
             
-            // 发给小虾老师
-            const msg = `【纯纯英语 Day 1 答题结果】\n\n日期：${new Date().toLocaleDateString()}\n\n${answerText}\n得分：${score}/44`;
-            const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=44&answers=' + encodeURIComponent(msg);
-            fetch(webhookUrl).then(() => console.log('已发送')).catch(() => console.log('发送失败'));
-            
-            // 从GitHub获取小虾老师的批改解析
-            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
-                .then(r => r.json())
-                .then(data => {
-                    const latest = data.quiz[data.quiz.length-1];
-                    if (latest) {
-                        alert('得分: ' + score + '/44\n已提交给小虾老师！\n\n💡 查看历史记录可以看到小虾老师的详细解析！');
-                    } else {
-                        alert('得分: ' + score + '/44\n已提交给小虾老师！');
-                    }
-                })
-                .catch(() => alert('得分: ' + score + '/44\n已提交给小虾老师！'));
+            const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=44&answers=' + encodeURIComponent('【纯纯英语 Day 1 答题结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n' + answerText + '\n得分：' + score + '/44');
+            fetch(webhookUrl).then(() => {}).catch(() => {});
+            alert('得分: ' + score + '/44\n已提交给小虾老师！\n\n💡 查看历史记录可以看到详细解析');
         }
         
-        // 完形填空答案
         const clozeCorrect = {1:'went',2:'woke',3:'had',4:'played',5:'swam',6:'made',7:'was',8:'enjoyed',9:'was'};
         const clozeHints = {1:'go',2:'wake',3:'have',4:'play',5:'swim',6:'make',7:'be',8:'enjoy',9:'be'};
         
         function submitCloze() {
-            const answers = {
-                1: document.getElementById('c1').value.toLowerCase().trim(),
-                2: document.getElementById('c2').value.toLowerCase().trim(),
-                3: document.getElementById('c3').value.toLowerCase().trim(),
-                4: document.getElementById('c4').value.toLowerCase().trim(),
-                5: document.getElementById('c5').value.toLowerCase().trim(),
-                6: document.getElementById('c6').value.toLowerCase().trim(),
-                7: document.getElementById('c7').value.toLowerCase().trim(),
-                8: document.getElementById('c8').value.toLowerCase().trim(),
-                9: document.getElementById('c9').value.toLowerCase().trim()
-            };
-            let score = 0;
-            let wrongList = [];
+            const answers = {};
+            let score = 0, wrongList = [];
             for (let i = 1; i <= 9; i++) {
-                if (answers[i] === clozeCorrect[i]) {
-                    score += 4;
-                } else {
-                    wrongList.push({n:i, ans:answers[i]||'空', correct:clozeCorrect[i], hint:clozeHints[i]});
-                }
+                const ans = document.getElementById('c' + i).value.trim().toLowerCase();
+                answers[i] = ans || '空';
+                if (ans === clozeCorrect[i]) score += 4;
+                else wrongList.push({n:i, correct:clozeCorrect[i], hint:clozeHints[i]});
             }
-            clozeHistory.push({type:'cloze',day:1,score:score,wrongCount:wrongList.length,wrongList:wrongList,userAnswers:answers,date:new Date().toLocaleDateString()});
+            clozeHistory.push({type:'cloze',day:1,score,wrongCount:wrongList.length,wrongList,userAnswers:answers,date:new Date().toLocaleDateString()});
             localStorage.setItem('chunchun_cloze_history', JSON.stringify(clozeHistory));
             
-            // 发给小虾老师
-            let clozeMsg = '【纯纯英语 Day 1 完形填空结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n';
-            for (let i = 1; i <= 9; i++) {
-                clozeMsg += i + '. ' + (answers[i] || '空') + '\n';
-            }
-            clozeMsg += '\n得分：' + score + '/36';
-            fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-cloze&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=36&answers=' + encodeURIComponent(clozeMsg)).then(() => console.log('已发送')).catch(() => console.log('发送失败'));
-            
-            alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', ') + '\n已提交给小虾老师！');
+            let answerText = '';
+            for (let i = 1; i <= 9; i++) answerText += i + '. ' + (answers[i] || '空') + '\n';
+            const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-cloze&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=36&answers=' + encodeURIComponent('【纯纯英语 Day 1 完形填空结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n' + answerText + '\n得分：' + score + '/36');
+            fetch(webhookUrl).then(() => {}).catch(() => {});
+            alert('得分: ' + score + '/36\n已提交给小虾老师！\n\n💡 查看历史记录可以看到详细解析');
         }
         
         renderQuestions();
