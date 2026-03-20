@@ -1,4 +1,48 @@
 {
-  "quiz": [],
-  "cloze": []
+  "quiz": [
+    {
+      "date": "2026/3/20",
+      "score": 4,
+      "answers": {"1": "A", "2": "C", "3": "未答", "4": "未答", "5": "C", "6": "未答", "7": "未答", "8": "未答", "9": "未答", "10": "未答"},
+      "analysis": {
+        "1": {"correct": "C", "explanation": "过去进行时：were/was + doing，昨晚7点正在看电视，用was watching"},
+        "2": {"correct": "B", "explanation": "条件句主将从现：if从句用一般现在时rains，主句用will+动词原形"},
+        "5": {"correct": "C", "explanation": "go的过去式是went，Last summer表示过去时间"}
+      }
+    },
+    {
+      "date": "2026/3/20",
+      "score": 0,
+      "answers": {"1": "B", "2": "未答", "3": "未答", "4": "Don't", "5": "未答", "6": "未答", "7": "未答", "8": "未答", "9": "未答", "10": "未答"},
+      "analysis": {
+        "1": {"correct": "C", "explanation": "过去进行时：What were you doing... 答B不对，要用was watching"},
+        "4": {"correct": "Don't draw on the wall", "explanation": "翻译题：不要... = Don't...，在墙上 = on the wall"}
+      }
+    },
+    {
+      "date": "2026/3/20",
+      "score": 20,
+      "answers": {"1": "B", "2": "B", "3": "未答", "4": "Don't draw on wall", "5": "B", "6": "B", "7": "C", "8": "C", "9": "C", "10": "B"},
+      "analysis": {
+        "1": {"correct": "C", "explanation": "过去进行时：were watching，不是B"},
+        "5": {"correct": "C", "explanation": "go的过去式是went，不是B"},
+        "6": {"correct": "C", "explanation": "stay的过去式是stayed，不是B"},
+        "8": {"correct": "B", "explanation": "第三人称单数：he learns，不是C"}
+      }
+    }
+  ],
+  "cloze": [
+    {
+      "date": "2026/3/20",
+      "score": 0,
+      "answers": {"1": "go", "2": "wake", "3": "have", "4": "play", "5": "swinm", "6": "空", "7": "空", "8": "空", "9": "空"},
+      "analysis": [
+        {"n": 1, "correct": "went", "hint": "go", "explanation": "过去式：go→went"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "过去式：wake→woke (wake up)"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "过去式：have→had"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "过去式：play→played"},
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "不规则过去式：swim→swam"}
+      ]
+    }
+  ]
 }
