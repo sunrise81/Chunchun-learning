@@ -119,12 +119,14 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             const list = document.getElementById('history-list');
             const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
             if (allHistory.length === 0) {
-                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录</div>';
+                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录<br><br>请先完成答题并提交</div>';
                 return;
             }
+            // 显示最新在前
+            allHistory.reverse();
             list.innerHTML = allHistory.map((h, i) => `
-                <div class="history-item" onclick="showDetail(${i})">
-                    <div><b>${h.attemptType}</b></div>
+                <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
+                    <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
                     <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
                     <div>错题: ${h.wrongCount}道</div>
                 </div>
@@ -183,9 +185,11 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         function submitQuiz() {
             let score = 0;
             let wrongList = [];
+            let answerText = '';
             questions.forEach(q => {
                 if (q.o) {
-                    const ans = userAnswers[q.n];
+                    const ans = userAnswers[q.n] || '未答';
+                    answerText += q.n + '. ' + ans + '\n';
                     if (ans === q.a) {
                         score += 4;
                     } else {
@@ -193,13 +197,15 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     }
                 } else {
                     // 翻译题 - 分段得分
-                    const ans = document.getElementById('a' + q.n).value.toLowerCase();
+                    const ans = document.getElementById('a' + q.n).value || '未答';
+                    answerText += q.n + '. ' + ans + '\n';
                     let qScore = 0;
                     let correctPoints = [];
                     let wrongPoints = [];
+                    const ansLower = ans.toLowerCase();
                     if (q.points) {
                         q.points.forEach(p => {
-                            if (ans.includes(p.key)) {
+                            if (ansLower.includes(p.key)) {
                                 qScore += p.p;
                                 correctPoints.push(p.key);
                             } else {
@@ -214,16 +220,22 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 }
             });
             
-            // 保存到历史（包含翻译题详细得分）
+            // 保存到历史
             historyData.push({
                 type:'quiz',
                 day:1,
                 score:score,
                 wrongCount:wrongList.length,
-                wrongList:wrongList
+                wrongList:wrongList,
+                date:new Date().toLocaleDateString()
             });
             
-            alert('得分: ' + score + '/44');
+            // 发给小虾老师
+            const msg = `【纯纯英语 Day 1 答题结果】\n\n日期：${new Date().toLocaleDateString()}\n\n${answerText}\n得分：${score}/44`;
+            const webhookUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=44&answers=' + encodeURIComponent(msg);
+            fetch(webhookUrl).then(() => console.log('已发送')).catch(() => console.log('发送失败'));
+            
+            alert('得分: ' + score + '/44\n已提交给小虾老师！');
         }
         
         // 完形填空答案
@@ -251,8 +263,17 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     wrongList.push({n:i, ans:answers[i]||'空', correct:clozeCorrect[i], hint:clozeHints[i]});
                 }
             }
-            clozeHistory.push({type:'cloze',day:1,score:score,wrongCount:wrongList.length,wrongList:wrongList});
-            alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', '));
+            clozeHistory.push({type:'cloze',day:1,score:score,wrongCount:wrongList.length,wrongList:wrongList,date:new Date().toLocaleDateString()});
+            
+            // 发给小虾老师
+            let clozeMsg = '【纯纯英语 Day 1 完形填空结果】\n\n日期：' + new Date().toLocaleDateString() + '\n\n';
+            for (let i = 1; i <= 9; i++) {
+                clozeMsg += i + '. ' + (answers[i] || '空') + '\n';
+            }
+            clozeMsg += '\n得分：' + score + '/36';
+            fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-cloze&date=' + new Date().toISOString().split('T')[0] + '&day=1&score=' + score + '&total=36&answers=' + encodeURIComponent(clozeMsg)).then(() => console.log('已发送')).catch(() => console.log('发送失败'));
+            
+            alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', ') + '\n已提交给小虾老师！');
         }
         
         renderQuestions();
