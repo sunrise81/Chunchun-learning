@@ -508,36 +508,23 @@
             };
             document.body.appendChild(img);
             
+            // Google Form - 预填URL
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/viewform?usp=pp_url' +
+                '&entry.2006960552=' + encodeURIComponent(new Date().toISOString().split('T')[0]) +
+                '&entry.1222766399=' + encodeURIComponent(exportText.substring(0, 500)) +
+                '&entry.1205699284=' + score + '/' + total;
+            
             // 显示发送界面
             const tipEl = document.querySelector('.copy-tip');
             tipEl.innerHTML = `
                 <div style="text-align:center;padding:16px;">
                     <div style="font-size:18px;color:#52c41a;margin-bottom:12px;">✅ 答案已准备好！</div>
-                    <div style="font-size:14px;color:#666;margin-bottom:16px;">请发送给"小虾老师"完成提交</div>
-                    <button id="sendBtn" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#4A90E2,#1890ff);color:white;border:none;border-radius:12px;font-size:16px;cursor:pointer;">
-                        📨 一键发送给：小虾老师
-                    </button>
+                    <a href="${formUrl}" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#4A90E2,#1890ff);color:white;text-decoration:none;border-radius:12px;font-size:16px;box-sizing:border-box;">
+                        📝 提交到Google表单
+                    </a>
+                    <div style="font-size:12px;color:#888;margin-top:8px;">点击自动填入答案，提交即可</div>
                 </div>
             `;
-            
-            document.getElementById('sendBtn').onclick = function() {
-                // 复制答案
-                const textarea = document.createElement('textarea');
-                textarea.value = exportText;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                
-                // 尝试打开飞书
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                if (isMobile) {
-                    window.location.href = 'feishu://';
-                }
-                
-                // 提示用户
-                alert('答案已复制！请打开飞书，粘贴发送给"小虾老师"');
-            };
         }
     </script>
 </body>
