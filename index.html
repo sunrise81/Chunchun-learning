@@ -21,8 +21,9 @@
         .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
         .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
         .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
-        .cloze-input { width: 100px; padding: 8px; border: 2px solid #4A90E2; border-radius: 6px; font-size: 14px; }
-        .cloze-text { background: #f0f7ff; padding: 15px; border-radius: 8px; line-height: 2.2; }
+        .cloze-input { width: 90px; padding: 6px; border: 2px solid #4A90E2; border-radius: 6px; font-size: 14px; margin: 0 3px; }
+        .cloze-text { background: #f0f7ff; padding: 15px; border-radius: 8px; line-height: 2.8; }
+        .cloze-hint { color: #4A90E2; font-weight: bold; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -44,9 +45,12 @@
     
     <div id="cloze-section" style="display:none;">
         <div class="question-card">
-            <div class="question-title">📖 完形填空 (10空，共40分)</div>
+            <div class="question-title">📖 完形填空 (9空，共36分)</div>
+            <div style="background:#fff3e0;padding:10px;border-radius:8px;margin-bottom:15px;font-size:13px;">
+                💡 提示：括号里是动词原形，请根据上下文填写正确的形式
+            </div>
             <div class="cloze-text">
-Tom is a 12-year-old boy. Last summer, he <input type="text" id="c1" class="cloze-input" placeholder="1"> to a summer camp. Every morning, he <input type="text" id="c2" class="cloze-input" placeholder="2"> up at 6:30 and <input type="text" id="c3" class="cloze-input" placeholder="3"> breakfast with his friends. They <input type="text" id="c4" class="cloze-input" placeholder="4"> games and <input type="text" id="c5" class="cloze-input" placeholder="5"> in the lake every day. Tom <input type="text" id="c6" class="cloze-input" placeholder="6"> many new friends at the camp. His best friend <input type="text" id="c7" class="cloze-input" placeholder="7"> Jack. They <input type="text" id="c8" class="cloze-input" placeholder="8"> reading stories together at night. The camp <input type="text" id="c9" class="cloze-input" placeholder="9"> fun and Tom can't wait to go back next year.
+Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span> <input type="text" id="c1" class="cloze-input" placeholder="填词"> to a summer camp. Every morning, he <span class="cloze-hint">2 (wake)</span> <input type="text" id="c2" class="cloze-input" placeholder="填词"> up at 6:30 and <span class="cloze-hint">3 (have)</span> <input type="text" id="c3" class="cloze-input" placeholder="填词"> breakfast with his friends. They <span class="cloze-hint">4 (play)</span> <input type="text" id="c4" class="cloze-input" placeholder="填词"> games and <span class="cloze-hint">5 (swim)</span> <input type="text" id="c5" class="cloze-input" placeholder="填词"> in the lake every day. Tom <span class="cloze-hint">6 (make)</span> <input type="text" id="c6" class="cloze-input" placeholder="填词"> many new friends at the camp. His best friend <span class="cloze-hint">7 (be)</span> <input type="text" id="c7" class="cloze-input" placeholder="填词"> Jack. They <span class="cloze-hint">8 (enjoy)</span> <input type="text" id="c8" class="cloze-input" placeholder="填词"> reading stories together at night. The camp <span class="cloze-hint">9 (be)</span> <input type="text" id="c9" class="cloze-input" placeholder="填词"> fun and Tom can't wait to go back next year.
             </div>
         </div>
         <button class="btn btn-blue" onclick="submitCloze()">提交完形填空</button>
@@ -165,13 +169,17 @@ Tom is a 12-year-old boy. Last summer, he <input type="text" id="c1" class="cloz
                 1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'swam',
                 6: 'made', 7: 'was', 8: 'enjoyed', 9: 'was'
             };
+            const hints = {
+                1: 'go', 2: 'wake', 3: 'have', 4: 'play', 5: 'swim',
+                6: 'make', 7: 'be', 8: 'enjoy', 9: 'be'
+            };
             let score = 0;
             let wrong = [];
             for (let i = 1; i <= 9; i++) {
                 if (answers[i] === correct[i]) {
                     score += 4;
                 } else {
-                    wrong.push(i + ':' + (answers[i] || '空'));
+                    wrong.push(i + '(' + hints[i] + '):' + (answers[i] || '空'));
                 }
             }
             alert('完形填空得分: ' + score + '/36\n错题: ' + wrong.join(', '));
