@@ -153,6 +153,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     if (clozeData?.analysis) {
                         list.innerHTML = `
                             <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                            <button class="back-btn" onclick="deleteHistory(${idx})" style="background:#ff4d4f;float:right;">🗑️ 删除</button>
                             <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
                             ${clozeData.analysis.map(a => `
                                 <div class="detail-item" style="border-left-color:${a.explanation.includes('✅')?'#52c41a':'#ff4d4f'}">
@@ -176,23 +177,58 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                     const quizData = (serverAnalysis?.quiz || []).find(q => q.score === h.score);
                     list.innerHTML = `
                         <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                        <button class="back-btn" onclick="deleteHistory(${idx})" style="background:#ff4d4f;float:right;">🗑️ 删除</button>
                         <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">选择题得分: ${h.score}/44</div>
                         ${h.wrongList.map(w => {
-                            const q = questions.find(qq => qq.n === w);
-                            return `
-                                <div class="detail-item">
-                                    <div style="color:#1890ff;margin-bottom:8px;">【选择题】</div>
-                                    <div><b>${q.n}. ${q.c}</b></div>
-                                    ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers?.[q.n] || '未答'}</div>
-                                    <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
-                                    ${quizData?.analysis?.[w] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${quizData.analysis[w].explanation}</div>` : ''}
-                                </div>
-                            `;
+                            if (typeof w === 'object') {
+                                // 翻译题
+                                const q = questions.find(qq => qq.n === w.n);
+                                return `
+                                    <div class="detail-item">
+                                        <div style="color:#fa8c16;margin-bottom:8px;">【翻译题】</div>
+                                        <div><b>${q.n}. ${q.c}</b></div>
+                                        <div style="background:#fff3e0;padding:10px;border-radius:6px;margin:8px 0;">
+                                            <div style="color:#666;">得分: ${w.score}/${w.total}</div>
+                                            <div style="color:#52c41a;margin-top:4px;">✓ 已得分: ${w.correct.join(', ')}</div>
+                                            <div style="color:#ff4d4f;margin-top:4px;">✗ 未得分: ${w.wrong.join(', ')}</div>
+                                        </div>
+                                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers?.[q.n] || '未答'}</div>
+                                        <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                                        ${quizData?.analysis?.[w.n] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${quizData.analysis[w.n].explanation}</div>` : ''}
+                                    </div>
+                                `;
+                            } else {
+                                // 选择题
+                                const q = questions.find(qq => qq.n === w);
+                                return `
+                                    <div class="detail-item">
+                                        <div style="color:#1890ff;margin-bottom:8px;">【选择题】</div>
+                                        <div><b>${q.n}. ${q.c}</b></div>
+                                        ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
+                                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers?.[q.n] || '未答'}</div>
+                                        <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                                        ${quizData?.analysis?.[w] ? `<div style="background:#f0f7ff;padding:10px;border-radius:6px;margin-top:10px;font-size:13px;">${quizData.analysis[w].explanation}</div>` : ''}
+                                    </div>
+                                `;
+                            }
                         }).join('')}
                     `;
                 }
             });
+        }
+        
+        function deleteHistory(idx) {
+            if (!confirm('确定要删除这条历史记录吗？')) return;
+            const allHistory = [...historyData, ...clozeHistory];
+            const h = allHistory[idx];
+            if (h.type === 'cloze') {
+                clozeHistory.splice(idx - historyData.length, 1);
+                localStorage.setItem('chunchun_cloze_history', JSON.stringify(clozeHistory));
+            } else {
+                historyData.splice(idx, 1);
+                localStorage.setItem('chunchun_quiz_history', JSON.stringify(historyData));
+            }
+            renderHistory();
         }
         
         function submitQuiz() {
