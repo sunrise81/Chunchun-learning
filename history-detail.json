@@ -14,12 +14,12 @@
       {"num": 9, "type": "选择", "content": "She ______ many new friends.", "options": ["A. make", "B. makes", "C. made", "D. making"], "answer": "C"},
       {"num": 10, "type": "选择", "content": "He ______ the camp very much.", "options": ["A. enjoy", "B. enjoys", "C. enjoyed", "D. enjoying"], "answer": "B"}
     ],
-    "userAnswers": {"1": "B", "2": "B", "3": "未答", "4": "未答", "5": "C", "6": "C", "7": "C", "8": "C", "9": "C", "10": "C"},
-    "score": 28,
+    "userAnswers": {"1": "B", "2": "C", "3": "未答", "4": "未答", "5": "B", "6": "C", "7": "C", "8": "C", "9": "C", "10": "C"},
+    "score": 24,
     "total": 44,
-    "wrongQuestions": [1, 3, 4],
-    "wrongTopics": ["过去进行时", "翻译题"],
-    "comment": "太棒了！28分！只错了3题！Q7-Q10全对！继续保持～",
+    "wrongQuestions": [1, 3, 4, 5],
+    "wrongTopics": ["过去进行时", "翻译题", "过去式went"],
+    "comment": "24分！错题：Q1(过去进行时)、Q3/Q4(翻译题未答)、Q5(过去式went)",
     "reviewStatus": "pending"
   }
 ]
