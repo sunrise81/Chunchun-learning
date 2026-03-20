@@ -2,47 +2,30 @@
   "quiz": [
     {
       "date": "2026/3/20",
-      "score": 24,
-      "answers": {"1": "B", "2": "B", "3": "If", "4": "Don't", "5": "C", "6": "C", "7": "B", "8": "B", "9": "C", "10": "B"},
+      "score": 14,
+      "answers": {"1": "C", "2": "B", "3": "If it does not rain tomorrow we go to the park", "4": "未答", "5": "C", "6": "未答", "7": "未答", "8": "未答", "9": "未答", "10": "未答"},
       "analysis": {
-        "1": {"correct": "C", "explanation": "❌ 错误！答B watched不对。\n【语法】过去进行时：were/was + doing。What were you doing... 正在做什么，用was watching。"},
-        "3": {"correct": "If it doesn't rain tomorrow, we will go to the park.", "explanation": "⚠️ 部分正确：你写了If，得2分。\n【语法】完整翻译：If it doesn't rain tomorrow, we will go to the park.\n- if引导条件句\n- doesn't rain（否定）\n- tomorrow（明天）\n- we will go（我们去）\n- to the park（去公园）"},
-        "4": {"correct": "Don't draw on the wall.", "explanation": "⚠️ 部分正确：你写了Don't，得2分。\n【语法】完整翻译：Don't draw on the wall.\n- Don't + 动词原形（表示否定命令）\n- draw（画）\n- on the wall（在墙上）"},
-        "7": {"correct": "C", "explanation": "❌ 错误！答B不对。\n【语法】Every day表示习惯性动作，用一般现在时。主语是he，第三人称单数，所以用plays。"}
+        "1": {"correct": "C", "explanation": "✅ 正确！\n【语法】过去进行时：were/was + doing。What were you doing... 正在做什么，用was watching。"},
+        "3": {"correct": "If it doesn't rain tomorrow, we will go to the park.", "explanation": "⚠️ 部分正确：你写了主要意思，但有错误。\n【语法】正确翻译：If it doesn't rain tomorrow, we will go to the park.\n- 你的问题：\n  1. does not 应该写成 doesn't（缩写）\n  2. we go 应该写成 we will go（主将从现：主句用will+动词原形）\n- 得分：2分（因为有关键词）"},
+        "5": {"correct": "C", "explanation": "✅ 正确！\n【语法】Last summer表示过去时间，go的过去式是went。"}
       }
     }
   ],
   "cloze": [
     {
       "date": "2026/3/20",
-      "score": 24,
-      "answers": {"1": "went", "2": "wake", "3": "had", "4": "play", "5": "swim", "6": "made", "7": "was", "8": "enjoyed", "9": "was"},
-      "analysis": [
-        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went。"},
-        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错误！填了原形wake，应该填过去式woke。\n【语法】wake up是短语，过去式是woke up。不规则变化：wake→woke。"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。"},
-        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。"},
-        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错误！填了swing（摆动），应该是swam。\n【语法】swim的不规则过去式是swam。记忆口诀：swim-swam-swum。"},
-        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made。"},
-        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"},
-        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed。"},
-        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"}
-      ]
-    },
-    {
-      "date": "2026/3/20",
       "score": 20,
       "answers": {"1": "went", "2": "wake", "3": "had", "4": "play", "5": "swing", "6": "made", "7": "was", "8": "enjoed", "9": "was"},
       "analysis": [
-        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went。\n【语法】Last summer表示过去时间，动词要用过去式。"},
-        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错误！填了原形wake，应该填过去式woke。\n【语法】wake up是短语，过去式是woke up。"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。"},
-        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。\n【语法】过去每天的动作要用过去式。"},
-        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错误！你填了swing（摆动），应该是swam（游泳）。\n【语法】swim的不规则过去式是swam。注意区分：swing是秋千，swim是游泳！"},
-        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made。"},
-        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"},
-        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "❌ 错误！你填了enjoed（拼写错），应该是enjoyed。\n【语法】enjoy的过去式是enjoyed（直接加ed）。"},
-        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词过去式，主语单数用was。"}
+        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错误！填了原形wake，应该填过去式woke。"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。"},
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错误！你填了swing（秋千），应该是swam（游泳）。"},
+        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！"},
+        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！"},
+        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "❌ 错误！拼写错，应该是enjoyed。"},
+        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！"}
       ]
     }
   ]
