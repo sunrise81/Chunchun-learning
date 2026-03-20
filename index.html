@@ -35,12 +35,24 @@
     
     <div class="tab-container">
         <button class="tab active" onclick="showTab('quiz')">选择题</button>
+        <button class="tab" onclick="showTab('cloze')">完形填空</button>
         <button class="tab" onclick="showTab('history')">📜 历史</button>
     </div>
     
     <div id="quiz-section">
         <div id="questions"></div>
         <button class="btn btn-blue" onclick="submitQuiz()">提交答案</button>
+    </div>
+    
+    <div id="cloze-section" style="display:none;">
+        <div class="question-card">
+            <div class="question-title">📖 完形填空</div>
+            <div style="background:#f0f7ff;padding:15px;border-radius:8px;margin:15px 0;line-height:2;">
+                Tom is a 12-year-old boy. Last summer, he <input type="text" id="c1" placeholder="1" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> to a summer camp near the lake. Every morning, he <input type="text" id="c2" placeholder="2" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> up at 6:30 and <input type="text" id="c3" placeholder="3" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> breakfast with his friends. They <input type="text" id="c4" placeholder="4" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> games, <input type="text" id="c5" placeholder="5" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> new skills, and <input type="text" id="c6" placeholder="6" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> in the lake every day.<br><br>
+                Tom <input type="text" id="c7" placeholder="7" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> many new friends at the camp. His best friend <input type="text" id="c8" placeholder="8" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> Jack. They <input type="text" id="c9" placeholder="9" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> reading stories together at night. The camp <input type="text" id="c10" placeholder="10" style="width:80px;padding:5px;border:1px solid #4A90E2;border-radius:4px;"> fun and Tom can't wait to go back next year.
+            </div>
+        </div>
+        <button class="btn btn-blue" onclick="submitCloze()">提交完形填空</button>
     </div>
     
     <div id="history-section" style="display:none;">
@@ -93,6 +105,7 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+            document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
             document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
             if (tab === 'history') renderHistory();
         }
@@ -140,6 +153,35 @@
                 }
             });
             alert('得分: ' + score + '/44');
+        }
+        
+        function submitCloze() {
+            const answers = {
+                1: document.getElementById('c1').value.toLowerCase().trim(),
+                2: document.getElementById('c2').value.toLowerCase().trim(),
+                3: document.getElementById('c3').value.toLowerCase().trim(),
+                4: document.getElementById('c4').value.toLowerCase().trim(),
+                5: document.getElementById('c5').value.toLowerCase().trim(),
+                6: document.getElementById('c6').value.toLowerCase().trim(),
+                7: document.getElementById('c7').value.toLowerCase().trim(),
+                8: document.getElementById('c8').value.toLowerCase().trim(),
+                9: document.getElementById('c9').value.toLowerCase().trim(),
+                10: document.getElementById('c10').value.toLowerCase().trim()
+            };
+            const correct = {
+                1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'learned',
+                6: 'swam', 7: 'made', 8: 'was called', 9: 'enjoyed', 10: 'was'
+            };
+            let score = 0;
+            let wrong = [];
+            for (let i = 1; i <= 10; i++) {
+                if (answers[i] === correct[i] || answers[i] === correct[i].replace(' was ', ' ')) {
+                    score += 4;
+                } else {
+                    wrong.push(i);
+                }
+            }
+            alert('完形填空得分: ' + score + '/40\n错题: ' + wrong.join(', '));
         }
         
         renderQuestions();
