@@ -490,23 +490,29 @@
             });
             
             // 自动提交到服务器（通知小虾老师）
+            // 使用JSONP方式或直接复制
+            const submitData = {
+                type: 'chunchun-english-answer',
+                date: new Date().toISOString().split('T')[0],
+                day: 1,
+                answers: exportText,
+                score: score,
+                total: total
+            };
+            
+            // 尝试提交，如果失败则显示手动发送提示
             fetch('https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb', {
                 method: 'POST',
+                mode: 'no-cors',  // 忽略CORS错误
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    type: 'chunchun-english-answer',
-                    date: new Date().toISOString().split('T')[0],
-                    day: 1,
-                    answers: exportText,
-                    score: score,
-                    total: total
-                })
+                body: JSON.stringify(submitData)
             }).then(r => {
-                console.log('已通知小虾老师');
+                document.querySelector('.copy-tip').textContent = '✅ 已自动提交！小虾老师会收到~';
             }).catch(err => {
-                console.log('通知失败', err);
+                // 如果自动提交失败，显示手动发送提示
+                document.querySelector('.copy-tip').innerHTML = '📋 请把答案发给小虾老师<br><span style="font-size:12px;color:#666;">（点击上方文本复制）</span>';
             });
         }
     </script>
