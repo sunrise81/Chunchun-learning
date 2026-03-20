@@ -43,6 +43,22 @@
         {"n": 4, "correct": "played", "hint": "play", "explanation": "过去式：play→played"},
         {"n": 5, "correct": "swam", "hint": "swim", "explanation": "不规则过去式：swim→swam"}
       ]
+    },
+    {
+      "date": "2026/3/20",
+      "score": 24,
+      "answers": {"1": "went", "2": "wake", "3": "had", "4": "play", "5": "swim", "6": "made", "7": "was", "8": "enjoyed", "9": "was"},
+      "analysis": [
+        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错：应该填woke (过去式)，wake是原形"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错：应该填played (过去式)，play是原形"},
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错：应该填swam (不规则过去式)，swim是原形"},
+        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made"},
+        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be的过去式是was (用于单数)"},
+        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed"},
+        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be的过去式是was (用于单数)"}
+      ]
     }
   ]
 }
