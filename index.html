@@ -489,7 +489,7 @@
                 document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
             });
             
-            // 提交到 httpbin.org（支持CORS）
+            // 尝试自动提交（不阻塞显示）
             const data = {
                 type: 'chunchun-english-answer',
                 date: new Date().toISOString().split('T')[0],
@@ -501,15 +501,29 @@
             
             fetch('https://httpbin.org/post', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
-            }).then(r => r.json()).then(result => {
-                document.querySelector('.copy-tip').textContent = '✅ 已提交！小虾老师收到了~';
+            }).then(r => {
+                // 成功
             }).catch(err => {
-                document.querySelector('.copy-tip').innerHTML = '📋 请把答案发给小虾老师';
+                // 失败没关系，主要靠手动
             });
+            
+            // 显示复制结果和发送按钮
+            document.querySelector('.copy-tip').innerHTML = '✅ 已复制！<br><a id="sendBtn" style="display:inline-block;margin-top:8px;padding:10px 20px;background:#4A90E2;color:white;text-decoration:none;border-radius:8px;">📨 点此发送给小虾老师</a>';
+            
+            document.getElementById('sendBtn').onclick = function() {
+                // 复制并尝试打开飞书
+                const blob = new Blob([exportText], {type: 'text/plain'});
+                const item = new ClipboardItem({'text/plain': blob});
+                navigator.clipboard.write([item]).then(() => {
+                    // 尝试打开飞书
+                    window.location.href = 'feishu://';
+                    setTimeout(() => {
+                        alert('答案已复制！请打开飞书，粘贴发送给小虾老师~');
+                    }, 500);
+                });
+            };
         }
     </script>
 </body>
