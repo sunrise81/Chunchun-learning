@@ -489,22 +489,24 @@
                 document.querySelector('.copy-tip').textContent = '👆 请长按上方文本手动复制';
             });
             
-            // 自动尝试提交（用于检测，但主要靠手动）
-            const data = {
-                type: 'chunchun-english-answer',
-                date: new Date().toISOString().split('T')[0],
-                day: 1,
-                answers: exportText,
-                score: score,
-                total: total
-            };
+            // 方法：用图片URL携带数据（绕过CORS）
+            // 数据编码到URL参数中
+            const submitUrl = 'https://webhook.site/74436fa6-994e-444b-9d9c-aa9dbbd251cb?type=chunchun-answer&date=' + 
+                encodeURIComponent(new Date().toISOString().split('T')[0]) +
+                '&day=1&score=' + score + '&total=' + total +
+                '&answers=' + encodeURIComponent(exportText.substring(0, 500));
             
-            // 后台尝试提交（不阻塞）
-            fetch('https://httpbin.org/post', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            }).then(r => {}).catch(err => {});
+            // 创建隐藏图片来发送数据
+            const img = document.createElement('img');
+            img.src = submitUrl;
+            img.style.display = 'none';
+            img.onload = function() {
+                console.log('提交成功');
+            };
+            img.onerror = function() {
+                console.log('提交失败（正常，webhook.site只支持POST）');
+            };
+            document.body.appendChild(img);
             
             // 显示发送界面
             const tipEl = document.querySelector('.copy-tip');
