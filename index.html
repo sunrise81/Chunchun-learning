@@ -120,20 +120,43 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         
         function renderHistory() {
             const list = document.getElementById('history-list');
-            const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
-            if (allHistory.length === 0) {
-                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录<br><br>请先完成答题并提交</div>';
-                return;
-            }
-            // 显示最新在前
-            allHistory.reverse();
-            list.innerHTML = allHistory.map((h, i) => `
-                <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
-                    <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
-                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
-                    <div>错题: ${h.wrongCount}道</div>
-                </div>
-            `).join('');
+            // 优先从GitHub获取解析
+            fetch('https://raw.githubusercontent.com/sunrise81/Chunchun-learning/main/history-answers.json')
+                .then(r => r.json())
+                .then(serverData => {
+                    // 合并本地和服务器数据
+                    const serverQuiz = serverData.quiz || [];
+                    const serverCloze = serverData.cloze || [];
+                    const allHistory = [...historyData.map((h,i)=>({...h,attemptType:'选择题',serverIndex:i})), ...clozeHistory.map((h,i)=>({...h,attemptType:'完形填空',serverIndex:i}))];
+                    allHistory.reverse();
+                    if (allHistory.length === 0) {
+                        list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录<br><br>请先完成答题并提交</div>';
+                        return;
+                    }
+                    list.innerHTML = allHistory.map((h, i) => `
+                        <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
+                            <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
+                            <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
+                            <div>错题: ${h.wrongCount}道</div>
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    // 如果获取失败，用本地数据
+                    const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
+                    if (allHistory.length === 0) {
+                        list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录</div>';
+                        return;
+                    }
+                    allHistory.reverse();
+                    list.innerHTML = allHistory.map((h, i) => `
+                        <div class="history-item" onclick="showDetail(${allHistory.length-1-i})">
+                            <div><b>${h.attemptType || '答题'}</b> <span style="color:#999;font-size:12px;">${h.date||''}</span></div>
+                            <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
+                            <div>错题: ${h.wrongCount}道</div>
+                        </div>
+                    `).join('');
+                });
         }
         
         function showDetail(idx) {
