@@ -37,11 +37,11 @@
       "score": 0,
       "answers": {"1": "go", "2": "wake", "3": "have", "4": "play", "5": "swinm", "6": "空", "7": "空", "8": "空", "9": "空"},
       "analysis": [
-        {"n": 1, "correct": "went", "hint": "go", "explanation": "过去式：go→went"},
-        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "过去式：wake→woke (wake up)"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "过去式：have→had"},
-        {"n": 4, "correct": "played", "hint": "play", "explanation": "过去式：play→played"},
-        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "不规则过去式：swim→swam"}
+        {"n": 1, "correct": "went", "hint": "go", "explanation": "【语法】go的过去式是不规则变化go→went。题目说的是Last summer（去年夏天），是过去的时间，所以要用过去式went。"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "【语法】wake的过去式是不规则变化wake→woke。题目说Every morning he ___ up at 6:30，是描述过去每天的动作，要用过去式woke。"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "【语法】have的过去式是不规则变化have→had。had breakfast吃早餐，是固定搭配。"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "【语法】play的过去式是规则变化play→played（直接加ed）。They played games他们玩游戏。"},
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "【语法】swim的不规则过去式是swim→swam。swim in the lake在湖里游泳。"}
       ]
     },
     {
@@ -49,15 +49,15 @@
       "score": 24,
       "answers": {"1": "went", "2": "wake", "3": "had", "4": "play", "5": "swim", "6": "made", "7": "was", "8": "enjoyed", "9": "was"},
       "analysis": [
-        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went"},
-        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错：应该填woke (过去式)，wake是原形"},
-        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had"},
-        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错：应该填played (过去式)，play是原形"},
-        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错：应该填swam (不规则过去式)，swim是原形"},
-        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made"},
-        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be的过去式是was (用于单数)"},
-        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed"},
-        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be的过去式是was (用于单数)"}
+        {"n": 1, "correct": "went", "hint": "go", "explanation": "✅ 正确！go的过去式是went。\n【语法】Last summer表示过去时间，动词要用过去式。不规则变化：go→went。"},
+        {"n": 2, "correct": "woke", "hint": "wake", "explanation": "❌ 错误！填了原形wake，应该填过去式woke。\n【语法】wake up是短语，过去式是woke up。不规则变化：wake→woke。"},
+        {"n": 3, "correct": "had", "hint": "have", "explanation": "✅ 正确！have的过去式是had。\n【语法】had breakfast是固定搭配，表示吃早餐。不规则变化：have→had。"},
+        {"n": 4, "correct": "played", "hint": "play", "explanation": "❌ 错误！填了原形play，应该填过去式played。\n【语法】题目说过去每天的动作，要用过去式。规则变化：play→played。"},
+        {"n": 5, "correct": "swam", "hint": "swim", "explanation": "❌ 错误！填了原形swim，应该填过去式swam。\n【语法】不规则变化：swim→swam。记忆口诀：swim-swam-swum。"},
+        {"n": 6, "correct": "made", "hint": "make", "explanation": "✅ 正确！make的过去式是made。\n【语法】made many friends交了很多朋友。不规则变化：make→made。"},
+        {"n": 7, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词的过去式，主语是单数用was。\n【语法】His best friend是单数，所以用was。不规则变化：be→was/were。"},
+        {"n": 8, "correct": "enjoyed", "hint": "enjoy", "explanation": "✅ 正确！enjoy的过去式是enjoyed。\n【语法】They enjoyed reading stories他们喜欢读故事。规则变化：enjoy→enjoyed（直接加ed）。"},
+        {"n": 9, "correct": "was", "hint": "be", "explanation": "✅ 正确！be动词的过去式，主语是单数用was。\n【语法】The camp是单数，所以用was。"}
       ]
     }
   ]
