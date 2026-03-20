@@ -47,18 +47,18 @@
     </div>
     
     <script>
-        // 题目数据
+        // 题目数据含解析
         const questions = [
-            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C"},
-            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B"},
-            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park."},
-            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall."},
-            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C"},
-            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C"},
-            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C"},
-            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B"},
-            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C"},
-            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"💡 过去进行时：was/were + doing，表示过去某个时刻正在进行的动作"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"💡 条件句主将从现：if从句用一般现在时，主句用will + 动词原形"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"💡 翻译要点：doesn't rain（否定），we will go（将来时）"},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"💡 介词搭配：在墙上画 = draw on the wall（不是in）"},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"💡 过去式：go的过去式是不规则变化went"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"💡 过去式：stay → stayed"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"💡 规则动词过去式：play → played（直接加ed）"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"💡 第三人称单数：he/she/it 后动词要加s，learn → learns"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"💡 不规则动词过去式：make → made"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"💡 第三人称单数：he enjoys（加es）"}
         ];
         
         // 历史数据
@@ -117,8 +117,9 @@
                     <div class="detail-item">
                         <div><b>${q.n}. ${q.c}</b></div>
                         ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                        <div style="color:#ff4d4f;">你的答案: ${userAnswers[q.n] || '未答'}</div>
-                        <div style="color:#52c41a;">正确答案: ${q.a}</div>
+                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${userAnswers[q.n] || '未答'}</div>
+                        <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                        <div style="background:#fffbe6;padding:10px;border-radius:6px;margin-top:8px;font-size:13px;color:#fa8c16;">${q.exp}</div>
                     </div>
                 `).join('')}
             `;
