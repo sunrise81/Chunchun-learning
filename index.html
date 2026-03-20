@@ -141,6 +141,7 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 list.innerHTML = `
                     <button class="back-btn" onclick="renderHistory()">← 返回</button>
                     <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
+                    ${h.wrongList.length === 0 ? '<div style="text-align:center;color:#52c41a;padding:20px;">🎉 全对！</div>' : ''}
                     ${h.wrongList.map(w => `
                         <div class="detail-item">
                             <div><b>第${w.n}空</b> (提示: ${w.hint})</div>
@@ -153,26 +154,31 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 list.innerHTML = `
                     <button class="back-btn" onclick="renderHistory()">← 返回</button>
                     <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
+                    ${h.wrongList.length === 0 ? '<div style="text-align:center;color:#52c41a;padding:20px;">🎉 全对！</div>' : ''}
                     ${h.wrongList.map(w => {
                         if (typeof w === 'object') {
                             // 翻译题 - 分段显示
                             const q = questions.find(qq => qq.n === w.n);
                             return `
                                 <div class="detail-item">
+                                    <div style="color:#fa8c16;margin-bottom:8px;">【翻译题】</div>
                                     <div><b>${q.n}. ${q.c}</b></div>
-                                    <div style="color:#666;margin:8px 0;">得分: ${w.score}/${w.total}</div>
-                                    <div style="color:#52c41a;margin-top:4px;">✓ 已得分: ${w.correct.join(', ')}</div>
-                                    <div style="color:#ff4d4f;margin-top:4px;">✗ 未得分: ${w.wrong.join(', ')}</div>
-                                    <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                                    <div style="background:#fff3e0;padding:10px;border-radius:6px;margin:8px 0;">
+                                        <div style="color:#666;">得分: ${w.score}/${w.total}</div>
+                                        <div style="color:#52c41a;margin-top:4px;">✓ 已得分: ${w.correct.join(', ')}</div>
+                                        <div style="color:#ff4d4f;margin-top:4px;">✗ 未得分: ${w.wrong.join(', ')}</div>
+                                    </div>
+                                    <div style="color:#52c41a;">正确答案: ${q.a}</div>
                                 </div>
                             `;
                         } else {
                             const q = questions.find(qq => qq.n === w);
                             return `
                                 <div class="detail-item">
+                                    <div style="color:#1890ff;margin-bottom:8px;">【选择题】</div>
                                     <div><b>${q.n}. ${q.c}</b></div>
                                     ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${userAnswers[q.n] || '未答'}</div>
+                                    <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${h.userAnswers ? h.userAnswers[q.n] : '未答'}</div>
                                     <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
                                 </div>
                             `;
@@ -220,13 +226,19 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 }
             });
             
-            // 保存到历史
+            // 保存到历史（包含用户答案）
+            const userAns = {};
+            questions.forEach(q => {
+                if (q.o) userAns[q.n] = userAnswers[q.n] || '未答';
+                else userAns[q.n] = document.getElementById('a' + q.n).value || '未答';
+            });
             historyData.push({
                 type:'quiz',
                 day:1,
                 score:score,
                 wrongCount:wrongList.length,
                 wrongList:wrongList,
+                userAnswers:userAns,
                 date:new Date().toLocaleDateString()
             });
             
