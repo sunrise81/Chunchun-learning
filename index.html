@@ -74,13 +74,16 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B"}
         ];
         
+        // 历史数据：选择题 + 完形填空
         const historyData = [
-            {day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
-            {day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
-            {day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
-            {day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
-            {day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+            {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
+            {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
+            {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+            {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
+            {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
         ];
+        
+        const clozeHistory = []; // 完形填空历史
         
         const userAnswers = {};
         
@@ -111,31 +114,55 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
         
         function renderHistory() {
             const list = document.getElementById('history-list');
-            list.innerHTML = historyData.map((h, i) => `
+            // 合并选择题和完形填空历史
+            const allHistory = [...historyData.map(h=>({...h,attemptType:'选择题'})), ...clozeHistory.map(h=>({...h,attemptType:'完形填空'}))];
+            if (allHistory.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录</div>';
+                return;
+            }
+            list.innerHTML = allHistory.map((h, i) => `
                 <div class="history-item" onclick="showDetail(${i})">
-                    <div><b>第${i+1}次答题</b></div>
-                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/44</div>
+                    <div><b>${h.attemptType}</b></div>
+                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
                     <div>错题: ${h.wrongCount}道</div>
                 </div>
             `).join('');
         }
         
         function showDetail(idx) {
-            const h = historyData[idx];
+            const allHistory = [...historyData, ...clozeHistory];
+            const h = allHistory[idx];
             const list = document.getElementById('history-list');
-            const wrongQs = questions.filter(q => h.wrongList.includes(q.n));
-            list.innerHTML = `
-                <button class="back-btn" onclick="renderHistory()">← 返回</button>
-                <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
-                ${wrongQs.map(q => `
-                    <div class="detail-item">
-                        <div><b>${q.n}. ${q.c}</b></div>
-                        ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
-                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: 未答</div>
-                        <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
-                    </div>
-                `).join('')}
-            `;
+            
+            if (h.type === 'cloze') {
+                // 完形填空详情
+                list.innerHTML = `
+                    <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                    <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空得分: ${h.score}/36</div>
+                    ${h.wrongList.map(w => `
+                        <div class="detail-item">
+                            <div><b>第${w.n}空</b> (提示: ${w.hint})</div>
+                            <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${w.ans}</div>
+                            <div style="color:#52c41a;margin-top:4px;">正确答案: ${w.correct}</div>
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                // 选择题详情
+                const wrongQs = questions.filter(q => h.wrongList.includes(q.n));
+                list.innerHTML = `
+                    <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                    <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
+                    ${wrongQs.map(q => `
+                        <div class="detail-item">
+                            <div><b>${q.n}. ${q.c}</b></div>
+                            ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
+                            <div style="color:#ff4d4f;margin-top:8px;">你的答案: 未答</div>
+                            <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                        </div>
+                    `).join('')}
+                `;
+            }
         }
         
         function submitQuiz() {
@@ -153,6 +180,16 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
             alert('得分: ' + score + '/44');
         }
         
+        // 完形填空答案
+        const clozeCorrect = {
+            1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'swam',
+            6: 'made', 7: 'was', 8: 'enjoyed', 9: 'was'
+        };
+        const clozeHints = {
+            1: 'go', 2: 'wake', 3: 'have', 4: 'play', 5: 'swim',
+            6: 'make', 7: 'be', 8: 'enjoy', 9: 'be'
+        };
+        
         function submitCloze() {
             const answers = {
                 1: document.getElementById('c1').value.toLowerCase().trim(),
@@ -165,24 +202,26 @@ Tom is a 12-year-old boy. Last summer, he <span class="cloze-hint">1 (go)</span>
                 8: document.getElementById('c8').value.toLowerCase().trim(),
                 9: document.getElementById('c9').value.toLowerCase().trim()
             };
-            const correct = {
-                1: 'went', 2: 'woke', 3: 'had', 4: 'played', 5: 'swam',
-                6: 'made', 7: 'was', 8: 'enjoyed', 9: 'was'
-            };
-            const hints = {
-                1: 'go', 2: 'wake', 3: 'have', 4: 'play', 5: 'swim',
-                6: 'make', 7: 'be', 8: 'enjoy', 9: 'be'
-            };
             let score = 0;
-            let wrong = [];
+            let wrongList = [];
             for (let i = 1; i <= 9; i++) {
-                if (answers[i] === correct[i]) {
+                if (answers[i] === clozeCorrect[i]) {
                     score += 4;
                 } else {
-                    wrong.push(i + '(' + hints[i] + '):' + (answers[i] || '空'));
+                    wrongList.push({n:i, ans:answers[i]||'空', correct:clozeCorrect[i], hint:clozeHints[i]});
                 }
             }
-            alert('完形填空得分: ' + score + '/36\n错题: ' + wrong.join(', '));
+            
+            // 保存到历史
+            clozeHistory.push({
+                type:'cloze',
+                day:1,
+                score:score,
+                wrongCount:wrongList.length,
+                wrongList:wrongList
+            });
+            
+            alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', '));
         }
         
         renderQuestions();
