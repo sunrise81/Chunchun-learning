@@ -379,8 +379,8 @@
                         const userAns = dayData.userAnswers[q.num] || '未答';
                         const isWrong = dayData.wrongQuestions.includes(q.num);
                         const explanations = {
-                            1: "过去进行时: was/were + doing，表示过去某个时刻正在进行的动作。正确答案C (was watching)",
-                            2: "条件句主将从现: if从句用一般现在时，主句用will + 动词原形。正确答案B (rains)",
+                            1: "过去进行时: was/were + doing，表示过去某个时刻正在进行的动作",
+                            2: "条件句主将从现: if从句用一般现在时，主句用will + 动词原形",
                             3: "翻译题: 明天如果不下雨 = If it doesn't rain, we will go",
                             4: "介词搭配: 不要在墙上画 = Don't draw ON the wall (不是in)",
                             5: "过去式: go的过去式是went",
@@ -389,14 +389,18 @@
                             9: "过去式: make的过去式是made",
                             10: "第三人称单数: he enjoys (要加s)"
                         };
-                        html += `<div style="background:${isWrong ? '#fff5f5' : '#f5f5f5'};padding:12px;border-radius:8px;margin-bottom:10px;border-left:4px solid ${isWrong ? '#ff4d4f' : '#52c41a'};">
-                            <div style="font-weight:bold;margin-bottom:4px;">${q.num}. ${q.content}</div>
-                            ${q.options ? `<div style="color:#666;font-size:12px;margin-bottom:4px;">${q.options.join(' ')}</div>` : ''}
-                            <div style="margin-top:6px;">
-                                <span style="color:${isWrong ? '#ff4d4f' : '#52c41a'};font-weight:bold;">你的答案: ${userAns}</span>
-                                ${isWrong ? `<span style="color:#52c41a;margin-left:8px;">✓ 正确答案: ${q.answer}</span>` : ''}
+                        const correctAns = q.answer;
+                        html += `<div style="background:${isWrong ? '#fff5f5' : '#f5fff5'};padding:12px;border-radius:8px;margin-bottom:12px;border-left:4px solid ${isWrong ? '#ff4d4f' : '#52c41a'};">
+                            <div style="font-weight:bold;margin-bottom:6px;">
+                                <span style="background:${isWrong ? '#ff4d4f' : '#52c41a'};color:white;padding:2px 8px;border-radius:4px;margin-right:8px;">${q.num}</span>
+                                ${q.content}
                             </div>
-                            ${isWrong && explanations[q.num] ? `<div style="margin-top:6px;padding:8px;background:#fffbe6;border-radius:4px;font-size:12px;color:#fa8c16;">💡 解析: ${explanations[q.num]}</div>` : ''}
+                            ${q.options ? `<div style="color:#666;font-size:12px;margin:8px 0;">${q.options.join(' ')}</div>` : ''}
+                            <div style="margin-top:8px;padding:8px;background:white;border-radius:6px;">
+                                <div><span style="color:${isWrong ? '#ff4d4f' : '#52c41a'};font-weight:bold;">你的答案:</span> ${userAns || '未答'} ${isWrong ? '❌' : '✅'}</div>
+                                ${isWrong ? `<div style="margin-top:4px;"><span style="color:#52c41a;font-weight:bold;">正确答案:</span> <span style="color:#52c41a;font-weight:bold;font-size:16px;">${correctAns}</span></div>` : ''}
+                            </div>
+                            ${isWrong && explanations[q.num] ? `<div style="margin-top:8px;padding:10px;background:#fffbe6;border-radius:6px;font-size:13px;color:#fa8c16;border:1px solid #ffe58f;">💡 ${explanations[q.num]}</div>` : ''}
                         </div>`;
                     });
                     
