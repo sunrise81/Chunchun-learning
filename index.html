@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>çº¯çº¯è‹±è¯­ç»ƒä¹ </title>
+<title>´¿´¿Ó¢ÓïÁ·Ï°</title>
 <style>
 body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
 .header{text-align:center;margin-bottom:20px}
@@ -19,22 +19,22 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 </style>
 </head>
 <body>
-<h1 class="header">çº¯çº¯è‹±è¯­ç»ƒä¹ </h1>
-<p class="header">Day 2 | 2026å¹´3æœˆ21æ—¥</p>
+<h1 class="header">´¿´¿Ó¢ÓïÁ·Ï°</h1>
+<p class="header">Day 2 | 2026Äê3ÔÂ21ÈÕ</p>
 <div class="tab-container">
-<button class="tab active" id="tab-quiz" onclick="showTab('quiz')">é€‰æ‹©é¢˜</button>
-<button class="tab" id="tab-cloze" onclick="showTab('cloze')">å®Œå½¢å¡«ç©º</button>
+<button class="tab active" id="tab-quiz" onclick="showTab('quiz')">Ñ¡ÔñÌâ</button>
+<button class="tab" id="tab-cloze" onclick="showTab('cloze')">ÍêĞÎÌî¿Õ</button>
 </div>
 <div id="quiz-section">
 <div id="questions"></div>
-<button class="btn" onclick="submitQuiz()">æäº¤ç­”æ¡ˆ</button>
+<button class="btn" onclick="submitQuiz()">Ìá½»´ğ°¸</button>
 </div>
 <div id="cloze-section" style="display:none">
 <div class="question-card">
-<div class="question-title">å®Œå½¢å¡«ç©º (3ç©ºï¼Œå…±12åˆ†)</div>
-<p>Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="å¡«è¯"> to the park. He <input type="text" id="c2" class="cloze-input" placeholder="å¡«è¯"> football. They <input type="text" id="c3" class="cloze-input" placeholder="å¡«è¯"> sandwiches.</p>
+<div class="question-title">ÍêĞÎÌî¿Õ (3¿Õ£¬¹²12·Ö)</div>
+<p>Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="Ìî´Ê"> to the park. He <input type="text" id="c2" class="cloze-input" placeholder="Ìî´Ê"> football. They <input type="text" id="c3" class="cloze-input" placeholder="Ìî´Ê"> sandwiches.</p>
 </div>
-<button class="btn" onclick="submitCloze()">æäº¤å®Œå½¢å¡«ç©º</button>
+<button class="btn" onclick="submitCloze()">Ìá½»ÍêĞÎÌî¿Õ</button>
 </div>
 <script>
 var questions = [
@@ -84,7 +84,7 @@ for(var i=0;i<questions.length;i++) {
 var q = questions[i];
 if(userAnswers[q.n] === q.a) score += 4;
 }
-alert('å¾—åˆ†: ' + score + '/12');
+alert('µÃ·Ö: ' + score + '/12');
 }
 
 function submitCloze() {
@@ -93,7 +93,7 @@ for(var i=1;i<=3;i++) {
 var ans = document.getElementById('c'+i).value.toLowerCase().trim();
 if(ans === clozeAnswers[i]) score += 4;
 }
-alert('å®Œå½¢å¡«ç©ºå¾—åˆ†: ' + score + '/12');
+alert('ÍêĞÎÌî¿ÕµÃ·Ö: ' + score + '/12');
 }
 
 renderQuestions();
