@@ -103,13 +103,11 @@ a wonderful day!
 
     // ── 历史数据（已有记录） ──────────────────────────────
     const historyData = [
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:54',score:20,total:44,wrongCount:3,wrongList:[2,5,8]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'04:50',score:20,total:36,wrongCount:4,wrongList:[{n:4,ans:'bring',correct:'brought',hint:'bring'},{n:5,ans:'eated',correct:'ate',hint:'eat'},{n:6,ans:'swain',correct:'swam',hint:'swim'},{n:8,ans:'enjoy',correct:'enjoyed',hint:'enjoy'}]},
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:44',score:20,total:44,wrongCount:3,wrongList:[5,8,10]},
         {type:'quiz',day:2,date:'2026-03-21',time:'13:40',score:12,total:44,wrongCount:8,wrongList:[1,2,3,4,5,6,7,9]},
-
+        {type:'quiz',day:1,date:'2026-03-20',time:'21:33',score:28,total:44,wrongCount:3,wrongList:[1,3,4]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:28',score:20,total:44,wrongCount:5,wrongList:[1,3,4,7,8]},
-
+        {type:'quiz',day:1,date:'2026-03-20',time:'21:20',score:12,total:44,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+        {type:'quiz',day:1,date:'2026-03-20',time:'21:15',score:8,total:44,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]}
     ];
     const clozeHistory = [];
     const userAnswers  = {};
@@ -322,19 +320,39 @@ a wonderful day!
                 <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空 ${h.score}/36</div>
                 ${wrongHtml}`;
         } else {
-            const wrongQs = questions.filter(q=>h.wrongList.includes(q.n));
+            // 检查是否有过用户答案详情
+            let wrongHtml = '';
+            if (h.userAnswers && typeof h.userAnswers === 'object') {
+                // 有详细答案
+                const wrongQs = questions.filter(q => h.wrongList && h.wrongList.includes(q.n));
+                wrongHtml = wrongQs.map(q => {
+                    const userAns = h.userAnswers['Q'+q.n] || '未记录';
+                    const isCorrect = userAns === q.a;
+                    return `<div class="detail-item" style="${isCorrect?'':'border-left-color:#52c41a;'}">
+                        <b>Q${q.n}.</b> ${q.c}<br>
+                        ${q.o?`<span style="color:#666;font-size:13px;">${q.o.join(' / ')}</span><br>`:''}
+                        <span style="color:#ff4d4f;">你的答案：${userAns}</span><br>
+                        <span style="color:#52c41a;">正确答案：${q.a}</span>
+                    </div>`;
+                }).join('');
+            } else {
+                // 没有详细答案，只显示正确答案
+                const wrongQs = questions.filter(q => h.wrongList && h.wrongList.includes(q.n));
+                wrongHtml = wrongQs.map(q => `
+                    <div class="detail-item">
+                        <b>Q${q.n}.</b> ${q.c}<br>
+                        ${q.o?`<span style="color:#666;font-size:13px;">${q.o.join(' / ')}</span><br>`:''}
+                        <span style="color:#52c41a;">正确答案：${q.a}</span>
+                    </div>`).join('');
+            }
+            
             list.innerHTML = `
                 <div style="display:flex;gap:10px;margin-bottom:15px;">
                     <button class="back-btn" onclick="renderHistory()">← 返回</button>
                     <button class="back-btn" style="background:#ff4d4f;" onclick="doDelete('quiz','${h.date}','${h.time}')">🗑️ 删除</button>
                 </div>
                 <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">选择题 ${h.score}/44</div>
-                ${wrongQs.map(q=>`
-                    <div class="detail-item">
-                        <b>Q${q.n}.</b> ${q.c}<br>
-                        ${q.o?`<span style="color:#666;font-size:13px;">${q.o.join(' / ')}</span><br>`:''}
-                        <span style="color:#52c41a;">正确答案：${q.a}</span>
-                    </div>`).join('')}`;
+                ${wrongHtml}`;
         }
     }
 
