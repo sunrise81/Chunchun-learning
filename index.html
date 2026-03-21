@@ -33,8 +33,8 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 </div>
 <div id="cloze-section" style="display:none">
 <div class="question-card">
-<div class="question-title">Cloze Test (3 blanks, 12 points)</div>
-<p>Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="word"> to the park.</p>
+<div class="question-title">Cloze Test</div>
+<p>Blank 1: <input type="text" id="c1" class="cloze-input" placeholder="word"></p>
 </div>
 <button class="btn" onclick="submitCloze()">Submit</button>
 </div>
@@ -159,8 +159,9 @@ var q = questions[qNum-1];
 if(q && userAns !== q.a) {
 html = html + '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
 html = html + '<div><b>Q' + qNum + '.</b> ' + q.c + '</div>';
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">→ Correct: ' + q.a + '</span>';
+html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">Correct: ' + q.a + '</span>';
 html = html + '</div></div>';
+}
 }
 }
 }
@@ -180,8 +181,9 @@ var correct = clozeQuestions[cNum-1].a;
 if(userAns !== correct) {
 html = html + '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
 html = html + '<div><b>Blank ' + cNum + ':</b> ' + clozeQuestions[cNum-1].t + '</div>';
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">→ Correct: ' + correct + '</span>';
+html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">Correct: ' + correct + '</span>';
 html = html + '</div></div>';
+}
 }
 }
 }
