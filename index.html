@@ -6,8 +6,8 @@
 <style>
 body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
 .header{text-align:center;margin-bottom:20px}
-.tab-container{display:flex;margin-bottom:20px}
-.tab{flex:1;padding:15px;text-align:center;cursor:pointer;background:#f0f0f0;border:none;font-size:14px}
+.tab-container{display:flex;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:12px 8px;text-align:center;cursor:pointer;background:#f0f0f0;border:none;border-radius:8px;font-size:13px;margin:2px}
 .tab.active{background:#4A90E2;color:white}
 .question-card{background:white;border-radius:12px;padding:16px;margin-bottom:16px}
 .question-title{font-weight:bold;margin-bottom:12px}
@@ -15,7 +15,7 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 .option{padding:12px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer}
 .option.selected{border-color:#4A90E2;background:#e8f4ff}
 .btn{width:100%;padding:15px;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;background:#4A90E2;color:white}
-.cloze-input{width:100px;padding:8px;border:2px solid #4A90E2;border-radius:6px;margin:0 5px}
+.cloze-input{width:120px;padding:8px;border:2px solid #4A90E2;border-radius:6px;margin:5px}
 .history-item{background:white;padding:15px;border-radius:10px;margin-bottom:12px;border:2px solid #4A90E2;cursor:pointer}
 .back-btn{padding:10px 20px;background:#666;color:white;border:none;border-radius:8px;cursor:pointer;margin-bottom:15px}
 </style>
@@ -35,16 +35,12 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 <div id="cloze-section" style="display:none">
 <div class="question-card">
 <div class="question-title">Cloze Test</div>
-<p>1. Last Sunday, Tom ______ to the park.</p>
-<p><input type="text" id="c1" class="cloze-input" placeholder="answer"></p>
-<p>2. He ______ football.</p>
-<p><input type="text" id="c2" class="cloze-input" placeholder="answer"></p>
-<p>3. They ______ sandwiches.</p>
-<p><input type="text" id="c3" class="cloze-input" placeholder="answer"></p>
+<p>1. Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="answer"></p>
+<p>2. He <input type="text" id="c2" class="cloze-input" placeholder="answer"> football.</p>
+<p>3. They <input type="text" id="c3" class="cloze-input" placeholder="answer"> sandwiches.</p>
 </div>
 <button class="btn" onclick="submitCloze()">Submit</button>
 </div>
-
 <div id="trans-section" style="display:none">
 <div id="trans-questions"></div>
 <button class="btn" onclick="submitTrans()">Submit</button>
@@ -70,15 +66,12 @@ var clozeQuestions = [
 ];
 
 var transQuestions = [
-{n:1,c:'Translate to English: I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
-{n:2,c:'Translate to English: She is taller than me.',a:'She is taller than me.'},
-{n:3,c:'Translate to English: This book is interesting.',a:'This book is interesting.'}
+{n:1,c:'Translate: I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
+{n:2,c:'Translate: She is taller than me.',a:'She is taller than me.'},
+{n:3,c:'Translate: This book is interesting.',a:'This book is interesting.'}
 ];
 
-var transAnswers = {};
-
 var userAnswers = {};
-
 var historyData = [
 {date:'2026-03-21 20:39', score:4, total:12, type:'cloze', answers:'C1:went,C2:play,C3:eat', wrong:'2,3'},
 {date:'2026-03-21 20:31', score:8, total:12, type:'cloze', answers:'C1:went,C2:played,C3:eat', wrong:'3'},
@@ -91,13 +84,13 @@ function renderQuestions() {
 var html = '';
 for(var i=0;i<questions.length;i++) {
 var q = questions[i];
-html = html + '<div class="question-card"><div class="question-title">Q' + q.n + '. ' + q.c + '</div><div class="options">';
+html += '<div class="question-card"><div class="question-title">Q' + q.n + '. ' + q.c + '</div><div class="options">';
 for(var j=0;j<q.o.length;j++) {
 var opt = q.o[j];
 var letter = opt.charAt(0);
-html = html + '<div class="option" data-n="' + q.n + '" data-a="' + letter + '" onclick="selectOption(this)">' + opt + '</div>';
+html += '<div class="option" data-n="' + q.n + '" data-a="' + letter + '" onclick="selectOption(this)">' + opt + '</div>';
 }
-html = html + '</div></div>';
+html += '</div></div>';
 }
 document.getElementById('questions').innerHTML = html;
 }
@@ -130,31 +123,18 @@ function submitQuiz() {
 var score = 0;
 for(var i=0;i<questions.length;i++) {
 var q = questions[i];
-if(userAnswers[q.n] === q.a) {score = score + 4;}
+if(userAnswers[q.n] === q.a) {score += 4;}
 }
 var d = new Date();
 var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
 var ansStr = '';
 var wrongStr = '';
 for(var n in userAnswers) {
-ansStr = ansStr + 'Q' + n + ':' + userAnswers[n] + ',';
-if(userAnswers[n] !== questions[n-1].a) {wrongStr = wrongStr + n + ',';}
+ansStr += 'Q' + n + ':' + userAnswers[n] + ',';
+if(userAnswers[n] !== questions[n-1].a) {wrongStr += n + ',';}
 }
 historyData.unshift({date:timeStr, score:score, total:12, type:'quiz', answers:ansStr, wrong:wrongStr});
-
-// Submit to Google Form
-var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-var form = document.createElement('form');
-form.action = formUrl;
-form.method = 'POST';
-form.target = '_blank';
-var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
-var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
-document.body.appendChild(form);
-form.submit();
-document.body.removeChild(form);
-
+submitToForm(timeStr, ansStr, score + '/12 | Wrong:' + wrongStr);
 alert('Score: ' + score + '/12');
 renderQuestions();
 }
@@ -166,26 +146,13 @@ var wrongStr = '';
 for(var i=1;i<=3;i++) {
 var ans = document.getElementById('c'+i).value.toLowerCase().trim();
 var correct = clozeQuestions[i-1].a;
-ansStr = ansStr + 'C' + i + ':' + ans + ',';
-if(ans === correct) {score = score + 4;} else {wrongStr = wrongStr + i + ',';}
+ansStr += 'C' + i + ':' + ans + ',';
+if(ans === correct) {score += 4;} else {wrongStr += i + ',';}
 }
 var d = new Date();
 var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
 historyData.unshift({date:timeStr, score:score, total:12, type:'cloze', answers:ansStr, wrong:wrongStr});
-
-// Submit to Google Form
-var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-var form = document.createElement('form');
-form.action = formUrl;
-form.method = 'POST';
-form.target = '_blank';
-var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
-var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
-document.body.appendChild(form);
-form.submit();
-document.body.removeChild(form);
-
+submitToForm(timeStr, ansStr, score + '/12 | Wrong:' + wrongStr);
 alert('Cloze Score: ' + score + '/12');
 }
 
@@ -193,7 +160,7 @@ function renderTransQuestions() {
 var html = '';
 for(var i=0;i<transQuestions.length;i++) {
 var q = transQuestions[i];
-html = html + '<div class="question-card"><div class="question-title">Translate: ' + q.c + '</div><textarea id="t' + q.n + '" style="width:100%;padding:10px;border:2px solid #4A90E2;border-radius:8px;margin-top:10px;" rows="2" placeholder="Your translation..."></textarea></div>';
+html += '<div class="question-card"><div class="question-title">' + q.c + '</div><textarea id="t' + q.n + '" style="width:100%;padding:10px;border:2px solid #4A90E2;border-radius:8px;margin-top:10px;" rows="2" placeholder="Your translation..."></textarea></div>';
 }
 document.getElementById('trans-questions').innerHTML = html;
 }
@@ -206,14 +173,18 @@ for(var i=0;i<transQuestions.length;i++) {
 var q = transQuestions[i];
 var userAns = document.getElementById('t'+q.n).value.toLowerCase().trim();
 var correct = q.a.toLowerCase().trim();
-ansStr = ansStr + 'T' + q.n + ':' + document.getElementById('t'+q.n).value + ',';
-if(userAns === correct) {score = score + 4;} else {wrongStr = wrongStr + q.n + ',';}
+ansStr += 'T' + q.n + ':' + document.getElementById('t'+q.n).value + ',';
+if(userAns === correct) {score += 4;} else {wrongStr += q.n + ',';}
 }
 var d = new Date();
 var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
 historyData.unshift({date:timeStr, score:score, total:12, type:'trans', answers:ansStr, wrong:wrongStr});
+submitToForm(timeStr, ansStr, score + '/12 | Wrong:' + wrongStr);
+alert('Translation Score: ' + score + '/12');
+renderTransQuestions();
+}
 
-// Submit to Google Form
+function submitToForm(timeStr, ansStr, scoreStr) {
 var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
 var form = document.createElement('form');
 form.action = formUrl;
@@ -221,26 +192,23 @@ form.method = 'POST';
 form.target = '_blank';
 var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
 var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = scoreStr; form.appendChild(f3);
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
-
-alert('Translation Score: ' + score + '/12');
-renderTransQuestions();
 }
 
 function showDetail(idx) {
 var h = historyData[idx];
 var html = '<div class="question-card">';
-html = html + '<button onclick="deleteRecord(' + idx + ')" style="float:right;padding:5px 10px;background:#ff4444;color:white;border:none;border-radius:5px;cursor:pointer;">Delete</button>';
-html = html + '<div class="question-title" style="font-size:20px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div>';
-html = html + '<div style="color:#666;margin-bottom:15px;">' + h.date + '</div>';
+html += '<button onclick="deleteRecord(' + idx + ')" style="float:right;padding:5px 10px;background:#ff4444;color:white;border:none;border-radius:5px;cursor:pointer;">Delete</button>';
+html += '<div class="question-title" style="font-size:20px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div>';
+html += '<div style="color:#666;margin-bottom:15px;">' + h.date + '</div>';
 
 if(h.type === 'quiz') {
 var wrongArr = h.wrong ? h.wrong.split(',') : [];
 if(wrongArr.length > 0 && wrongArr[0] !== '') {
-html = html + '<div><b>Wrong Answers:</b></div>';
+html += '<div><b>Wrong Answers:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -250,18 +218,20 @@ var qNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var q = questions[qNum-1];
 if(q && userAns !== q.a) {
-html = html + '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
-html = html + '<div><b>Q' + qNum + '.</b> ' + q.c + '</div>';
+html += '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
+html += '<div><b>Q' + qNum + '.</b> ' + q.c + '</div>';
 var userOpt = q.o[userAns.charCodeAt(0)-65];
 var correctOpt = q.o[q.a.charCodeAt(0)-65];
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userOpt + '</b></div>';
-html = html + '<div style="color:red;">Correct: <b>' + correctOpt + '</b></div>';
-html = html + '</div>';
+html += '<div style="margin-top:5px;">Your: <b>' + userOpt + '</b></div>';
+html += '<div style="color:red;">Correct: <b>' + correctOpt + '</b></div>';
+html += '</div>';
+}
+}
 }
 }
 }
 } else if(h.type === 'trans') {
-html = html + '<div><b>Translation:</b></div>';
+html += '<div><b>Translation:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -271,16 +241,16 @@ var tNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var correct = transQuestions[tNum-1].a;
 var isWrong = userAns.toLowerCase().trim() !== correct.toLowerCase().trim();
-html = html + '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
-html = html + '<div><b>' + tNum + '.</b> ' + transQuestions[tNum-1].c + '</div>';
-html = html + '<div style="margin-top:5px;">Your: <b>' + userAns + '</b>';
-if(isWrong) {html = html + '<br><span style="color:red;">Correct: ' + correct + '</span>';}
-html = html + '</div></div>';
+html += '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+html += '<div><b>' + tNum + '.</b> ' + transQuestions[tNum-1].c + '</div>';
+html += '<div style="margin-top:5px;">Your: <b>' + userAns + '</b>';
+if(isWrong) {html += '<br><span style="color:red;">Correct: ' + correct + '</span>';}
+html += '</div></div>';
 }
 }
 }
 } else {
-html = html + '<div><b>All Answers:</b></div>';
+html += '<div><b>All Answers:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -290,17 +260,16 @@ var cNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var correct = clozeQuestions[cNum-1].a;
 var isWrong = userAns !== correct;
-html = html + '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
-html = html + '<div><b>Blank ' + cNum + ':</b> ' + clozeQuestions[cNum-1].t + '</div>';
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b>';
-if(isWrong) {html = html + ' <span style="color:red;">Correct: ' + correct + '</span>';}
-html = html + '</div></div>';
+html += '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+html += '<div><b>Blank ' + cNum + ':</b> ' + clozeQuestions[cNum-1].t + '</div>';
+html += '<div style="margin-top:5px;">Your: <b>' + userAns + '</b>';
+if(isWrong) {html += ' <span style="color:red;">Correct: ' + correct + '</span>';}
+html += '</div></div>';
 }
 }
 }
 }
-}
-html = html + '</div>';
+html += '</div>';
 document.getElementById('detail-content').innerHTML = html;
 showTab('detail');
 }
@@ -311,19 +280,7 @@ var h = historyData[idx];
 historyData.splice(idx, 1);
 renderHistory();
 showTab('history');
-
-// Submit delete to Google Form
-var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-var form = document.createElement('form');
-form.action = formUrl;
-form.method = 'POST';
-form.target = '_blank';
-var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = 'DELETE:' + h.type + ':' + h.date; form.appendChild(f1);
-var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = 'delete'; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = 'DELETE'; form.appendChild(f3);
-document.body.appendChild(form);
-form.submit();
-document.body.removeChild(form);
+submitToForm('DELETE:' + h.type + ':' + h.date, 'delete', 'DELETE');
 }
 }
 
@@ -332,14 +289,13 @@ var html = '';
 for(var i=0;i<historyData.length;i++) {
 var h = historyData[i];
 var typeLabel = h.type === 'cloze' ? 'Cloze' : (h.type === 'trans' ? 'Translate' : 'Quiz');
-html = html + '<div class="history-item" onclick="showDetail(' + i + ')"><div><b>' + typeLabel + '</b> <span style="color:#999;font-size:12px;">' + h.date + '</span></div><div style="font-size:24px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div></div>';
+html += '<div class="history-item" onclick="showDetail(' + i + ')"><div><b>' + typeLabel + '</b> <span style="color:#999;font-size:12px;">' + h.date + '</span></div><div style="font-size:24px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div></div>';
 }
 if(historyData.length === 0) {html = '<div style="text-align:center;color:#666;padding:30px;">No records</div>';}
 document.getElementById('history-list').innerHTML = html;
 }
 
 renderQuestions();
-renderTransQuestions();
 </script>
 </body>
 </html>
