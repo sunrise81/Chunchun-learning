@@ -77,7 +77,9 @@ document.getElementById('content').innerHTML = html;
 
 function selectQ(n,letter){
 answers['q'+n]=letter;
-document.querySelectorAll('#content .opt').forEach(o=>o.classList.remove('selected'));
+// Only deselect within the same question card
+var card = document.getElementById('q'+n+letter).parentElement;
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
 event.target.classList.add('selected');
 }
 
