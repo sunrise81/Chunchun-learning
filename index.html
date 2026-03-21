@@ -57,15 +57,16 @@
                 💡 提示：括号里是动词原形，请根据上下文填写正确形式
             </div>
             <div class="cloze-text">
-Today is a special day. Lucy <span class="cloze-hint">1(be)</span> <input type="text" id="c1" class="cloze-input" placeholder="填词">
-happy because it is her birthday. Her mother <span class="cloze-hint">2(buy)</span> <input type="text" id="c2" class="cloze-input" placeholder="填词">
-a big cake for her. Her friends <span class="cloze-hint">3(come)</span> <input type="text" id="c3" class="cloze-input" placeholder="填词">
-to the party. They <span class="cloze-hint">4(bring)</span> <input type="text" id="c4" class="cloze-input" placeholder="填词">
-her many gifts. Lucy <span class="cloze-hint">5(open)</span> <input type="text" id="c5" class="cloze-input" placeholder="填词">
-the gifts one by one. She <span class="cloze-hint">6(like)</span> <input type="text" id="c6" class="cloze-input" placeholder="填词">
-all the presents. After the party, Lucy <span class="cloze-hint">7(say)</span> <input type="text" id="c7" class="cloze-input" placeholder="填词">
-"Thank you" to everyone. It <span class="cloze-hint">8(be)</span> <input type="text" id="c8" class="cloze-input" placeholder="填词">
-the best birthday ever!
+Last Sunday, Tom <span class="cloze-hint">1(go)</span> <input type="text" id="c1" class="cloze-input" placeholder="填词">
+to the park with his family. They <span class="cloze-hint">2(have)</span> <input type="text" id="c2" class="cloze-input" placeholder="填词">
+a picnic there. Tom <span class="cloze-hint">3(play)</span> <input type="text" id="c3" class="cloze-input" placeholder="填词">
+football with his father. His mother <span class="cloze-hint">4(bring)</span> <input type="text" id="c4" class="cloze-input" placeholder="填词">
+delicious food. They <span class="cloze-hint">5(eat)</span> <input type="text" id="c5" class="cloze-input" placeholder="填词">
+sandwiches and fruit. Tom <span class="cloze-hint">6(swim)</span> <input type="text" id="c6" class="cloze-input" placeholder="填词">
+in the lake. After lunch, Tom <span class="cloze-hint">7(make)</span> <input type="text" id="c7" class="cloze-input" placeholder="填词">
+a sandcastle. His sister <span class="cloze-hint">8(enjoy)</span> <input type="text" id="c8" class="cloze-input" placeholder="填词">
+the sunshine. It <span class="cloze-hint">9(be)</span> <input type="text" id="c9" class="cloze-input" placeholder="填词">
+a wonderful day!
             </div>
         </div>
         <button class="btn btn-blue" onclick="submitCloze()">提交完形填空 ☁️</button>
@@ -97,8 +98,8 @@ the best birthday ever!
         {n:10,t:'选择',c:'______ late next time!',o:["A. Don't",'B. Not',"C. Don't be",'D. Be not'],a:'C'}
     ];
 
-    const clozeCorrect = {1:'went',2:'woke',3:'had',4:'played',5:'swam',6:'made',7:'was',8:'enjoyed',9:'was'};
-    const clozeHints   = {1:'go',2:'wake',3:'have',4:'play',5:'swim',6:'make',7:'be',8:'enjoy',9:'be'};
+    const clozeCorrect = {1:'went',2:'had',3:'played',4:'brought',5:'ate',6:'swam',7:'made',8:'enjoyed',9:'was'};
+    const clozeHints   = {1:'go',2:'have',3:'play',4:'bring',5:'eat',6:'swim',7:'make',8:'enjoy',9:'be'};
 
     // ── 历史数据（已有记录） ──────────────────────────────
     const historyData = [
