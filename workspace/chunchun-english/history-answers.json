@@ -1,0 +1,27 @@
+{
+  "quiz": [
+    {
+      "date": "2026/3/20",
+      "score": 26,
+      "answers": {"1": "C", "2": "A", "3": "If it doesn't rain tomorrow we go to park", "4": "Don't draw in the wall", "5": "C", "6": "C", "7": "C", "8": "C", "9": "B", "10": "B"},
+      "analysis": {
+        "2": {"correct": "B", "explanation": "❌ 错误！if条件句，主将从现。"},
+        "3": {"correct": "If it doesn't rain tomorrow, we will go to the park.", "explanation": "⚠️ 部分正确！we go → we will go"},
+        "4": {"correct": "Don't draw on the wall.", "explanation": "⚠️ 部分正确！in → on"}
+      }
+    }
+  ],
+  "cloze": [
+    {
+      "date": "2026/3/20",
+      "score": 20,
+      "answers": {"1": "went", "2": "waked", "3": "had", "4": "played", "5": "swam", "6": "maked", "7": "is", "8": "enjoyed", "9": "is"},
+      "analysis": [
+        {"n": 2, "hint": "wake", "userAnswer": "waked", "correct": "woke", "explanation": "❌ wake的过去式是woke"},
+        {"n": 6, "hint": "make", "userAnswer": "maked", "correct": "made", "explanation": "❌ make的过去式是made"},
+        {"n": 7, "hint": "be", "userAnswer": "is", "correct": "was", "explanation": "❌ 过去时间用was"},
+        {"n": 9, "hint": "be", "userAnswer": "is", "correct": "was", "explanation": "❌ 过去时间用was"}
+      ]
+    }
+  ]
+}

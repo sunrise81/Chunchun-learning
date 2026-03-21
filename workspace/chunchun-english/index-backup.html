@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纯纯英语练习</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .tab-container { display: flex; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 16px; }
+        .tab.active { background: #4A90E2; color: white; }
+        .question-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .question-title { font-weight: bold; margin-bottom: 12px; }
+        .options { display: flex; flex-direction: column; gap: 8px; }
+        .option { padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; }
+        .option.selected { border-color: #4A90E2; background: #e8f4ff; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: #4A90E2; color: white; }
+        .history-item { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 2px solid #4A90E2; cursor: pointer; }
+        .detail-item { background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #ff4d4f; }
+        .back-btn { padding: 10px 20px; background: #666; color: white; border: none; border-radius: 6px; margin-bottom: 15px; }
+        .exp-box { background: #fffbe6; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; white-space: pre-wrap; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦞 纯纯英语练习</h1>
+        <p>Day 1 | 2026年3月20日</p>
+    </div>
+    
+    <div class="tab-container">
+        <button class="tab active" onclick="showTab('quiz', this)">选择题</button>
+        <button class="tab" onclick="showTab('history', this)">📜 历史</button>
+    </div>
+    
+    <div id="quiz-section">
+        <div id="questions"></div>
+        <button class="btn btn-blue" onclick="submitQuiz()">提交答案</button>
+    </div>
+    
+    <div id="history-section" style="display:none;">
+        <div id="history-list"></div>
+    </div>
+    
+    <script>
+        const questions = [
+            {n:1,t:"选择",c:"What were you doing at 7:00 yesterday evening? I ______ TV with my family.",o:["A. watch","B. watched","C. was watching","D. am watching"],a:"C",exp:"✅ 选C. was watching\n\n📝 详解：题目问"昨晚7点你在做什么？"，时间状语是"at 7:00 yesterday evening"，表示过去某个具体时间点正在进行的动作，要用过去进行时。\n\n🔑 公式：was/were + 动词ing形式\n- I → was watching"},
+            {n:2,t:"选择",c:"If it ______ tomorrow, we will stay at home.",o:["A. rain","B. rains","C. rained","D. will rain"],a:"B",exp:"✅ 选B. rains\n\n📝 详解：这是条件句，主将从现。\n- if从句用一般现在时\n- 主句用will + 动词原形"},
+            {n:3,t:"翻译",c:"明天如果不下雨，我们就去公园。",a:"If it doesn't rain tomorrow, we will go to the park.",exp:"✅ 参考答案：If it doesn't rain tomorrow, we will go to the park.\n\n📝 翻译要点：\n1. "如果不下雨" → if it doesn't rain\n2. "就去公园" → we will go to the park"},
+            {n:4,t:"翻译",c:"不要在墙上乱画。",a:"Don't draw on the wall.",exp:"✅ 参考答案：Don't draw on the wall.\n\n📝 翻译要点：\n1. "不要" → Don't\n2. "在墙上画" → draw on the wall（介词用on）"},
+            {n:5,t:"选择",c:"Last summer, Tom ______ to a summer camp.",o:["A. go","B. goes","C. went","D. going"],a:"C",exp:"✅ 选C. went\n\n📝 详解：时间状语是"Last summer"，要用过去式。\n🔑 go的过去式是不规则变化went"},
+            {n:6,t:"选择",c:"He ______ there for two weeks.",o:["A. stay","B. stays","C. stayed","D. staying"],a:"C",exp:"✅ 选C. stayed\n\n📝 详解：用过去式，stay → stayed"},
+            {n:7,t:"选择",c:"Every day, he ______ sports.",o:["A. play","B. plays","C. played","D. playing"],a:"C",exp:"✅ 选C. played\n\n📝 详解：用过去式，play → played"},
+            {n:8,t:"选择",c:"He ______ English every day.",o:["A. learn","B. learns","C. learned","D. learning"],a:"B",exp:"✅ 选B. learns\n\n📝 详解：主语是He（第三人称单数），动词要加s。\n🔑 learn → learns"},
+            {n:9,t:"选择",c:"She ______ many new friends.",o:["A. make","B. makes","C. made","D. making"],a:"C",exp:"✅ 选C. made\n\n📝 详解：用过去式，make → made"},
+            {n:10,t:"选择",c:"He ______ the camp very much.",o:["A. enjoy","B. enjoys","C. enjoyed","D. enjoying"],a:"B",exp:"✅ 选B. enjoys\n\n📝 详解：第三人称单数，enjoy → enjoys"}
+        ];
+        
+        const historyData = [
+            {day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
+            {day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
+            {day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+            {day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
+            {day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+        ];
+        
+        const userAnswers = {};
+        
+        function renderQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = questions.map(q => `
+                <div class="question-card">
+                    <div class="question-title">${q.n}. ${q.c}</div>
+                    ${q.o ? `<div class="options">${q.o.map(o => `<div class="option" onclick="selectAnswer(${q.n},'${o.charAt(0)}',this)">${o}</div>`).join('')}</div>` : `<input type="text" id="a${q.n}" placeholder="请输入答案" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;">`}
+                </div>
+            `).join('');
+        }
+        
+        function selectAnswer(n, ans, el) {
+            userAnswers[n] = ans;
+            el.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+        
+        function showTab(tab, btn) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+            document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
+            if (tab === 'history') renderHistory();
+        }
+        
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = historyData.map((h, i) => `
+                <div class="history-item" onclick="showDetail(${i})">
+                    <div><b>第${i+1}次答题</b></div>
+                    <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/44</div>
+                    <div>错题: ${h.wrongCount}道</div>
+                </div>
+            `).join('');
+        }
+        
+        function showDetail(idx) {
+            const h = historyData[idx];
+            const list = document.getElementById('history-list');
+            const wrongQs = questions.filter(q => h.wrongList.includes(q.n));
+            list.innerHTML = `
+                <button class="back-btn" onclick="renderHistory()">← 返回</button>
+                <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">得分: ${h.score}/44</div>
+                ${wrongQs.map(q => `
+                    <div class="detail-item">
+                        <div><b>${q.n}. ${q.c}</b></div>
+                        ${q.o ? `<div style="color:#666;margin:8px 0;">${q.o.join(' ')}</div>` : ''}
+                        <div style="color:#ff4d4f;margin-top:8px;">你的答案: ${userAnswers[q.n] || '未答'}</div>
+                        <div style="color:#52c41a;margin-top:4px;">正确答案: ${q.a}</div>
+                        <div class="exp-box">${q.exp}</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach(q => {
+                if (q.o) {
+                    const ans = userAnswers[q.n];
+                    if (ans === q.a) score += 4;
+                } else {
+                    const ans = document.getElementById('a' + q.n).value.toLowerCase();
+                    if (ans.includes("doesn't") || ans.includes("rain")) score += 6;
+                    if ((ans.includes("don't") || ans.includes("dont")) && ans.includes("draw")) score += 6;
+                }
+            });
+            alert('得分: ' + score + '/44');
+        }
+        
+        renderQuestions();
+    </script>
+</body>
+</html>
