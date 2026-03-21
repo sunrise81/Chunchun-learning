@@ -1,0 +1,15 @@
+# 忽略敏感文件
+extensions/
+identity/
+memory/
+media/
+workspace/memory/
+workspace/.openclaw/
+workspace/AGENTS.md
+workspace/BOOTSTRAP.md
+workspace/HEARTBEAT.md
+workspace/IDENTITY.md
+workspace/MEMORY.md
+workspace/SOUL.md
+workspace/TOOLS.md
+workspace/USER.md

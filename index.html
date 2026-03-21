@@ -124,7 +124,8 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
             allHistory.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
             list.innerHTML = allHistory.map((h, i) => `
                 <div class="history-item" onclick="showDetail(${i})">
-                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date} ${h.time||''}</span></div>
+                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date} ${h.time||''}</span>
+                    <button onclick="event.stopPropagation();deleteHistory(${i})" style="float:right;padding:2px8px;background:#ff4d4f;color:white;border:none;border-radius:4px;font-size:12px;">删除</button></div>
                     <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
                     <div>错题: ${h.wrongCount}道</div>
                 </div>
@@ -167,18 +168,41 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
             }
         }
         
+        // 获取当前时间
+        function getNow() {
+            const d = new Date();
+            return {
+                date: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'),
+                time: String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0')
+            };
+        }
+        
         function submitQuiz() {
-            let score = 0;
+            let score = 0, wrongList = [];
             questions.forEach(q => {
                 if (q.o) {
                     const ans = userAnswers[q.n];
                     if (ans === q.a) score += 4;
+                    else wrongList.push(q.n);
                 } else {
                     const ans = document.getElementById('a' + q.n).value.toLowerCase();
                     if (ans.includes("doesn't") || ans.includes("rain")) score += 6;
                     if ((ans.includes("don't") || ans.includes("dont")) && ans.includes("draw")) score += 6;
                 }
             });
+            
+            // 保存到历史（带时间）
+            const now = getNow();
+            historyData.push({
+                type:'quiz',
+                day:2,
+                date:now.date,
+                time:now.time,
+                score:score,
+                wrongCount:wrongList.length,
+                wrongList:wrongList
+            });
+            
             alert('得分: ' + score + '/44');
         }
         
@@ -214,16 +238,32 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
                 }
             }
             
-            // 保存到历史
+            // 保存到历史（带时间）
+            const now = getNow();
             clozeHistory.push({
                 type:'cloze',
-                day:1,
+                day:2,
+                date:now.date,
+                time:now.time,
                 score:score,
                 wrongCount:wrongList.length,
                 wrongList:wrongList
             });
             
             alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', '));
+        }
+        
+        // 删除历史记录
+        function deleteHistory(idx) {
+            if (!confirm('确定删除这条记录吗？')) return;
+            const allHistory = [...historyData, ...clozeHistory];
+            const item = allHistory[idx];
+            if (item.type === 'quiz') {
+                historyData = historyData.filter((_, i) => i !== idx);
+            } else {
+                clozeHistory = clozeHistory.filter((_, i) => i !== (idx - historyData.length));
+            }
+            renderHistory();
         }
         
         renderQuestions();
