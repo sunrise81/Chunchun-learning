@@ -88,6 +88,22 @@ var score=0;
 for(var i=0;i<questions.length;i++){
 if(answers['q'+i]===questions[i].a)score+=4;
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+var ansStr = '';
+for(var n in answers){ansStr += n+':'+answers[n]+',';}
+// Submit to Google Form
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 alert('Score: '+score+'/12');
 show('quiz');
 }
@@ -98,6 +114,21 @@ for(var i=0;i<cloze.length;i++){
 var ans=document.getElementById('c'+i).value.toLowerCase().trim();
 if(ans===cloze[i].a)score+=4;
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+var ansStr = '';
+for(var i=0;i<cloze.length;i++){ansStr += 'C'+(i+1)+':'+document.getElementById('c'+i).value+',';}
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 alert('Score: '+score+'/12');
 show('cloze');
 }
@@ -108,6 +139,21 @@ for(var i=0;i<trans.length;i++){
 var ans=document.getElementById('t'+i).value.toLowerCase().trim();
 if(ans===trans[i].a.toLowerCase().trim())score+=4;
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+var ansStr = '';
+for(var i=0;i<trans.length;i++){ansStr += 'T'+(i+1)+':'+document.getElementById('t'+i).value+',';}
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 alert('Score: '+score+'/12');
 show('trans');
 }
