@@ -75,12 +75,12 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
         ];
         
         // 历史数据：选择题 + 完形填空
+        // 历史记录 - 带时间，按时间倒序排列
         const historyData = [
-            {type:'quiz',day:1,score:4,wrongCount:7,wrongList:[1,2,3,4,5,7,8,9]},
-            {type:'quiz',day:1,score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]},
-            {type:'quiz',day:1,score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
-            {type:'quiz',day:1,score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
-            {type:'quiz',day:1,score:28,wrongCount:3,wrongList:[1,3,4]}
+            {type:'quiz',day:1,date:'2026-03-20',time:'21:33',score:28,wrongCount:3,wrongList:[1,3,4]},
+            {type:'quiz',day:1,date:'2026-03-20',time:'21:28',score:20,wrongCount:5,wrongList:[1,3,4,7,8]},
+            {type:'quiz',day:1,date:'2026-03-20',time:'21:20',score:12,wrongCount:6,wrongList:[1,3,4,7,8,10]},
+            {type:'quiz',day:1,date:'2026-03-20',time:'21:15',score:8,wrongCount:8,wrongList:[1,2,3,4,5,7,9,10]}
         ];
         
         const clozeHistory = []; // 完形填空历史
@@ -120,9 +120,12 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
                 list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无历史记录</div>';
                 return;
             }
+            // 按时间倒序排列
+            allHistory.sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
             list.innerHTML = allHistory.map((h, i) => `
                 <div class="history-item" onclick="showDetail(${i})">
-                    <div><b>${h.attemptType}</b></div>
+                    <div><b>${h.attemptType}</b> <span style="color:#999;font-size:12px;">${h.date} ${h.time||''}</span>
+                    <button onclick="event.stopPropagation();deleteHistory(${i})" style="float:right;padding:2px8px;background:#ff4d4f;color:white;border:none;border-radius:4px;font-size:12px;">删除</button></div>
                     <div style="font-size:24px;color:#4A90E2;">得分: ${h.score}/${h.type==='cloze'?36:44}</div>
                     <div>错题: ${h.wrongCount}道</div>
                 </div>
@@ -165,18 +168,41 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
             }
         }
         
+        // 获取当前时间
+        function getNow() {
+            const d = new Date();
+            return {
+                date: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'),
+                time: String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0')
+            };
+        }
+        
         function submitQuiz() {
-            let score = 0;
+            let score = 0, wrongList = [];
             questions.forEach(q => {
                 if (q.o) {
                     const ans = userAnswers[q.n];
                     if (ans === q.a) score += 4;
+                    else wrongList.push(q.n);
                 } else {
                     const ans = document.getElementById('a' + q.n).value.toLowerCase();
                     if (ans.includes("doesn't") || ans.includes("rain")) score += 6;
                     if ((ans.includes("don't") || ans.includes("dont")) && ans.includes("draw")) score += 6;
                 }
             });
+            
+            // 保存到历史（带时间）
+            const now = getNow();
+            historyData.push({
+                type:'quiz',
+                day:2,
+                date:now.date,
+                time:now.time,
+                score:score,
+                wrongCount:wrongList.length,
+                wrongList:wrongList
+            });
+            
             alert('得分: ' + score + '/44');
         }
         
@@ -212,16 +238,32 @@ Today is a special day. Lucy <span class="cloze-hint">1 (be)</span> <input type=
                 }
             }
             
-            // 保存到历史
+            // 保存到历史（带时间）
+            const now = getNow();
             clozeHistory.push({
                 type:'cloze',
-                day:1,
+                day:2,
+                date:now.date,
+                time:now.time,
                 score:score,
                 wrongCount:wrongList.length,
                 wrongList:wrongList
             });
             
             alert('完形填空得分: ' + score + '/36\n错题: ' + wrongList.map(w=>w.n).join(', '));
+        }
+        
+        // 删除历史记录
+        function deleteHistory(idx) {
+            if (!confirm('确定删除这条记录吗？')) return;
+            const allHistory = [...historyData, ...clozeHistory];
+            const item = allHistory[idx];
+            if (item.type === 'quiz') {
+                historyData = historyData.filter((_, i) => i !== idx);
+            } else {
+                clozeHistory = clozeHistory.filter((_, i) => i !== (idx - historyData.length));
+            }
+            renderHistory();
         }
         
         renderQuestions();
