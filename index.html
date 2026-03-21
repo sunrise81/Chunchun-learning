@@ -78,11 +78,9 @@ a wonderful day!
 
     <script>
     // ── 配置 ──────────────────────────────────────────────
-    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-    // Google Form 字段 ID（从表单 HTML 中提取）
-    const FIELD_DATE    = 'entry.705164145';   // 日期字段
-    const FIELD_ANSWERS = 'entry.9424799';     // 答案字段
-    const FIELD_SCORE   = 'entry.1864991047';  // 分数字段
+    // JSONBin.io - 免费 JSON 存储
+    const JSONBIN_SECRET = '$2a$10$xxxxxxxxxxxxxxx';  // 注册获取
+    const JSONBIN_BIN_ID = 'xxxxxxxxxxxxxxx';  // 注册获取
 
     // ── 题目数据 ──────────────────────────────────────────
     const questions = [
@@ -103,14 +101,7 @@ a wonderful day!
 
     // ── 历史数据（已有记录） ──────────────────────────────
     const historyData = [
-
-            {type:'quiz',day:2,date:'2026-03-21',time:'17:35',score:30,total:44,wrongCount:2,wrongList:[3,4],userAnswers:{Q10='C',Q6='B',Q5='A',Q8='D',Q7='B',Q9='B',Q4='answer',Q3='answer',Q2='B',Q1='B'}},
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:44',score:20,total:44,wrongCount:0,wrongList:[],userAnswers:{Q10='B',Q6='B',Q5='B',Q8='B',Q7='B',Q9='B',Q4='I am taller than her.',Q3='I bougnt a book yestoday.',Q2='B',Q1='B'}},
-            {type:'cloze',day:2,date:'2026-03-21',time:'04:50',score:20,total:36,wrongCount:4,wrongList:[{n:4,ans:'bring',correct:'brought',hint:'bring'},{n:5,ans:'eated',correct:'ate',hint:'eat'},{n:6,ans:'swain',correct:'swam',hint:'swim'},{n:8,ans:'enjoy',correct:'enjoyed',hint:'enjoy'}]},
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:54',score:20,total:44,wrongCount:0,wrongList:[],userAnswers:{Q10='C',Q6='B',Q5='C',Q8='C',Q7='B',Q9='B',Q4='tall',Q3='a book',Q2='C',Q1='B'}},
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:44',score:20,total:44,wrongCount:0,wrongList:[],userAnswers:{Q10='B',Q6='B',Q5='B',Q8='B',Q7='B',Q9='B',Q4='I am taller than her.',Q3='I bougnt a book yestoday.',Q2='B',Q1='B'}},
-            {type:'cloze',day:2,date:'2026-03-21',time:'04:50',score:20,total:36,wrongCount:4,wrongList:[{n:4,ans:'bring',correct:'brought',hint:'bring'},{n:5,ans:'eated',correct:'ate',hint:'eat'},{n:6,ans:'swain',correct:'swam',hint:'swim'},{n:8,ans:'enjoy',correct:'enjoyed',hint:'enjoy'}]},
-            {type:'quiz',day:2,date:'2026-03-21',time:'04:54',score:20,total:44,wrongCount:0,wrongList:[],userAnswers:{Q10='C',Q6='B',Q5='C',Q8='C',Q7='B',Q9='B',Q4='tall',Q3='a book',Q2='C',Q1='B'}},        {type:'quiz',day:2,date:'2026-03-21',time:'13:40',score:12,total:44,wrongCount:8,wrongList:[1,2,3,4,5,6,7,9]},
+        {type:'quiz',day:2,date:'2026-03-21',time:'13:40',score:12,total:44,wrongCount:8,wrongList:[1,2,3,4,5,6,7,9]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:33',score:28,total:44,wrongCount:3,wrongList:[1,3,4]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:28',score:20,total:44,wrongCount:5,wrongList:[1,3,4,7,8]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:20',score:12,total:44,wrongCount:6,wrongList:[1,3,4,7,8,10]},
@@ -144,26 +135,55 @@ a wonderful day!
         if (tab==='history') renderHistory();
     }
 
-    // ── 提交到 Google Form ─────────────────────────────────
-    function syncToForm(dateStr, answersStr, scoreStr) {
+    // ── 直接提交到 GitHub ─────────────────────────────────
+    async function syncToGitHub(data) {
         const bar = document.getElementById('syncBar');
         bar.className = 'sync-bar sync-pending';
-        bar.textContent = '☁️ 正在同步...';
-
-        const body = new URLSearchParams();
-        body.append(FIELD_DATE,    dateStr);
-        body.append(FIELD_ANSWERS, answersStr);
-        body.append(FIELD_SCORE,   scoreStr);
-
-        fetch(FORM_URL, { method:'POST', mode:'no-cors', body })
-            .then(() => {
-                bar.className = 'sync-bar sync-ok';
-                bar.textContent = '✅ 已同步到云端！';
-            })
-            .catch(() => {
-                bar.className = 'sync-bar sync-err';
-                bar.textContent = '⚠️ 同步失败，请检查网络';
+        bar.textContent = '☁️ 正在同步到 GitHub...';
+        
+        try {
+            // 获取当前 submissions.json
+            let sha = null;
+            let existing = [];
+            try {
+                const getResp = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SUBMISSIONS_FILE}`, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (getResp.ok) {
+                    const getData = await getResp.json();
+                    sha = getData.sha;
+                    const content = atob(getData.content);
+                    try { existing = JSON.parse(content).submissions || []; } catch(e) {}
+                }
+            } catch(e) { console.log('No existing file'); }
+            
+            // 添加新提交
+            existing.unshift(data);
+            
+            // 写入
+            const content = JSON.stringify({ submissions: existing }, null, 2);
+            const encoded = btoa(unescape(encodeURIComponent(content)));
+            
+            const body = { message: `Add ${data.type} submission: ${data.score}/${data.total}`, content: encoded };
+            if (sha) body.sha = sha;
+            
+            const resp = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SUBMISSIONS_FILE}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
             });
+            
+            if (resp.ok) {
+                bar.className = 'sync-bar sync-ok';
+                bar.textContent = '✅ 已同步到 GitHub！';
+            } else {
+                throw new Error('GitHub API error');
+            }
+        } catch(e) {
+            console.error(e);
+            bar.className = 'sync-bar sync-err';
+            bar.textContent = '⚠️ 同步失败: ' + e.message;
+        }
     }
 
     function getNow() {
@@ -198,7 +218,10 @@ a wonderful day!
 
         const answersStr = Object.entries(answers).map(([k,v])=>`${k}:${v}`).join(',');
         const scoreStr   = `${score}/44 | 错题:${wrongList.join(',')}`;
-        syncToForm(`${now.date} ${now.time}`, answersStr, scoreStr);
+        // 保存到本地历史
+        historyData.unshift({type:'quiz',day:2,...now,score,total:44,wrongCount:wrongList.length,wrongList,userAnswers:answers});
+        // 同步到 GitHub
+        syncToGitHub({type:'quiz',day:2,date:now.date,time:now.time,score,total:44,wrongCount:wrongList.length,wrongList,userAnswers:answers,submittedAt:new Date().toISOString()});
 
         alert(`得分：${score} / 44\n错题：Q${wrongList.join(', Q') || '无'}`);
     }
@@ -219,7 +242,10 @@ a wonderful day!
 
         const answersStr = Object.entries(answers).map(([k,v])=>`${k}:${v}`).join(',');
         const scoreStr   = `${score}/36 | 错题:${wrongList.map(w=>w.n).join(',')}`;
-        syncToForm(`${now.date} ${now.time}`, answersStr, scoreStr);
+        // 保存到本地
+        clozeHistory.unshift({type:'cloze',day:2,...now,score,total:36,wrongCount:wrongList.length,wrongList});
+        // 同步到 GitHub
+        syncToGitHub({type:'cloze',day:2,date:now.date,time:now.time,score,total:36,wrongCount:wrongList.length,wrongList,submittedAt:new Date().toISOString()});
 
         alert(`完形填空得分：${score} / 36\n错题：${wrongList.map(w=>`第${w.n}空(应填${w.correct})`).join(', ') || '无'}`);
     }
