@@ -1,108 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>绾函鑻辫缁冧範</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .tab-container { display: flex; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; }
-        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; background: #f0f0f0; border: none; font-size: 14px; }
-        .tab.active { background: #4A90E2; color: white; }
-        .question-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-        .question-title { font-weight: bold; margin-bottom: 12px; }
-        .options { display: flex; flex-direction: column; gap: 8px; }
-        .option { padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; }
-        .option.selected { border-color: #4A90E2; background: #e8f4ff; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; background: #4A90E2; color: white; }
-        .cloze-input { width: 100px; padding: 8px; border: 2px solid #4A90E2; border-radius: 6px; margin: 0 5px; }
-    </style>
+<meta charset="UTF-8">
+<title>绾函鑻辫缁冧範</title>
+<style>
+body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
+.header{text-align:center;margin-bottom:20px}
+.tab-container{display:flex;margin-bottom:20px}
+.tab{flex:1;padding:15px;text-align:center;cursor:pointer;background:#f0f0f0;border:none;font-size:14px}
+.tab.active{background:#4A90E2;color:white}
+.question-card{background:white;border-radius:12px;padding:16px;margin-bottom:16px}
+.question-title{font-weight:bold;margin-bottom:12px}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{padding:12px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer}
+.option.selected{border-color:#4A90E2;background:#e8f4ff}
+.btn{width:100%;padding:15px;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;background:#4A90E2;color:white}
+.cloze-input{width:100px;padding:8px;border:2px solid #4A90E2;border-radius:6px;margin:0 5px}
+</style>
 </head>
 <body>
-    <div class="header">
-        <h1>馃 绾函鑻辫缁冧範</h1>
-        <p>Day 2 | 2026骞?鏈?1鏃?/p>
-    </div>
-    <div class="tab-container">
-        <button class="tab active" id="tab-quiz" onclick="showTab('quiz')">閫夋嫨棰?/button>
-        <button class="tab" id="tab-cloze" onclick="showTab('cloze')">瀹屽舰濉┖</button>
-    </div>
-    <div id="quiz-section">
-        <div id="questions"></div>
-        <button class="btn" onclick="submitQuiz()">鎻愪氦绛旀</button>
-    </div>
-    <div id="cloze-section" style="display:none;">
-        <div class="question-card">
-            <div class="question-title">瀹屽舰濉┖ (3绌猴紝鍏?2鍒?</div>
-            <p>Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="濉瘝"> to the park. He <input type="text" id="c2" class="cloze-input" placeholder="濉瘝"> football. They <input type="text" id="c3" class="cloze-input" placeholder="濉瘝"> sandwiches.</p>
-        </div>
-        <button class="btn" onclick="submitCloze()">鎻愪氦瀹屽舰濉┖</button>
-    </div>
-    <script>
-        var questions = [
-            {n:1, c:'She ______ to music every morning.', o:['A. listen','B. listens','C. listened','D. listening'], a:'B'},
-            {n:2, c:'The book is ______ the table.', o:['A. in','B. on','C. at','D. to'], a:'B'},
-            {n:3, c:'I ______ a new book yesterday.', o:['A. buy','B. buys','C. bought','D. buying'], a:'C'}
-        ];
-        
-        var clozeAnswers = {1:'went', 2:'played', 3:'ate'};
-        var userAnswers = {};
-        
-        function renderQuestions() {
-            var html = '';
-            for (var i = 0; i < questions.length; i++) {
-                var q = questions[i];
-                html += '<div class="question-card"><div class="question-title">Q' + q.n + '. ' + q.c + '</div><div class="options">';
-                for (var j = 0; j < q.o.length; j++) {
-                    var opt = q.o[j];
-                    var letter = opt.charAt(0);
-                    html += '<div class="option" data-n="' + q.n + '" data-a="' + letter + '" onclick="selectOption(this)">' + opt + '</div>';
-                }
-                html += '</div></div>';
-            }
-            document.getElementById('questions').innerHTML = html;
-        }
-        
-        function selectOption(el) {
-            var n = el.getAttribute('data-n');
-            var a = el.getAttribute('data-a');
-            userAnswers[n] = a;
-            var parent = el.parentElement;
-            var opts = parent.getElementsByClassName('option');
-            for (var i = 0; i < opts.length; i++) {
-                opts[i].classList.remove('selected');
-            }
-            el.classList.add('selected');
-        }
-        
-        function showTab(tab) {
-            document.getElementById('tab-quiz').className = tab === 'quiz' ? 'tab active' : 'tab';
-            document.getElementById('tab-cloze').className = tab === 'cloze' ? 'tab active' : 'tab';
-            document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
-            document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
-        }
-        
-        function submitQuiz() {
-            var score = 0;
-            for (var i = 0; i < questions.length; i++) {
-                var q = questions[i];
-                if (userAnswers[q.n] === q.a) score += 4;
-            }
-            alert('寰楀垎: ' + score + '/12');
-        }
-        
-        function submitCloze() {
-            var score = 0;
-            for (var i = 1; i <= 3; i++) {
-                var ans = document.getElementById('c' + i).value.toLowerCase().trim();
-                if (ans === clozeAnswers[i]) score += 4;
-            }
-            alert('瀹屽舰濉┖寰楀垎: ' + score + '/12');
-        }
-        
-        renderQuestions();
-    </script>
+<h1 class="header">绾函鑻辫缁冧範</h1>
+<p class="header">Day 2 | 2026骞?鏈?1鏃?/p>
+<div class="tab-container">
+<button class="tab active" id="tab-quiz" onclick="showTab('quiz')">閫夋嫨棰?/button>
+<button class="tab" id="tab-cloze" onclick="showTab('cloze')">瀹屽舰濉┖</button>
+</div>
+<div id="quiz-section">
+<div id="questions"></div>
+<button class="btn" onclick="submitQuiz()">鎻愪氦绛旀</button>
+</div>
+<div id="cloze-section" style="display:none">
+<div class="question-card">
+<div class="question-title">瀹屽舰濉┖ (3绌猴紝鍏?2鍒?</div>
+<p>Last Sunday, Tom <input type="text" id="c1" class="cloze-input" placeholder="濉瘝"> to the park. He <input type="text" id="c2" class="cloze-input" placeholder="濉瘝"> football. They <input type="text" id="c3" class="cloze-input" placeholder="濉瘝"> sandwiches.</p>
+</div>
+<button class="btn" onclick="submitCloze()">鎻愪氦瀹屽舰濉┖</button>
+</div>
+<script>
+var questions = [
+{n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
+{n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
+{n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
+];
+
+var clozeAnswers = {1:'went',2:'played',3:'ate'};
+var userAnswers = {};
+
+function renderQuestions() {
+var html = '';
+for(var i=0;i<questions.length;i++) {
+var q = questions[i];
+html += '<div class="question-card"><div class="question-title">Q' + q.n + '. ' + q.c + '</div><div class="options">';
+for(var j=0;j<q.o.length;j++) {
+var opt = q.o[j];
+var letter = opt.charAt(0);
+html += '<div class="option" data-n="' + q.n + '" data-a="' + letter + '" onclick="selectOption(this)">' + opt + '</div>';
+}
+html += '</div></div>';
+}
+document.getElementById('questions').innerHTML = html;
+}
+
+function selectOption(el) {
+var n = el.getAttribute('data-n');
+var a = el.getAttribute('data-a');
+userAnswers[n] = a;
+var parent = el.parentElement;
+var opts = parent.getElementsByClassName('option');
+for(var i=0;i<opts.length;i++) {opts[i].classList.remove('selected');}
+el.classList.add('selected');
+}
+
+function showTab(tab) {
+document.getElementById('tab-quiz').className = tab === 'quiz' ? 'tab active' : 'tab';
+document.getElementById('tab-cloze').className = tab === 'cloze' ? 'tab active' : 'tab';
+document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
+document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
+}
+
+function submitQuiz() {
+var score = 0;
+for(var i=0;i<questions.length;i++) {
+var q = questions[i];
+if(userAnswers[q.n] === q.a) score += 4;
+}
+alert('寰楀垎: ' + score + '/12');
+}
+
+function submitCloze() {
+var score = 0;
+for(var i=1;i<=3;i++) {
+var ans = document.getElementById('c'+i).value.toLowerCase().trim();
+if(ans === clozeAnswers[i]) score += 4;
+}
+alert('瀹屽舰濉┖寰楀垎: ' + score + '/12');
+}
+
+renderQuestions();
+</script>
 </body>
 </html>
