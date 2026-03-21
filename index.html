@@ -145,7 +145,9 @@ html = html + '<div class="question-title" style="font-size:20px;color:#4A90E2;"
 html = html + '<div style="color:#666;margin-bottom:15px;">' + h.date + '</div>';
 
 if(h.type === 'quiz') {
-html = html + '<div><b>Questions:</b></div>';
+var wrongArr = h.wrong ? h.wrong.split(',') : [];
+if(wrongArr.length > 0 && wrongArr[0] !== '') {
+html = html + '<div><b>Wrong Answers:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -154,22 +156,19 @@ if(parts.length === 2) {
 var qNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var q = questions[qNum-1];
-if(q) {
-var isWrong = userAns !== q.a;
-html = html + '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+if(q && userAns !== q.a) {
+html = html + '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
 html = html + '<div><b>Q' + qNum + '.</b> ' + q.c + '</div>';
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b>';
-if(isWrong) {html = html + ' <span style="color:red;">(Correct: ' + q.a + ')</span>';}
+html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">→ Correct: ' + q.a + '</span>';
 html = html + '</div></div>';
 }
 }
 }
 }
-if(h.wrong) {
-html = html + '<div style="color:red;margin-top:10px;"><b>Wrong:</b> ' + h.wrong + '</div>';
-}
 } else {
-html = html + '<div><b>Cloze:</b></div>';
+var wrongArr = h.wrong ? h.wrong.split(',') : [];
+if(wrongArr.length > 0 && wrongArr[0] !== '') {
+html = html + '<div><b>Wrong Answers:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -178,17 +177,14 @@ if(parts.length === 2) {
 var cNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var correct = clozeQuestions[cNum-1].a;
-var isWrong = userAns !== correct;
-html = html + '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+if(userAns !== correct) {
+html = html + '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
 html = html + '<div><b>Blank ' + cNum + ':</b> ' + clozeQuestions[cNum-1].t + '</div>';
-html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b>';
-if(isWrong) {html = html + ' <span style="color:red;">(Correct: ' + correct + ')</span>';}
+html = html + '<div style="margin-top:5px;">Your answer: <b>' + userAns + '</b> <span style="color:red;">→ Correct: ' + correct + '</span>';
 html = html + '</div></div>';
 }
 }
 }
-if(h.wrong) {
-html = html + '<div style="color:red;margin-top:10px;"><b>Wrong:</b> ' + h.wrong + '</div>';
 }
 }
 html = html + '</div>';
