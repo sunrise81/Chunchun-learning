@@ -43,6 +43,11 @@ var trans = [
 {c:'This book is interesting.',a:'This book is interesting.'}
 ];
 var answers = {};
+var historyData = JSON.parse(localStorage.getItem('history') || '[]');
+
+function saveHistory() {
+localStorage.setItem('history', JSON.stringify(historyData));
+}
 
 function show(page) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
@@ -51,10 +56,11 @@ var html = '';
 if(page==='quiz'){
 for(var i=0;i<questions.length;i++){
 var q=questions[i];
-html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
+html+='<div class="card" id="card'+i+'"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
 for(var j=0;j<q.o.length;j++){
 var letter=String.fromCharCode(65+j);
-html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
+var sel = answers['q'+i] === letter ? 'selected' : '';
+html+='<div class="opt '+sel+'" onclick="selectQ('+i+',\''+letter+'\',this)">'+q.o[j]+'</div>';
 }
 }
 html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
@@ -69,44 +75,76 @@ html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+
 }
 html+='<button class="submit" onclick="submitTrans()">Submit</button>';
 }else if(page==='history'){
+if(historyData.length===0){
 html+='<div class="card"><b>History</b><br>No records yet</div>';
+}else{
+for(var i=0;i<historyData.length;i++){
+var h = historyData[i];
+html+='<div class="card"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><small>'+h.wrong+'</small></div>';
+}
+}
+html+='<button class="submit" onclick="clearHistory()">Clear All</button>';
 }
 document.getElementById('content').innerHTML = html;
 }
 
-function selectQ(n,letter){
+function selectQ(n,letter,el){
 answers['q'+n]=letter;
-document.querySelectorAll('#content .opt').forEach(o=>o.classList.remove('selected'));
-event.target.classList.add('selected');
+var card = document.getElementById('card'+n);
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+el.classList.add('selected');
 }
 
 function submitQuiz(){
 var score=0;
+var wrong='';
 for(var i=0;i<questions.length;i++){
-if(answers['q'+i]===questions[i].a)score+=4;
+if(answers['q'+i]===questions[i].a){score+=4;}else{wrong+='Q'+(i+1)+' ';}
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Quiz',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
+saveHistory();
 alert('Score: '+score+'/12');
 show('quiz');
 }
 
 function submitCloze(){
 var score=0;
+var wrong='';
 for(var i=0;i<cloze.length;i++){
 var ans=document.getElementById('c'+i).value.toLowerCase().trim();
-if(ans===cloze[i].a)score+=4;
+if(ans===cloze[i].a){score+=4;}else{wrong+='C'+(i+1)+' ';}
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Cloze',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
+saveHistory();
 alert('Score: '+score+'/12');
 show('cloze');
 }
 
 function submitTrans(){
 var score=0;
+var wrong='';
 for(var i=0;i<trans.length;i++){
 var ans=document.getElementById('t'+i).value.toLowerCase().trim();
-if(ans===trans[i].a.toLowerCase().trim())score+=4;
+if(ans===trans[i].a.toLowerCase().trim()){score+=4;}else{wrong+='T'+(i+1)+' ';}
 }
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Translate',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
+saveHistory();
 alert('Score: '+score+'/12');
 show('trans');
+}
+
+function clearHistory(){
+if(confirm('Clear all history?')){
+historyData=[];
+saveHistory();
+show('history');
+}
 }
 
 show('quiz');
