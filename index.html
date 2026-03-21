@@ -25,6 +25,7 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 <div class="tab-container">
 <button class="tab active" id="tab-quiz" onclick="showTab('quiz')">Quiz</button>
 <button class="tab" id="tab-cloze" onclick="showTab('cloze')">Cloze</button>
+<button class="tab" id="tab-trans" onclick="showTab('trans')">Translate</button>
 <button class="tab" id="tab-history" onclick="showTab('history')">History</button>
 </div>
 <div id="quiz-section">
@@ -42,6 +43,11 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 <p><input type="text" id="c3" class="cloze-input" placeholder="answer"></p>
 </div>
 <button class="btn" onclick="submitCloze()">Submit</button>
+</div>
+
+<div id="trans-section" style="display:none">
+<div id="trans-questions"></div>
+<button class="btn" onclick="submitTrans()">Submit</button>
 </div>
 <div id="history-section" style="display:none">
 <div id="history-list"></div>
@@ -62,6 +68,14 @@ var clozeQuestions = [
 {n:2,t:'He ______ football.',a:'played'},
 {n:3,t:'They ______ sandwiches.',a:'ate'}
 ];
+
+var transQuestions = [
+{n:1,c:'我昨天买了一个新书包。',a:'I bought a new schoolbag yesterday.'},
+{n:2,c:'她比我高。',a:'She is taller than me.'},
+{n:3,c:'这本书很有趣。',a:'This book is interesting.'}
+];
+
+var transAnswers = {};
 
 var userAnswers = {};
 
@@ -101,12 +115,15 @@ el.classList.add('selected');
 function showTab(tab) {
 document.getElementById('tab-quiz').className = tab === 'quiz' ? 'tab active' : 'tab';
 document.getElementById('tab-cloze').className = tab === 'cloze' ? 'tab active' : 'tab';
+document.getElementById('tab-trans').className = tab === 'trans' ? 'tab active' : 'tab';
 document.getElementById('tab-history').className = tab === 'history' ? 'tab active' : 'tab';
 document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
 document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
+document.getElementById('trans-section').style.display = tab === 'trans' ? 'block' : 'none';
 document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
 document.getElementById('detail-section').style.display = tab === 'detail' ? 'block' : 'none';
 if(tab === 'history') renderHistory();
+if(tab === 'trans') renderTransQuestions();
 }
 
 function submitQuiz() {
@@ -172,6 +189,47 @@ document.body.removeChild(form);
 alert('Cloze Score: ' + score + '/12');
 }
 
+function renderTransQuestions() {
+var html = '';
+for(var i=0;i<transQuestions.length;i++) {
+var q = transQuestions[i];
+html = html + '<div class="question-card"><div class="question-title">Translate: ' + q.c + '</div><textarea id="t' + q.n + '" style="width:100%;padding:10px;border:2px solid #4A90E2;border-radius:8px;margin-top:10px;" rows="2" placeholder="Your translation..."></textarea></div>';
+}
+document.getElementById('trans-questions').innerHTML = html;
+}
+
+function submitTrans() {
+var score = 0;
+var ansStr = '';
+var wrongStr = '';
+for(var i=0;i<transQuestions.length;i++) {
+var q = transQuestions[i];
+var userAns = document.getElementById('t'+q.n).value.toLowerCase().trim();
+var correct = q.a.toLowerCase().trim();
+ansStr = ansStr + 'T' + q.n + ':' + document.getElementById('t'+q.n).value + ',';
+if(userAns === correct) {score = score + 4;} else {wrongStr = wrongStr + q.n + ',';}
+}
+var d = new Date();
+var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
+historyData.unshift({date:timeStr, score:score, total:12, type:'trans', answers:ansStr, wrong:wrongStr});
+
+// Submit to Google Form
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
+
+alert('Translation Score: ' + score + '/12');
+renderTransQuestions();
+}
+
 function showDetail(idx) {
 var h = historyData[idx];
 var html = '<div class="question-card">';
@@ -201,6 +259,23 @@ html = html + '<div style="color:red;">Correct: <b>' + correctOpt + '</b></div>'
 html = html + '</div>';
 }
 }
+}
+} else if(h.type === 'trans') {
+html = html + '<div><b>Translation:</b></div>';
+var arr = h.answers.split(',');
+for(var i=0;i<arr.length;i++) {
+if(arr[i]) {
+var parts = arr[i].split(':');
+if(parts.length === 2) {
+var tNum = parseInt(parts[0].substring(1));
+var userAns = parts[1];
+var correct = transQuestions[tNum-1].a;
+var isWrong = userAns.toLowerCase().trim() !== correct.toLowerCase().trim();
+html = html + '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+html = html + '<div><b>' + tNum + '.</b> ' + transQuestions[tNum-1].c + '</div>';
+html = html + '<div style="margin-top:5px;">Your: <b>' + userAns + '</b>';
+if(isWrong) {html = html + '<br><span style="color:red;">Correct: ' + correct + '</span>';}
+html = html + '</div></div>';
 }
 }
 }
@@ -256,7 +331,7 @@ function renderHistory() {
 var html = '';
 for(var i=0;i<historyData.length;i++) {
 var h = historyData[i];
-var typeLabel = h.type === 'cloze' ? 'Cloze' : 'Quiz';
+var typeLabel = h.type === 'cloze' ? 'Cloze' : (h.type === 'trans' ? 'Translate' : 'Quiz');
 html = html + '<div class="history-item" onclick="showDetail(' + i + ')"><div><b>' + typeLabel + '</b> <span style="color:#999;font-size:12px;">' + h.date + '</span></div><div style="font-size:24px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div></div>';
 }
 if(historyData.length === 0) {html = '<div style="text-align:center;color:#666;padding:30px;">No records</div>';}
@@ -264,6 +339,7 @@ document.getElementById('history-list').innerHTML = html;
 }
 
 renderQuestions();
+renderTransQuestions();
 </script>
 </body>
 </html>
