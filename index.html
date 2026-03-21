@@ -15,7 +15,9 @@ h1{text-align:center}
 .opt.selected{border-color:#4A90E2;background:#c8e6ff}
 input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
 .submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
-.wrong{color:red;font-size:12px}
+.wrong{color:red}
+.correct{color:green}
+.back{background:#666;padding:10px;color:white;border:none;border-radius:5px;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -39,9 +41,9 @@ var clozeQuestions = [
 {n:3,t:'They ______ sandwiches.',a:'ate'}
 ];
 var transQuestions = [
-{n:1,c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
-{n:2,c:'She is taller than me.',a:'She is taller than me.'},
-{n:3,c:'This book is interesting.',a:'This book is interesting.'}
+{c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
+{c:'She is taller than me.',a:'She is taller than me.'},
+{c:'This book is interesting.',a:'This book is interesting.'}
 ];
 var userAnswers = {};
 var historyData = JSON.parse(localStorage.getItem('chunchun_history') || '[]');
@@ -64,7 +66,7 @@ function renderQuiz(app) {
 var html = '';
 for(var i=0;i<questions.length;i++) {
 var q = questions[i];
-html += '<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
+html += '<div class="card" id="card'+i+'"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
 for(var j=0;j<q.o.length;j++) {
 var letter = String.fromCharCode(65+j);
 var selected = userAnswers[i] === letter ? 'selected' : '';
@@ -77,23 +79,28 @@ app.innerHTML = html;
 }
 
 function selectAnswer(n, letter) {
-userAnswers[n] = showTab('quiz');
+userAnswers[n] = letter;
+var card = document.getElementById('card'+n);
+card.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+event.target.classList.add('selected');
 }
 
 function submitQuiz() {
 var score = 0;
 var wrongList = [];
+var answers = [];
 for(var i=0;i<questions.length;i++) {
-if(userAnswers[i] === questions[i].a) {
-score += 4;
-} else {
-wrongList.push(i+1);
-}
+var ans = userAnswers[i] || '';
+var correct = questions[i].a;
+answers.push('Q'+(i+1)+':'+ans);
+if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Quiz', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+var record = {type:'Quiz', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
+historyData.unshift(record);
 saveHistory();
+submitToGoogleForm(dateStr, answers.join(','), score+'/12');
 alert('Score: '+score+'/12');
 userAnswers = {};
 showTab('quiz');
@@ -112,18 +119,19 @@ app.innerHTML = html;
 function submitCloze() {
 var score = 0;
 var wrongList = [];
+var answers = [];
 for(var i=0;i<clozeQuestions.length;i++) {
 var ans = document.getElementById('c'+i).value.toLowerCase().trim();
-if(ans === clozeQuestions[i].a) {
-score += 4;
-} else {
-wrongList.push(i+1);
-}
+var correct = clozeQuestions[i].a;
+answers.push('C'+(i+1)+':'+ans);
+if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Cloze', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+var record = {type:'Cloze', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
+historyData.unshift(record);
 saveHistory();
+submitToGoogleForm(dateStr, answers.join(','), score+'/12');
 alert('Score: '+score+'/12');
 showTab('cloze');
 }
@@ -141,20 +149,34 @@ app.innerHTML = html;
 function submitTrans() {
 var score = 0;
 var wrongList = [];
+var answers = [];
 for(var i=0;i<transQuestions.length;i++) {
 var ans = document.getElementById('t'+i).value.toLowerCase().trim();
-if(ans === transQuestions[i].a.toLowerCase().trim()) {
-score += 4;
-} else {
-wrongList.push(i+1);
-}
+var correct = transQuestions[i].a.toLowerCase().trim();
+answers.push('T'+(i+1)+':'+ans);
+if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Translate', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+var record = {type:'Translate', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
+historyData.unshift(record);
 saveHistory();
+submitToGoogleForm(dateStr, answers.join(','), score+'/12');
 alert('Score: '+score+'/12');
 showTab('trans');
+}
+
+function submitToGoogleForm(timeStr, ansStr, scoreStr) {
+var form = document.createElement('form');
+form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = scoreStr; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 }
 
 function renderHistory(app) {
@@ -162,14 +184,78 @@ if(historyData.length === 0) {
 app.innerHTML = '<div class="card"><b>History</b><br>No records yet</div><button class="submit" onclick="clearHistory()">Clear All</button>';
 return;
 }
+var html = '<button class="back" onclick="showHistoryList()">Back to List</button><div id="history-detail"></div>';
+app.innerHTML = html;
+showHistoryList();
+}
+
+function showHistoryList() {
 var html = '';
 for(var i=0;i<historyData.length;i++) {
 var h = historyData[i];
 var wrongText = h.wrong ? 'Wrong: ' + h.wrong : 'All correct';
-html += '<div class="card"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
+html += '<div class="card" onclick="showHistoryDetail('+i+')"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
 }
 html += '<button class="submit" onclick="clearHistory()">Clear All</button>';
-app.innerHTML = html;
+document.getElementById('history-detail').innerHTML = html;
+}
+
+function showHistoryDetail(idx) {
+var h = historyData[idx];
+var html = '<button class="back" onclick="showHistoryList()">Back</button>';
+if(h.type === 'Quiz') {
+var arr = h.answers.split(',');
+for(var i=0;i<arr.length;i++) {
+if(arr[i]) {
+var parts = arr[i].split(':');
+var qNum = parseInt(parts[0].substring(1)) - 1;
+var userAns = parts[1];
+var correct = questions[qNum].a;
+var isWrong = userAns !== correct;
+html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Q'+(qNum+1)+'</b>. '+questions[qNum].c+'<br>Your: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '</div>';
+}
+}
+} else if(h.type === 'Cloze') {
+var arr = h.answers.split(',');
+for(var i=0;i<arr.length;i++) {
+if(arr[i]) {
+var parts = arr[i].split(':');
+var cNum = parseInt(parts[0].substring(1)) - 1;
+var userAns = parts[1];
+var correct = clozeQuestions[cNum].a;
+var isWrong = userAns !== correct;
+html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Blank '+(cNum+1)+'</b>: '+clozeQuestions[cNum].t+'<br>Your: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '</div>';
+}
+}
+} else if(h.type === 'Translate') {
+var arr = h.answers.split(',');
+for(var i=0;i<arr.length;i++) {
+if(arr[i]) {
+var parts = arr[i].split(':');
+var tNum = parseInt(parts[0].substring(1)) - 1;
+var userAns = parts[1];
+var correct = transQuestions[tNum].a;
+var isWrong = userAns !== correct.toLowerCase().trim();
+html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>'+(tNum+1)+'</b>. '+transQuestions[tNum].c+'<br>Your: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '</div>';
+}
+}
+}
+html += '<button class="submit" onclick="deleteRecord('+idx+')">Delete This</button>';
+document.getElementById('history-detail').innerHTML = html;
+}
+
+function deleteRecord(idx) {
+if(confirm('Delete this record?')) {
+historyData.splice(idx, 1);
+saveHistory();
+showHistoryList();
+}
 }
 
 function clearHistory() {
