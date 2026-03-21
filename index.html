@@ -5,29 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>English Practice</title>
 <style>
-body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
+body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;����ground:#f5f5f5}
 h1{text-align:center}
 .nav{display:flex;gap:5px;margin-bottom:20px}
-.nav button{flex:1;padding:12px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
-.nav button.active{background:#2E7D32}
-.card{background:white;padding:15px;border-radius:10px;margin:10px 0}
+.nav button{flex:1;padding:12px;����ground:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.nav button.active{����ground:#2E7D32}
+.card{����ground:white;padding:15px;border-radius:10px;margin:10px 0}
 .opt{padding:10px;margin:5px 0;border:2px solid #ddd;border-radius:5px;cursor:pointer}
-.opt:hover{background:#e8f4ff}
-.opt.selected{border-color:#4A90E2;background:#c8e6ff}
+.opt:hover{����ground:#e8f4ff}
+.opt.selected{border-color:#4A90E2;����ground:#c8e6ff}
 input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
-.submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
+.�ύ{width:100%;padding:15px;����ground:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
 .wrong{color:red}
 .correct{color:green}
-.back{background:#666;padding:10px;color:white;border:none;border-radius:5px;margin-bottom:10px}
+.����{����ground:#666;padding:10px;color:white;border:none;border-radius:5px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <h1>English Practice</h1>
 <div class="nav">
-<button id="btn-quiz" class="active" onclick="showTab('quiz')">Quiz</button>
-<button id="btn-cloze" onclick="showTab('cloze')">Cloze</button>
-<button id="btn-trans" onclick="showTab('trans')">Translate</button>
-<button id="btn-history" onclick="showTab('history')">History</button>
+<button id="btn-ѡ����" class="active" onclick="showTab('ѡ����')">ѡ����</button>
+<button id="btn-�������" onclick="showTab('�������')">�������</button>
+<button id="btn-trans" onclick="showTab('trans')">����</button>
+<button id="btn-��ʷ��¼" onclick="showTab('��ʷ��¼')">��ʷ��¼</button>
 </div>
 <div id="app"></div>
 <script>
@@ -36,7 +36,7 @@ var questions = [
 {n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
 {n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
 ];
-var clozeQuestions = [
+var �������Questions = [
 {n:1,t:'Last Sunday, Tom ______ to the park.',a:'went'},
 {n:2,t:'He ______ football.',a:'played'},
 {n:3,t:'They ______ sandwiches.',a:'ate'}
@@ -47,23 +47,23 @@ var transQuestions = [
 {c:'This book is interesting.',a:'This book is interesting.'}
 ];
 var userAnswers = {};
-var historyData = JSON.parse(localStorage.getItem('chunchun_history') || '[]');
+var ��ʷ��¼Data = JSON.parse(localStorage.getItem('chunchun_��ʷ��¼') || '[]');
 
-function saveHistory() {
-localStorage.setItem('chunchun_history', JSON.stringify(historyData));
+function save��ʷ��¼() {
+localStorage.setItem('chunchun_��ʷ��¼', JSON.stringify(��ʷ��¼Data));
 }
 
 function showTab(tab) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
 document.getElementById('btn-'+tab).classList.add('active');
 var app = document.getElementById('app');
-if(tab === 'quiz') renderQuiz(app);
-else if(tab === 'cloze') renderCloze(app);
+if(tab === 'ѡ����') renderѡ����(app);
+else if(tab === '�������') render�������(app);
 else if(tab === 'trans') renderTrans(app);
-else if(tab === 'history') renderHistory(app);
+else if(tab === '��ʷ��¼') render��ʷ��¼(app);
 }
 
-function renderQuiz(app) {
+function renderѡ����(app) {
 var html = '';
 for(var i=0;i<questions.length;i++) {
 var q = questions[i];
@@ -75,7 +75,7 @@ html += '<div class="opt '+selected+'" onclick="selectAnswer('+i+',\''+letter+'\
 }
 html += '</div>';
 }
-html += '<button class="submit" onclick="submitQuiz()">Submit</button>';
+html += '<button class="�ύ" onclick="�ύѡ����()">�ύ</button>';
 app.innerHTML = html;
 }
 
@@ -86,7 +86,7 @@ card.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
 event.target.classList.add('selected');
 }
 
-function submitQuiz() {
+function �ύѡ����() {
 var score = 0;
 var wrongList = [];
 var answers = [];
@@ -98,56 +98,56 @@ if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'Quiz', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
-historyData.unshift(record);
-saveHistory();
-submitToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('Score: '+score+'/12');
+var record = {type:'ѡ����', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
+��ʷ��¼Data.unshift(record);
+save��ʷ��¼();
+�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
+alert('�÷�: '+score+'/12');
 userAnswers = {};
-showTab('quiz');
+showTab('ѡ����');
 }
 
-function renderCloze(app) {
+function render�������(app) {
 var html = '';
-for(var i=0;i<clozeQuestions.length;i++) {
-var q = clozeQuestions[i];
+for(var i=0;i<�������Questions.length;i++) {
+var q = �������Questions[i];
 html += '<div class="card"><b>Blank '+(i+1)+'</b>: '+q.t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
 }
-html += '<button class="submit" onclick="submitCloze()">Submit</button>';
+html += '<button class="�ύ" onclick="�ύ�������()">�ύ</button>';
 app.innerHTML = html;
 }
 
-function submitCloze() {
+function �ύ�������() {
 var score = 0;
 var wrongList = [];
 var answers = [];
-for(var i=0;i<clozeQuestions.length;i++) {
+for(var i=0;i<�������Questions.length;i++) {
 var ans = document.getElementById('c'+i).value.toLowerCase().trim();
-var correct = clozeQuestions[i].a;
+var correct = �������Questions[i].a;
 answers.push('C'+(i+1)+':'+ans);
 if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'Cloze', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
-historyData.unshift(record);
-saveHistory();
-submitToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('Score: '+score+'/12');
-showTab('cloze');
+var record = {type:'�������', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
+��ʷ��¼Data.unshift(record);
+save��ʷ��¼();
+�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
+alert('�÷�: '+score+'/12');
+showTab('�������');
 }
 
 function renderTrans(app) {
 var html = '';
 for(var i=0;i<transQuestions.length;i++) {
 var q = transQuestions[i];
-html += '<div class="card"><b>'+(i+1)+'</b>. '+q.c+'<br><textarea id="t'+i+'" rows="2" placeholder="Translate to English"></textarea></div>';
+html += '<div class="card"><b>'+(i+1)+'</b>. '+q.c+'<br><textarea id="t'+i+'" rows="2" placeholder="���� to English"></textarea></div>';
 }
-html += '<button class="submit" onclick="submitTrans()">Submit</button>';
+html += '<button class="�ύ" onclick="�ύTrans()">�ύ</button>';
 app.innerHTML = html;
 }
 
-function submitTrans() {
+function �ύTrans() {
 var score = 0;
 var wrongList = [];
 var answers = [];
@@ -159,15 +159,15 @@ if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'Translate', date:dateStr, score:score, total:12, wrong:wrongList.join(','), answers:answers.join(',')};
-historyData.unshift(record);
-saveHistory();
-submitToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('Score: '+score+'/12');
+var record = {type:'����', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
+��ʷ��¼Data.unshift(record);
+save��ʷ��¼();
+�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
+alert('�÷�: '+score+'/12');
 showTab('trans');
 }
 
-function submitToGoogleForm(timeStr, ansStr, scoreStr) {
+function �ύToGoogleForm(timeStr, ansStr, scoreStr) {
 var form = document.createElement('form');
 form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
 form.method = 'POST';
@@ -176,35 +176,35 @@ var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value 
 var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
 var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = scoreStr; form.appendChild(f3);
 document.body.appendChild(form);
-form.submit();
+form.�ύ();
 document.body.removeChild(form);
 }
 
-function renderHistory(app) {
-if(historyData.length === 0) {
-app.innerHTML = '<div class="card"><b>History</b><br>No records yet</div><button class="submit" onclick="clearHistory()">Clear All</button>';
+function render��ʷ��¼(app) {
+if(��ʷ��¼Data.length === 0) {
+app.innerHTML = '<div class="card"><b>��ʷ��¼</b><br>���޼�¼</div><button class="�ύ" onclick="clear��ʷ��¼()">���ȫ��</button>';
 return;
 }
-var html = '<button class="back" onclick="showHistoryList()">Back to List</button><div id="history-detail"></div>';
+var html = '<button class="����" onclick="show��ʷ��¼List()">���� to List</button><div id="��ʷ��¼-detail"></div>';
 app.innerHTML = html;
-showHistoryList();
+show��ʷ��¼List();
 }
 
-function showHistoryList() {
+function show��ʷ��¼List() {
 var html = '';
-for(var i=0;i<historyData.length;i++) {
-var h = historyData[i];
-var wrongText = h.wrong ? 'Wrong: ' + h.wrong : 'All correct';
-html += '<div class="card" onclick="showHistoryDetail('+i+')"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
+for(var i=0;i<��ʷ��¼Data.length;i++) {
+var h = ��ʷ��¼Data[i];
+var wrongText = h.wrong ? '����: ' + h.wrong : 'ȫ��';
+html += '<div class="card" onclick="show��ʷ��¼Detail('+i+')"><b>'+h.type+'</b> - '+h.date+'<br>�÷�: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
 }
-html += '<button class="submit" onclick="clearHistory()">Clear All</button>';
-document.getElementById('history-detail').innerHTML = html;
+html += '<button class="�ύ" onclick="clear��ʷ��¼()">���ȫ��</button>';
+document.getElementById('��ʷ��¼-detail').innerHTML = html;
 }
 
-function showHistoryDetail(idx) {
-var h = historyData[idx];
-var html = '<button class="back" onclick="showHistoryList()">Back</button>';
-if(h.type === 'Quiz') {
+function show��ʷ��¼Detail(idx) {
+var h = ��ʷ��¼Data[idx];
+var html = '<button class="����" onclick="show��ʷ��¼List()">����</button>';
+if(h.type === 'ѡ����') {
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -213,26 +213,26 @@ var qNum = parseInt(parts[0].substring(1)) - 1;
 var userAns = parts[1];
 var correct = questions[qNum].a;
 var isWrong = userAns !== correct;
-html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Q'+(qNum+1)+'</b>. '+questions[qNum].c+'<br>Your: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Q'+(qNum+1)+'</b>. '+questions[qNum].c+'<br>���: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
 html += '</div>';
 }
 }
-} else if(h.type === 'Cloze') {
+} else if(h.type === '�������') {
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
 var parts = arr[i].split(':');
 var cNum = parseInt(parts[0].substring(1)) - 1;
 var userAns = parts[1];
-var correct = clozeQuestions[cNum].a;
+var correct = �������Questions[cNum].a;
 var isWrong = userAns !== correct;
-html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Blank '+(cNum+1)+'</b>: '+clozeQuestions[cNum].t+'<br>Your: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Blank '+(cNum+1)+'</b>: '+�������Questions[cNum].t+'<br>���: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
 html += '</div>';
 }
 }
-} else if(h.type === 'Translate') {
+} else if(h.type === '����') {
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -241,35 +241,35 @@ var tNum = parseInt(parts[0].substring(1)) - 1;
 var userAns = parts[1];
 var correct = transQuestions[tNum].a;
 var isWrong = userAns !== correct.toLowerCase().trim();
-html += '<div class="card" style="background:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>'+(tNum+1)+'</b>. '+transQuestions[tNum].c+'<br>Your: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">Correct: '+correct+'</span>';
+html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>'+(tNum+1)+'</b>. '+transQuestions[tNum].c+'<br>���: <b>'+userAns+'</b>';
+if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
 html += '</div>';
 }
 }
 }
-html += '<button class="submit" onclick="deleteRecord('+idx+')">Delete This</button>';
-document.getElementById('history-detail').innerHTML = html;
+html += '<button class="�ύ" onclick="deleteRecord('+idx+')">ɾ��</button>';
+document.getElementById('��ʷ��¼-detail').innerHTML = html;
 }
 
 function deleteRecord(idx) {
-if(confirm('Delete this record?')) {
-var h = historyData[idx];
-submitToGoogleForm('DELETE:'+h.type+':'+h.date, 'delete', 'DELETE');
-historyData.splice(idx, 1);
-saveHistory();
-showHistoryList();
+if(confirm('ɾ�� record?')) {
+var h = ��ʷ��¼Data[idx];
+�ύToGoogleForm('DELETE:'+h.type+':'+h.date, 'delete', 'DELETE');
+��ʷ��¼Data.splice(idx, 1);
+save��ʷ��¼();
+show��ʷ��¼List();
 }
 }
 
-function clearHistory() {
-if(confirm('Clear all history?')) {
-historyData = [];
-saveHistory();
-showTab('history');
+function clear��ʷ��¼() {
+if(confirm('���ȫ�� ��ʷ��¼?')) {
+��ʷ��¼Data = [];
+save��ʷ��¼();
+showTab('��ʷ��¼');
 }
 }
 
-showTab('quiz');
+showTab('ѡ����');
 </script>
 </body>
 </html>
