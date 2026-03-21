@@ -2,274 +2,114 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>English Practice</title>
 <style>
-body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;����ground:#f5f5f5}
+body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
 h1{text-align:center}
-.nav{display:flex;gap:5px;margin-bottom:20px}
-.nav button{flex:1;padding:12px;����ground:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
-.nav button.active{����ground:#2E7D32}
-.card{����ground:white;padding:15px;border-radius:10px;margin:10px 0}
+.nav{display:flex;gap:10px;margin-bottom:20px}
+.nav button{flex:1;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.nav button.active{background:#2E7D32}
+.card{background:white;padding:20px;border-radius:10px;margin:10px 0}
 .opt{padding:10px;margin:5px 0;border:2px solid #ddd;border-radius:5px;cursor:pointer}
-.opt:hover{����ground:#e8f4ff}
-.opt.selected{border-color:#4A90E2;����ground:#c8e6ff}
+.opt:hover{background:#e8f4ff}
+.opt.selected{border-color:#4A90E2;background:#e8f4ff}
 input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
-.�ύ{width:100%;padding:15px;����ground:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
-.wrong{color:red}
-.correct{color:green}
-.����{����ground:#666;padding:10px;color:white;border:none;border-radius:5px;margin-bottom:10px}
+.submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
 </style>
 </head>
 <body>
 <h1>English Practice</h1>
 <div class="nav">
-<button id="btn-ѡ����" class="active" onclick="showTab('ѡ����')">ѡ����</button>
-<button id="btn-�������" onclick="showTab('�������')">�������</button>
-<button id="btn-trans" onclick="showTab('trans')">����</button>
-<button id="btn-��ʷ��¼" onclick="showTab('��ʷ��¼')">��ʷ��¼</button>
+<button id="btn-quiz" class="active" onclick="show('quiz')">Quiz</button>
+<button id="btn-cloze" onclick="show('cloze')">Cloze</button>
+<button id="btn-trans" onclick="show('trans')">Translate</button>
+<button id="btn-history" onclick="show('history')">History</button>
 </div>
-<div id="app"></div>
+<div id="content"></div>
 <script>
 var questions = [
 {n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
 {n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
 {n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
 ];
-var �������Questions = [
-{n:1,t:'Last Sunday, Tom ______ to the park.',a:'went'},
-{n:2,t:'He ______ football.',a:'played'},
-{n:3,t:'They ______ sandwiches.',a:'ate'}
+var cloze = [
+{t:'Last Sunday, Tom ______ to the park.',a:'went'},
+{t:'He ______ football.',a:'played'},
+{t:'They ______ sandwiches.',a:'ate'}
 ];
-var transQuestions = [
+var trans = [
 {c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
 {c:'She is taller than me.',a:'She is taller than me.'},
 {c:'This book is interesting.',a:'This book is interesting.'}
 ];
-var userAnswers = {};
-var ��ʷ��¼Data = JSON.parse(localStorage.getItem('chunchun_��ʷ��¼') || '[]');
+var answers = {};
 
-function save��ʷ��¼() {
-localStorage.setItem('chunchun_��ʷ��¼', JSON.stringify(��ʷ��¼Data));
-}
-
-function showTab(tab) {
+function show(page) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-document.getElementById('btn-'+tab).classList.add('active');
-var app = document.getElementById('app');
-if(tab === 'ѡ����') renderѡ����(app);
-else if(tab === '�������') render�������(app);
-else if(tab === 'trans') renderTrans(app);
-else if(tab === '��ʷ��¼') render��ʷ��¼(app);
-}
-
-function renderѡ����(app) {
+document.getElementById('btn-'+page).classList.add('active');
 var html = '';
-for(var i=0;i<questions.length;i++) {
-var q = questions[i];
-html += '<div class="card" id="card'+i+'"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
-for(var j=0;j<q.o.length;j++) {
-var letter = String.fromCharCode(65+j);
-var selected = userAnswers[i] === letter ? 'selected' : '';
-html += '<div class="opt '+selected+'" onclick="selectAnswer('+i+',\''+letter+'\')">'+q.o[j]+'</div>';
+if(page==='quiz'){
+for(var i=0;i<questions.length;i++){
+var q=questions[i];
+html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
+for(var j=0;j<q.o.length;j++){
+var letter=String.fromCharCode(65+j);
+html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
 }
-html += '</div>';
 }
-html += '<button class="�ύ" onclick="�ύѡ����()">�ύ</button>';
-app.innerHTML = html;
+html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
+}else if(page==='cloze'){
+for(var i=0;i<cloze.length;i++){
+html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+}
+html+='<button class="submit" onclick="submitCloze()">Submit</button>';
+}else if(page==='trans'){
+for(var i=0;i<trans.length;i++){
+html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
+}
+html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+}else if(page==='history'){
+html+='<div class="card"><b>History</b><br>No records yet</div>';
+}
+document.getElementById('content').innerHTML = html;
 }
 
-function selectAnswer(n, letter) {
-userAnswers[n] = letter;
-var card = document.getElementById('card'+n);
-card.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+function selectQ(n,letter){
+answers['q'+n]=letter;
+document.querySelectorAll('#content .opt').forEach(o=>o.classList.remove('selected'));
 event.target.classList.add('selected');
 }
 
-function �ύѡ����() {
-var score = 0;
-var wrongList = [];
-var answers = [];
-for(var i=0;i<questions.length;i++) {
-var ans = userAnswers[i] || '';
-var correct = questions[i].a;
-answers.push('Q'+(i+1)+':'+ans);
-if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
+function submitQuiz(){
+var score=0;
+for(var i=0;i<questions.length;i++){
+if(answers['q'+i]===questions[i].a)score+=4;
 }
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'ѡ����', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
-��ʷ��¼Data.unshift(record);
-save��ʷ��¼();
-�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('�÷�: '+score+'/12');
-userAnswers = {};
-showTab('ѡ����');
+alert('Score: '+score+'/12');
+show('quiz');
 }
 
-function render�������(app) {
-var html = '';
-for(var i=0;i<�������Questions.length;i++) {
-var q = �������Questions[i];
-html += '<div class="card"><b>Blank '+(i+1)+'</b>: '+q.t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+function submitCloze(){
+var score=0;
+for(var i=0;i<cloze.length;i++){
+var ans=document.getElementById('c'+i).value.toLowerCase().trim();
+if(ans===cloze[i].a)score+=4;
 }
-html += '<button class="�ύ" onclick="�ύ�������()">�ύ</button>';
-app.innerHTML = html;
-}
-
-function �ύ�������() {
-var score = 0;
-var wrongList = [];
-var answers = [];
-for(var i=0;i<�������Questions.length;i++) {
-var ans = document.getElementById('c'+i).value.toLowerCase().trim();
-var correct = �������Questions[i].a;
-answers.push('C'+(i+1)+':'+ans);
-if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
-}
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'�������', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
-��ʷ��¼Data.unshift(record);
-save��ʷ��¼();
-�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('�÷�: '+score+'/12');
-showTab('�������');
+alert('Score: '+score+'/12');
+show('cloze');
 }
 
-function renderTrans(app) {
-var html = '';
-for(var i=0;i<transQuestions.length;i++) {
-var q = transQuestions[i];
-html += '<div class="card"><b>'+(i+1)+'</b>. '+q.c+'<br><textarea id="t'+i+'" rows="2" placeholder="���� to English"></textarea></div>';
+function submitTrans(){
+var score=0;
+for(var i=0;i<trans.length;i++){
+var ans=document.getElementById('t'+i).value.toLowerCase().trim();
+if(ans===trans[i].a.toLowerCase().trim())score+=4;
 }
-html += '<button class="�ύ" onclick="�ύTrans()">�ύ</button>';
-app.innerHTML = html;
-}
-
-function �ύTrans() {
-var score = 0;
-var wrongList = [];
-var answers = [];
-for(var i=0;i<transQuestions.length;i++) {
-var ans = document.getElementById('t'+i).value.toLowerCase().trim();
-var correct = transQuestions[i].a.toLowerCase().trim();
-answers.push('T'+(i+1)+':'+ans);
-if(ans === correct) {score += 4;} else {wrongList.push(i+1);}
-}
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-var record = {type:'����', date:dateStr, �÷�:score, total:12, ����:wrongList.join(','), answers:answers.join(',')};
-��ʷ��¼Data.unshift(record);
-save��ʷ��¼();
-�ύToGoogleForm(dateStr, answers.join(','), score+'/12');
-alert('�÷�: '+score+'/12');
-showTab('trans');
+alert('Score: '+score+'/12');
+show('trans');
 }
 
-function �ύToGoogleForm(timeStr, ansStr, scoreStr) {
-var form = document.createElement('form');
-form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-form.method = 'POST';
-form.target = '_blank';
-var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
-var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = scoreStr; form.appendChild(f3);
-document.body.appendChild(form);
-form.�ύ();
-document.body.removeChild(form);
-}
-
-function render��ʷ��¼(app) {
-if(��ʷ��¼Data.length === 0) {
-app.innerHTML = '<div class="card"><b>��ʷ��¼</b><br>���޼�¼</div><button class="�ύ" onclick="clear��ʷ��¼()">���ȫ��</button>';
-return;
-}
-var html = '<button class="����" onclick="show��ʷ��¼List()">���� to List</button><div id="��ʷ��¼-detail"></div>';
-app.innerHTML = html;
-show��ʷ��¼List();
-}
-
-function show��ʷ��¼List() {
-var html = '';
-for(var i=0;i<��ʷ��¼Data.length;i++) {
-var h = ��ʷ��¼Data[i];
-var wrongText = h.wrong ? '����: ' + h.wrong : 'ȫ��';
-html += '<div class="card" onclick="show��ʷ��¼Detail('+i+')"><b>'+h.type+'</b> - '+h.date+'<br>�÷�: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
-}
-html += '<button class="�ύ" onclick="clear��ʷ��¼()">���ȫ��</button>';
-document.getElementById('��ʷ��¼-detail').innerHTML = html;
-}
-
-function show��ʷ��¼Detail(idx) {
-var h = ��ʷ��¼Data[idx];
-var html = '<button class="����" onclick="show��ʷ��¼List()">����</button>';
-if(h.type === 'ѡ����') {
-var arr = h.answers.split(',');
-for(var i=0;i<arr.length;i++) {
-if(arr[i]) {
-var parts = arr[i].split(':');
-var qNum = parseInt(parts[0].substring(1)) - 1;
-var userAns = parts[1];
-var correct = questions[qNum].a;
-var isWrong = userAns !== correct;
-html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Q'+(qNum+1)+'</b>. '+questions[qNum].c+'<br>���: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
-html += '</div>';
-}
-}
-} else if(h.type === '�������') {
-var arr = h.answers.split(',');
-for(var i=0;i<arr.length;i++) {
-if(arr[i]) {
-var parts = arr[i].split(':');
-var cNum = parseInt(parts[0].substring(1)) - 1;
-var userAns = parts[1];
-var correct = �������Questions[cNum].a;
-var isWrong = userAns !== correct;
-html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>Blank '+(cNum+1)+'</b>: '+�������Questions[cNum].t+'<br>���: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
-html += '</div>';
-}
-}
-} else if(h.type === '����') {
-var arr = h.answers.split(',');
-for(var i=0;i<arr.length;i++) {
-if(arr[i]) {
-var parts = arr[i].split(':');
-var tNum = parseInt(parts[0].substring(1)) - 1;
-var userAns = parts[1];
-var correct = transQuestions[tNum].a;
-var isWrong = userAns !== correct.toLowerCase().trim();
-html += '<div class="card" style="����ground:'+(isWrong?'#ffeaea':'#e8f4ff')+'"><b>'+(tNum+1)+'</b>. '+transQuestions[tNum].c+'<br>���: <b>'+userAns+'</b>';
-if(isWrong) html += ' <span class="correct">��ȷ��: '+correct+'</span>';
-html += '</div>';
-}
-}
-}
-html += '<button class="�ύ" onclick="deleteRecord('+idx+')">ɾ��</button>';
-document.getElementById('��ʷ��¼-detail').innerHTML = html;
-}
-
-function deleteRecord(idx) {
-if(confirm('ɾ�� record?')) {
-var h = ��ʷ��¼Data[idx];
-�ύToGoogleForm('DELETE:'+h.type+':'+h.date, 'delete', 'DELETE');
-��ʷ��¼Data.splice(idx, 1);
-save��ʷ��¼();
-show��ʷ��¼List();
-}
-}
-
-function clear��ʷ��¼() {
-if(confirm('���ȫ�� ��ʷ��¼?')) {
-��ʷ��¼Data = [];
-save��ʷ��¼();
-showTab('��ʷ��¼');
-}
-}
-
-showTab('ѡ����');
+show('quiz');
 </script>
 </body>
 </html>
