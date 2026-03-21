@@ -78,9 +78,10 @@ a wonderful day!
 
     <script>
     // ── 配置 ──────────────────────────────────────────────
-    // JSONBin.io - 免费 JSON 存储
-    const JSONBIN_SECRET = '$2a$10$xxxxxxxxxxxxxxx';  // 注册获取
-    const JSONBIN_BIN_ID = 'xxxxxxxxxxxxxxx';  // 注册获取
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+    const FIELD_DATE = 'entry.705164145';
+    const FIELD_ANSWERS = 'entry.9424799';
+    const FIELD_SCORE = 'entry.1864991047';
 
     // ── 题目数据 ──────────────────────────────────────────
     const questions = [
@@ -135,55 +136,26 @@ a wonderful day!
         if (tab==='history') renderHistory();
     }
 
-    // ── 直接提交到 GitHub ─────────────────────────────────
-    async function syncToGitHub(data) {
+    // ── 提交到 Google Form ─────────────────────────────────
+    function syncToForm(dateStr, answersStr, scoreStr) {
         const bar = document.getElementById('syncBar');
         bar.className = 'sync-bar sync-pending';
-        bar.textContent = '☁️ 正在同步到 GitHub...';
-        
-        try {
-            // 获取当前 submissions.json
-            let sha = null;
-            let existing = [];
-            try {
-                const getResp = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SUBMISSIONS_FILE}`, {
-                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (getResp.ok) {
-                    const getData = await getResp.json();
-                    sha = getData.sha;
-                    const content = atob(getData.content);
-                    try { existing = JSON.parse(content).submissions || []; } catch(e) {}
-                }
-            } catch(e) { console.log('No existing file'); }
-            
-            // 添加新提交
-            existing.unshift(data);
-            
-            // 写入
-            const content = JSON.stringify({ submissions: existing }, null, 2);
-            const encoded = btoa(unescape(encodeURIComponent(content)));
-            
-            const body = { message: `Add ${data.type} submission: ${data.score}/${data.total}`, content: encoded };
-            if (sha) body.sha = sha;
-            
-            const resp = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${SUBMISSIONS_FILE}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            
-            if (resp.ok) {
+        bar.textContent = '☁️ 正在同步...';
+
+        const body = new URLSearchParams();
+        body.append(FIELD_DATE, dateStr);
+        body.append(FIELD_ANSWERS, answersStr);
+        body.append(FIELD_SCORE, scoreStr);
+
+        fetch(FORM_URL, { method:'POST', mode:'no-cors', body })
+            .then(() => {
                 bar.className = 'sync-bar sync-ok';
-                bar.textContent = '✅ 已同步到 GitHub！';
-            } else {
-                throw new Error('GitHub API error');
-            }
-        } catch(e) {
-            console.error(e);
-            bar.className = 'sync-bar sync-err';
-            bar.textContent = '⚠️ 同步失败: ' + e.message;
-        }
+                bar.textContent = '✅ 已同步到云端！';
+            })
+            .catch(() => {
+                bar.className = 'sync-bar sync-err';
+                bar.textContent = '⚠️ 同步失败，请检查网络';
+            });
     }
 
     function getNow() {
@@ -220,8 +192,10 @@ a wonderful day!
         const scoreStr   = `${score}/44 | 错题:${wrongList.join(',')}`;
         // 保存到本地历史
         historyData.unshift({type:'quiz',day:2,...now,score,total:44,wrongCount:wrongList.length,wrongList,userAnswers:answers});
-        // 同步到 GitHub
-        syncToGitHub({type:'quiz',day:2,date:now.date,time:now.time,score,total:44,wrongCount:wrongList.length,wrongList,userAnswers:answers,submittedAt:new Date().toISOString()});
+        // 同步到 Google Form
+        const answersStr = Object.entries(answers).map(([k,v])=>`${k}:${v}`).join(',');
+        const scoreStr = `${score}/44 | 错题:${wrongList.join(',')}`;
+        syncToForm(`${now.date} ${now.time}`, answersStr, scoreStr);
 
         alert(`得分：${score} / 44\n错题：Q${wrongList.join(', Q') || '无'}`);
     }
@@ -244,8 +218,10 @@ a wonderful day!
         const scoreStr   = `${score}/36 | 错题:${wrongList.map(w=>w.n).join(',')}`;
         // 保存到本地
         clozeHistory.unshift({type:'cloze',day:2,...now,score,total:36,wrongCount:wrongList.length,wrongList});
-        // 同步到 GitHub
-        syncToGitHub({type:'cloze',day:2,date:now.date,time:now.time,score,total:36,wrongCount:wrongList.length,wrongList,submittedAt:new Date().toISOString()});
+        // 同步到 Google Form
+        const answersStr = Object.entries(answers).map(([k,v])=>`${k}:${v}`).join(',');
+        const scoreStr = `${score}/36 | 错题:${wrongList.map(w=>w.n).join(',')}`;
+        syncToForm(`${now.date} ${now.time}`, answersStr, scoreStr);
 
         alert(`完形填空得分：${score} / 36\n错题：${wrongList.map(w=>`第${w.n}空(应填${w.correct})`).join(', ') || '无'}`);
     }
