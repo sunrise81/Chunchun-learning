@@ -50,7 +50,12 @@ var questions = [
 var clozeAnswers = {1:'went',2:'played',3:'ate'};
 var userAnswers = {};
 
-var historyData = [];
+var historyData = [
+{date:'2026-03-21 19:17', score:4, total:12, type:'quiz'},
+{date:'2026-03-21 17:35', score:30, total:44, type:'quiz'},
+{date:'2026-03-21 15:15', score:36, total:36, type:'cloze'},
+{date:'2026-03-21 15:00', score:28, total:44, type:'quiz'}
+];
 
 function renderQuestions() {
 var html = '';
@@ -95,7 +100,7 @@ if(userAnswers[q.n] === q.a) {score = score + 4;}
 }
 var d = new Date();
 var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
-historyData.unshift({date:timeStr, score:score, total:12});
+historyData.unshift({date:timeStr, score:score, total:12, type:'quiz'});
 alert('Score: ' + score + '/12');
 renderQuestions();
 }
