@@ -234,9 +234,23 @@ showTab('detail');
 
 function deleteRecord(idx) {
 if(confirm('Delete this record?')) {
+var h = historyData[idx];
 historyData.splice(idx, 1);
 renderHistory();
 showTab('history');
+
+// Submit delete to Google Form
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = 'DELETE:' + h.type + ':' + h.date; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = 'delete'; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = 'DELETE'; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 }
 }
 
