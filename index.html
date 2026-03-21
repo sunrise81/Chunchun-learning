@@ -250,7 +250,9 @@ html += '</div></div>';
 }
 }
 } else {
-html += '<div><b>All Answers:</b></div>';
+var wrongArr = h.wrong ? h.wrong.split(',') : [];
+if(wrongArr.length > 0 && wrongArr[0] !== '') {
+html += '<div><b>Wrong Answers:</b></div>';
 var arr = h.answers.split(',');
 for(var i=0;i<arr.length;i++) {
 if(arr[i]) {
@@ -260,11 +262,12 @@ var cNum = parseInt(parts[0].substring(1));
 var userAns = parts[1];
 var correct = clozeQuestions[cNum-1].a;
 var isWrong = userAns !== correct;
-html += '<div style="padding:8px;margin:5px 0;background:' + (isWrong ? '#ffeaea' : '#e8f4ff') + ';border-radius:8px;">';
+if(isWrong) {
+html += '<div style="padding:8px;margin:5px 0;background:#ffeaea;border-radius:8px;">';
 html += '<div><b>Blank ' + cNum + ':</b> ' + clozeQuestions[cNum-1].t + '</div>';
-html += '<div style="margin-top:5px;">Your: <b>' + userAns + '</b>';
-if(isWrong) {html += ' <span style="color:red;">Correct: ' + correct + '</span>';}
+html += '<div style="margin-top:5px;">Your: <b>' + userAns + '</b> <span style="color:red;">Correct: ' + correct + '</span>';
 html += '</div></div>';
+}
 }
 }
 }
