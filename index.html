@@ -103,7 +103,6 @@ a wonderful day!
 
     // ── 历史数据（已有记录） ──────────────────────────────
     const historyData = [
-            {type:'cloze',day:2,date:'2026-03-21',time:'16:18',score:12,total:36,wrongCount:0,wrongList:[]},
         {type:'quiz',day:2,date:'2026-03-21',time:'13:40',score:12,total:44,wrongCount:8,wrongList:[1,2,3,4,5,6,7,9]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:33',score:28,total:44,wrongCount:3,wrongList:[1,3,4]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:28',score:20,total:44,wrongCount:5,wrongList:[1,3,4,7,8]},
@@ -273,18 +272,36 @@ a wonderful day!
         const list = document.getElementById('history-list');
 
         if (h.type==='cloze') {
+            // 检查 wrongList 格式 - 可能是对象数组或简单数字数组
+            let wrongItems = [];
+            if (h.wrongList && h.wrongList.length > 0) {
+                if (typeof h.wrongList[0] === 'object') {
+                    // 对象格式 {n,ans,correct,hint}
+                    wrongItems = h.wrongList;
+                } else {
+                    // 简单数字格式，转为对象
+                    const hints = {1:'go',2:'have',3:'play',4:'bring',5:'eat',6:'swim',7:'make',8:'enjoy',9:'be'};
+                    const correct = {1:'went',2:'had',3:'played',4:'brought',5:'ate',6:'swam',7:'made',8:'enjoyed',9:'was'};
+                    wrongItems = h.wrongList.map(n => ({
+                        n: n,
+                        hint: hints[n] || '',
+                        ans: '未记录',
+                        correct: correct[n] || ''
+                    }));
+                }
+            }
+            
+            const wrongHtml = wrongItems.length > 0 
+                ? wrongItems.map(w => `<div class="detail-item"><b>第${w.n}空</b>（提示: ${w.hint}）<br><span style="color:#ff4d4f;">你的答案：${w.ans}</span><br><span style="color:#52c41a;">正确答案：${w.correct}</span></div>`).join('')
+                : '<div style="color:#52c41a;font-size:16px;padding:20px;text-align:center;">🎉 全部正确！</div>';
+            
             list.innerHTML = `
                 <div style="display:flex;gap:10px;margin-bottom:15px;">
                     <button class="back-btn" onclick="renderHistory()">← 返回</button>
                     <button class="back-btn" style="background:#ff4d4f;" onclick="doDelete('cloze','${h.date}','${h.time}')">🗑️ 删除</button>
                 </div>
                 <div style="font-size:24px;color:#4A90E2;margin-bottom:15px;">完形填空 ${h.score}/36</div>
-                ${h.wrongList.map(w=>`
-                    <div class="detail-item">
-                        <b>第${w.n}空</b>（提示: ${w.hint}）<br>
-                        <span style="color:#ff4d4f;">你的答案：${w.ans}</span><br>
-                        <span style="color:#52c41a;">正确答案：${w.correct}</span>
-                    </div>`).join('')}`;
+                ${wrongHtml}`;
         } else {
             const wrongQs = questions.filter(q=>h.wrongList.includes(q.n));
             list.innerHTML = `
