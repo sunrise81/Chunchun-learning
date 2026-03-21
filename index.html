@@ -175,6 +175,7 @@ alert('Cloze Score: ' + score + '/12');
 function showDetail(idx) {
 var h = historyData[idx];
 var html = '<div class="question-card">';
+html = html + '<button onclick="deleteRecord(' + idx + ')" style="float:right;padding:5px 10px;background:#ff4444;color:white;border:none;border-radius:5px;cursor:pointer;">Delete</button>';
 html = html + '<div class="question-title" style="font-size:20px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div>';
 html = html + '<div style="color:#666;margin-bottom:15px;">' + h.date + '</div>';
 
@@ -229,6 +230,14 @@ html = html + '</div></div>';
 html = html + '</div>';
 document.getElementById('detail-content').innerHTML = html;
 showTab('detail');
+}
+
+function deleteRecord(idx) {
+if(confirm('Delete this record?')) {
+historyData.splice(idx, 1);
+renderHistory();
+showTab('history');
+}
 }
 
 function renderHistory() {
