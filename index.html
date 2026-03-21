@@ -253,6 +253,8 @@ document.getElementById('history-detail').innerHTML = html;
 
 function deleteRecord(idx) {
 if(confirm('Delete this record?')) {
+var h = historyData[idx];
+submitToGoogleForm('DELETE:'+h.type+':'+h.date, 'delete', 'DELETE');
 historyData.splice(idx, 1);
 saveHistory();
 showHistoryList();
