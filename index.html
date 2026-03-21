@@ -120,6 +120,15 @@ ansStr = ansStr + 'Q' + n + ':' + userAnswers[n] + ',';
 if(userAnswers[n] !== questions[n-1].a) {wrongStr = wrongStr + n + ',';}
 }
 historyData.unshift({date:timeStr, score:score, total:12, type:'quiz', answers:ansStr, wrong:wrongStr});
+
+// Submit to Google Form
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var formData = new FormData();
+formData.append('entry.705164145', timeStr);
+formData.append('entry.9424799', ansStr);
+formData.append('entry.1864991047', score + '/12 | Wrong:' + wrongStr);
+fetch(formUrl, {method:'POST', body:formData, mode:'no-cors'}).catch(function(e){});
+
 alert('Score: ' + score + '/12');
 renderQuestions();
 }
@@ -137,6 +146,15 @@ if(ans === correct) {score = score + 4;} else {wrongStr = wrongStr + i + ',';}
 var d = new Date();
 var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
 historyData.unshift({date:timeStr, score:score, total:12, type:'cloze', answers:ansStr, wrong:wrongStr});
+
+// Submit to Google Form
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var formData = new FormData();
+formData.append('entry.705164145', timeStr);
+formData.append('entry.9424799', ansStr);
+formData.append('entry.1864991047', score + '/12 | Wrong:' + wrongStr);
+fetch(formUrl, {method:'POST', body:formData, mode:'no-cors'}).catch(function(e){});
+
 alert('Cloze Score: ' + score + '/12');
 }
 
