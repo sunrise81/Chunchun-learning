@@ -6,148 +6,181 @@
 <style>
 body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
 h1{text-align:center}
-.nav{display:flex;gap:10px;margin-bottom:20px}
-.nav button{flex:1;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.nav{display:flex;gap:5px;margin-bottom:20px}
+.nav button{flex:1;padding:12px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
 .nav button.active{background:#2E7D32}
-.card{background:white;padding:20px;border-radius:10px;margin:10px 0}
+.card{background:white;padding:15px;border-radius:10px;margin:10px 0}
 .opt{padding:10px;margin:5px 0;border:2px solid #ddd;border-radius:5px;cursor:pointer}
 .opt:hover{background:#e8f4ff}
-.opt.selected{border-color:#4A90E2;background:#e8f4ff}
+.opt.selected{border-color:#4A90E2;background:#c8e6ff}
 input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
 .submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
+.wrong{color:red;font-size:12px}
 </style>
 </head>
 <body>
 <h1>English Practice</h1>
 <div class="nav">
-<button id="btn-quiz" class="active" onclick="show('quiz')">Quiz</button>
-<button id="btn-cloze" onclick="show('cloze')">Cloze</button>
-<button id="btn-trans" onclick="show('trans')">Translate</button>
-<button id="btn-history" onclick="show('history')">History</button>
+<button id="btn-quiz" class="active" onclick="showTab('quiz')">Quiz</button>
+<button id="btn-cloze" onclick="showTab('cloze')">Cloze</button>
+<button id="btn-trans" onclick="showTab('trans')">Translate</button>
+<button id="btn-history" onclick="showTab('history')">History</button>
 </div>
-<div id="content"></div>
+<div id="app"></div>
 <script>
 var questions = [
 {n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
 {n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
 {n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
 ];
-var cloze = [
-{t:'Last Sunday, Tom ______ to the park.',a:'went'},
-{t:'He ______ football.',a:'played'},
-{t:'They ______ sandwiches.',a:'ate'}
+var clozeQuestions = [
+{n:1,t:'Last Sunday, Tom ______ to the park.',a:'went'},
+{n:2,t:'He ______ football.',a:'played'},
+{n:3,t:'They ______ sandwiches.',a:'ate'}
 ];
-var trans = [
-{c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
-{c:'She is taller than me.',a:'She is taller than me.'},
-{c:'This book is interesting.',a:'This book is interesting.'}
+var transQuestions = [
+{n:1,c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
+{n:2,c:'She is taller than me.',a:'She is taller than me.'},
+{n:3,c:'This book is interesting.',a:'This book is interesting.'}
 ];
-var answers = {};
-var historyData = JSON.parse(localStorage.getItem('history') || '[]');
+var userAnswers = {};
+var historyData = JSON.parse(localStorage.getItem('chunchun_history') || '[]');
 
 function saveHistory() {
-localStorage.setItem('history', JSON.stringify(historyData));
+localStorage.setItem('chunchun_history', JSON.stringify(historyData));
 }
 
-function show(page) {
+function showTab(tab) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-document.getElementById('btn-'+page).classList.add('active');
+document.getElementById('btn-'+tab).classList.add('active');
+var app = document.getElementById('app');
+if(tab === 'quiz') renderQuiz(app);
+else if(tab === 'cloze') renderCloze(app);
+else if(tab === 'trans') renderTrans(app);
+else if(tab === 'history') renderHistory(app);
+}
+
+function renderQuiz(app) {
 var html = '';
-if(page==='quiz'){
-for(var i=0;i<questions.length;i++){
-var q=questions[i];
-html+='<div class="card" id="card'+i+'"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
-for(var j=0;j<q.o.length;j++){
-var letter=String.fromCharCode(65+j);
-var sel = answers['q'+i] === letter ? 'selected' : '';
-html+='<div class="opt '+sel+'" onclick="selectQ('+i+',\''+letter+'\',this)">'+q.o[j]+'</div>';
+for(var i=0;i<questions.length;i++) {
+var q = questions[i];
+html += '<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
+for(var j=0;j<q.o.length;j++) {
+var letter = String.fromCharCode(65+j);
+var selected = userAnswers[i] === letter ? 'selected' : '';
+html += '<div class="opt '+selected+'" onclick="selectAnswer('+i+',\''+letter+'\')">'+q.o[j]+'</div>';
+}
+html += '</div>';
+}
+html += '<button class="submit" onclick="submitQuiz()">Submit</button>';
+app.innerHTML = html;
+}
+
+function selectAnswer(n, letter) {
+userAnswers[n] = showTab('quiz');
+}
+
+function submitQuiz() {
+var score = 0;
+var wrongList = [];
+for(var i=0;i<questions.length;i++) {
+if(userAnswers[i] === questions[i].a) {
+score += 4;
+} else {
+wrongList.push(i+1);
 }
 }
-html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
-}else if(page==='cloze'){
-for(var i=0;i<cloze.length;i++){
-html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Quiz', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+saveHistory();
+alert('Score: '+score+'/12');
+userAnswers = {};
+showTab('quiz');
 }
-html+='<button class="submit" onclick="submitCloze()">Submit</button>';
-}else if(page==='trans'){
-for(var i=0;i<trans.length;i++){
-html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
+
+function renderCloze(app) {
+var html = '';
+for(var i=0;i<clozeQuestions.length;i++) {
+var q = clozeQuestions[i];
+html += '<div class="card"><b>Blank '+(i+1)+'</b>: '+q.t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
 }
-html+='<button class="submit" onclick="submitTrans()">Submit</button>';
-}else if(page==='history'){
-if(historyData.length===0){
-html+='<div class="card"><b>History</b><br>No records yet</div>';
-}else{
-for(var i=0;i<historyData.length;i++){
+html += '<button class="submit" onclick="submitCloze()">Submit</button>';
+app.innerHTML = html;
+}
+
+function submitCloze() {
+var score = 0;
+var wrongList = [];
+for(var i=0;i<clozeQuestions.length;i++) {
+var ans = document.getElementById('c'+i).value.toLowerCase().trim();
+if(ans === clozeQuestions[i].a) {
+score += 4;
+} else {
+wrongList.push(i+1);
+}
+}
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Cloze', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+saveHistory();
+alert('Score: '+score+'/12');
+showTab('cloze');
+}
+
+function renderTrans(app) {
+var html = '';
+for(var i=0;i<transQuestions.length;i++) {
+var q = transQuestions[i];
+html += '<div class="card"><b>'+(i+1)+'</b>. '+q.c+'<br><textarea id="t'+i+'" rows="2" placeholder="Translate to English"></textarea></div>';
+}
+html += '<button class="submit" onclick="submitTrans()">Submit</button>';
+app.innerHTML = html;
+}
+
+function submitTrans() {
+var score = 0;
+var wrongList = [];
+for(var i=0;i<transQuestions.length;i++) {
+var ans = document.getElementById('t'+i).value.toLowerCase().trim();
+if(ans === transQuestions[i].a.toLowerCase().trim()) {
+score += 4;
+} else {
+wrongList.push(i+1);
+}
+}
+var now = new Date();
+var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
+historyData.unshift({type:'Translate', date:dateStr, score:score, total:12, wrong:wrongList.join(',')});
+saveHistory();
+alert('Score: '+score+'/12');
+showTab('trans');
+}
+
+function renderHistory(app) {
+if(historyData.length === 0) {
+app.innerHTML = '<div class="card"><b>History</b><br>No records yet</div><button class="submit" onclick="clearHistory()">Clear All</button>';
+return;
+}
+var html = '';
+for(var i=0;i<historyData.length;i++) {
 var h = historyData[i];
-html+='<div class="card"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><small>'+h.wrong+'</small></div>';
+var wrongText = h.wrong ? 'Wrong: ' + h.wrong : 'All correct';
+html += '<div class="card"><b>'+h.type+'</b> - '+h.date+'<br>Score: '+h.score+'/'+h.total+'<br><span class="wrong">'+wrongText+'</span></div>';
 }
-}
-html+='<button class="submit" onclick="clearHistory()">Clear All</button>';
-}
-document.getElementById('content').innerHTML = html;
-}
-
-function selectQ(n,letter,el){
-answers['q'+n]=letter;
-var card = document.getElementById('card'+n);
-card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
-el.classList.add('selected');
+html += '<button class="submit" onclick="clearHistory()">Clear All</button>';
+app.innerHTML = html;
 }
 
-function submitQuiz(){
-var score=0;
-var wrong='';
-for(var i=0;i<questions.length;i++){
-if(answers['q'+i]===questions[i].a){score+=4;}else{wrong+='Q'+(i+1)+' ';}
-}
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Quiz',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
+function clearHistory() {
+if(confirm('Clear all history?')) {
+historyData = [];
 saveHistory();
-alert('Score: '+score+'/12');
-show('quiz');
-}
-
-function submitCloze(){
-var score=0;
-var wrong='';
-for(var i=0;i<cloze.length;i++){
-var ans=document.getElementById('c'+i).value.toLowerCase().trim();
-if(ans===cloze[i].a){score+=4;}else{wrong+='C'+(i+1)+' ';}
-}
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Cloze',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
-saveHistory();
-alert('Score: '+score+'/12');
-show('cloze');
-}
-
-function submitTrans(){
-var score=0;
-var wrong='';
-for(var i=0;i<trans.length;i++){
-var ans=document.getElementById('t'+i).value.toLowerCase().trim();
-if(ans===trans[i].a.toLowerCase().trim()){score+=4;}else{wrong+='T'+(i+1)+' ';}
-}
-var now = new Date();
-var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
-historyData.unshift({type:'Translate',date:dateStr,score:score,total:12,wrong:wrong||'All correct'});
-saveHistory();
-alert('Score: '+score+'/12');
-show('trans');
-}
-
-function clearHistory(){
-if(confirm('Clear all history?')){
-historyData=[];
-saveHistory();
-show('history');
+showTab('history');
 }
 }
 
-show('quiz');
+showTab('quiz');
 </script>
 </body>
 </html>
