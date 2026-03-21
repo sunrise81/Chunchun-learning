@@ -123,11 +123,16 @@ historyData.unshift({date:timeStr, score:score, total:12, type:'quiz', answers:a
 
 // Submit to Google Form
 var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-var formData = new FormData();
-formData.append('entry.705164145', timeStr);
-formData.append('entry.9424799', ansStr);
-formData.append('entry.1864991047', score + '/12 | Wrong:' + wrongStr);
-fetch(formUrl, {method:'POST', body:formData, mode:'no-cors'}).catch(function(e){});
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 
 alert('Score: ' + score + '/12');
 renderQuestions();
@@ -149,11 +154,16 @@ historyData.unshift({date:timeStr, score:score, total:12, type:'cloze', answers:
 
 // Submit to Google Form
 var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-var formData = new FormData();
-formData.append('entry.705164145', timeStr);
-formData.append('entry.9424799', ansStr);
-formData.append('entry.1864991047', score + '/12 | Wrong:' + wrongStr);
-fetch(formUrl, {method:'POST', body:formData, mode:'no-cors'}).catch(function(e){});
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = timeStr; form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score + '/12 | Wrong:' + wrongStr; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
 
 alert('Cloze Score: ' + score + '/12');
 }
