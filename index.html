@@ -16,6 +16,7 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 .option.selected{border-color:#4A90E2;background:#e8f4ff}
 .btn{width:100%;padding:15px;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;background:#4A90E2;color:white}
 .cloze-input{width:100px;padding:8px;border:2px solid #4A90E2;border-radius:6px;margin:0 5px}
+.history-item{background:white;padding:15px;border-radius:10px;margin-bottom:12px;border:2px solid #4A90E2}
 </style>
 </head>
 <body>
@@ -23,6 +24,7 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 <div class="tab-container">
 <button class="tab active" id="tab-quiz" onclick="showTab('quiz')">Quiz</button>
 <button class="tab" id="tab-cloze" onclick="showTab('cloze')">Cloze</button>
+<button class="tab" id="tab-history" onclick="showTab('history')">History</button>
 </div>
 <div id="quiz-section">
 <div id="questions"></div>
@@ -35,6 +37,9 @@ body{font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:
 </div>
 <button class="btn" onclick="submitCloze()">Submit</button>
 </div>
+<div id="history-section" style="display:none">
+<div id="history-list"></div>
+</div>
 <script>
 var questions = [
 {n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
@@ -44,6 +49,8 @@ var questions = [
 
 var clozeAnswers = {1:'went',2:'played',3:'ate'};
 var userAnswers = {};
+
+var historyData = [];
 
 function renderQuestions() {
 var html = '';
@@ -73,8 +80,11 @@ el.classList.add('selected');
 function showTab(tab) {
 document.getElementById('tab-quiz').className = tab === 'quiz' ? 'tab active' : 'tab';
 document.getElementById('tab-cloze').className = tab === 'cloze' ? 'tab active' : 'tab';
+document.getElementById('tab-history').className = tab === 'history' ? 'tab active' : 'tab';
 document.getElementById('quiz-section').style.display = tab === 'quiz' ? 'block' : 'none';
 document.getElementById('cloze-section').style.display = tab === 'cloze' ? 'block' : 'none';
+document.getElementById('history-section').style.display = tab === 'history' ? 'block' : 'none';
+if(tab === 'history') renderHistory();
 }
 
 function submitQuiz() {
@@ -83,7 +93,11 @@ for(var i=0;i<questions.length;i++) {
 var q = questions[i];
 if(userAnswers[q.n] === q.a) {score = score + 4;}
 }
+var d = new Date();
+var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
+historyData.unshift({date:timeStr, score:score, total:12});
 alert('Score: ' + score + '/12');
+renderQuestions();
 }
 
 function submitCloze() {
@@ -92,7 +106,21 @@ for(var i=1;i<=3;i++) {
 var ans = document.getElementById('c'+i).value.toLowerCase().trim();
 if(ans === clozeAnswers[i]) {score = score + 4;}
 }
+var d = new Date();
+var timeStr = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
+historyData.unshift({date:timeStr, score:score, total:12, type:'cloze'});
 alert('Cloze Score: ' + score + '/12');
+}
+
+function renderHistory() {
+var html = '';
+for(var i=0;i<historyData.length;i++) {
+var h = historyData[i];
+var typeLabel = h.type === 'cloze' ? 'Cloze' : 'Quiz';
+html = html + '<div class="history-item"><div><b>' + typeLabel + '</b> <span style="color:#999;font-size:12px;">' + h.date + '</span></div><div style="font-size:24px;color:#4A90E2;">' + h.score + ' / ' + h.total + '</div></div>';
+}
+if(historyData.length === 0) {html = '<div style="text-align:center;color:#666;padding:30px;">No records</div>';}
+document.getElementById('history-list').innerHTML = html;
 }
 
 renderQuestions();
