@@ -103,8 +103,6 @@ a wonderful day!
 
     // ── 历史数据（已有记录） ──────────────────────────────
     const historyData = [
-            {type:'cloze',day:2,date:'2026-03-21',time:'16:15',score:0,total:36,wrongCount:9,wrongList:[1,2,3,4,5,6,7,8,9]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'16:16',score:4,total:36,wrongCount:8,wrongList:[2,3,4,5,6,7,8,9]},
         {type:'quiz',day:2,date:'2026-03-21',time:'13:40',score:12,total:44,wrongCount:8,wrongList:[1,2,3,4,5,6,7,9]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:33',score:28,total:44,wrongCount:3,wrongList:[1,3,4]},
         {type:'quiz',day:1,date:'2026-03-20',time:'21:28',score:20,total:44,wrongCount:5,wrongList:[1,3,4,7,8]},
@@ -251,6 +249,19 @@ a wonderful day!
             </div>`).join('');
     }
 
+    // 全局删除函数
+    function doDelete(type, date, time) {
+        if (!confirm('确定删除这条记录吗？')) return;
+        if (type === 'cloze') {
+            const idx = clozeHistory.findIndex(x => x.date === date && x.time === time);
+            if (idx >= 0) clozeHistory.splice(idx, 1);
+        } else {
+            const idx = historyData.findIndex(x => x.date === date && x.time === time);
+            if (idx >= 0) historyData.splice(idx, 1);
+        }
+        renderHistory();
+    }
+
     function showDetail(idx) {
         const all = [
             ...historyData.map(h=>({...h,label:'选择题'})),
@@ -259,19 +270,6 @@ a wonderful day!
 
         const h = all[idx];
         const list = document.getElementById('history-list');
-
-        // 简化的删除函数
-        function doDelete(type, date, time) {
-            if (!confirm('确定删除这条记录吗？')) return;
-            if (type === 'cloze') {
-                const idx = clozeHistory.findIndex(x => x.date === date && x.time === time);
-                if (idx >= 0) clozeHistory.splice(idx, 1);
-            } else {
-                const idx = historyData.findIndex(x => x.date === date && x.time === time);
-                if (idx >= 0) historyData.splice(idx, 1);
-            }
-            renderHistory();
-        }
 
         if (h.type==='cloze') {
             list.innerHTML = `
