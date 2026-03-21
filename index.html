@@ -219,8 +219,9 @@ a wonderful day!
 
     // ── 历史 ─────────────────────────────────────────────
     function renderHistory() {
+        // 根据 type 字段决定标签
         const all = [
-            ...historyData.map(h=>({...h,label:'选择题',src:'quiz'})),
+            ...historyData.map(h=>({...h,label:h.type==='cloze'?'完形填空':'选择题',src:h.type})),
             ...clozeHistory.map(h=>({...h,label:'完形填空',src:'cloze'}))
         ].sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
 
