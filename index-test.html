@@ -40,7 +40,11 @@ textarea{resize:vertical}
 <button id="btn-trans" onclick="show('trans')">Translate</button>
 <button id="btn-history" onclick="show('history')">History</button>
 <button id="btn-listen" class="test" onclick="show('listen')">🎧 Listening</button>
-<button id="btn-write" class="test" onclick="show('write')">✍️ Writing</button>
+<button id="btn-days" onclick="show('days')">📅 Days</button>
+</div>
+<div id="days-nav" style="display:none;background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:15px;text-align:center">
+<b>选择查看历史题目：</b><br>
+<div id="days-list" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px"></div>
 </div>
 <div id="content"></div>
 <script>
@@ -113,8 +117,18 @@ if(currentDay !== 'latest') {
 function show(page) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
 document.getElementById('btn-'+page).classList.add('active');
+
+// 显示/隐藏历史导航
+if(page === 'days'){
+document.getElementById('days-nav').style.display = 'block';
+} else {
+document.getElementById('days-nav').style.display = 'none';
+}
+
 var html = '';
-if(page==='quiz'){
+if(page==='days'){
+html += renderDaysPage();
+}else if(page==='quiz'){
 for(var i=0;i<questions.length;i++){
 var q=questions[i];
 html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
@@ -374,6 +388,34 @@ function saveHistory(record) {
 var history = loadHistory();
 history.unshift(record);
 localStorage.setItem('chunchunHistory', JSON.stringify(history));
+}
+
+// ========== 历史题目导航页 ==========
+function renderDaysPage() {
+var html = '<div class="card">';
+html += '<h3>📅 历史题目</h3>';
+html += '<p>点击下方链接查看历史练习题目：</p>';
+html += '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">';
+
+// 当前可用天数（后续可从GitHub JSON动态获取）
+var availableDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+for(var i=0; i<availableDays.length; i++){
+var day = availableDays[i];
+var isCurrentDay = (currentDay == day);
+html += '<a href="?day='+day+'" style="';
+html += 'padding:12px 20px;';
+html += 'background:'+(isCurrentDay?'#2E7D32':'#4A90E2')+';';
+html += 'color:white;border-radius:8px;text-decoration:none;';
+html += 'font-weight:bold;">';
+html += 'Day '+day;
+html += '</a>';
+}
+html += '</div>';
+html += '<div style="margin-top:20px;text-align:center">';
+html += '<a href="index.html" style="color:#666">返回最新题目</a>';
+html += '</div>';
+html += '</div>';
+return html;
 }
 
 function renderHistory() {
