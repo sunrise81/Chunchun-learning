@@ -78,6 +78,12 @@ for(var i=0;i<trans.length;i++){
 html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
 }
 html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+}else if(page==='history'){
+html += renderHistory();
+}
+document.getElementById('content').innerHTML = html;
+}
+
 // Load history from localStorage
 function loadHistory() {
     var data = localStorage.getItem('chunchunHistory');
@@ -113,12 +119,6 @@ function renderHistory() {
         html += '</div>';
     }
     return html;
-}
-
-}else if(page==='history'){
-html += renderHistory();
-}
-document.getElementById('content').innerHTML = html;
 }
 
 function selectQ(n,letter){
