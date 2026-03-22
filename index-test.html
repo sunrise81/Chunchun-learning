@@ -144,10 +144,31 @@ html+='</div>';
 }
 html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
 }else if(page==='cloze'){
-for(var i=0;i<cloze.length;i++){
-html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+html += '<div class="card">';
+html += '<h3>完形填空</h3>';
+html += '<p style="color:#666">阅读下面短文，在空白处填入适当的单词。</p>';
+html += '</div>';
+// 完形填空：显示一段文章，多个空
+var clozePassage = {
+    text: 'Today is a sunny day. Tom ____ (go) to the park with his friends. They ____ (play) football there. Tom ____ (be) very happy because it is his birthday.',
+    blanks: [
+        {idx: 0, answer: 'goes', hint: '第三人称单数'},
+        {idx: 1, answer: 'play', hint: '一般现在时'},
+        {idx: 2, answer: 'is', hint: 'be动词'}
+    ]
+};
+// 渲染文章，将空位用输入框替代
+var parts = clozePassage.text.split('____');
+for(var i=0; i<parts.length; i++){
+    html += '<span>' + parts[i] + '</span>';
+    if(i < clozePassage.blanks.length){
+        html += '<input id="c'+i+'" placeholder="填词" style="width:100px;display:inline-block;padding:5px;margin:0 5px;border:2px solid #4A90E2;border-radius:5px">';
+    }
 }
-html+='<button class="submit" onclick="submitCloze()">Submit</button>';
+html += '<div class="card" style="margin-top:15px;background:#fff3cd">';
+html += '<b>提示：</b>注意动词时态和第三人称单数变化';
+html += '</div>';
+html += '<button class="submit" onclick="submitCloze()">Submit</button>';
 }else if(page==='trans'){
 for(var i=0;i<trans.length;i++){
 html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
@@ -268,7 +289,36 @@ function submitQuiz(){
 submitType('quiz', questions, 'q', 4);
 }
 function submitCloze(){
-submitType('cloze', cloze, 'c', 4);
+// 完形填空：使用新的数据格式
+var clozePassage = {
+    text: 'Today is a sunny day. Tom ____ (go) to the park with his friends. They ____ (play) football there. Tom ____ (be) very happy because it is his birthday.',
+    blanks: [
+        {idx: 0, answer: 'goes', hint: '第三人称单数'},
+        {idx: 1, answer: 'play', hint: '一般现在时'},
+        {idx: 2, answer: 'is', hint: 'be动词'}
+    ]
+};
+var score = 0;
+var wrongList = [];
+for(var i=0; i<clozePassage.blanks.length; i++){
+    var userAns = document.getElementById('c'+i).value.toLowerCase().trim();
+    var correct = clozePassage.blanks[i].answer;
+    if(userAns === correct){
+        score += 4;
+    } else {
+        wrongList.push({
+            n: i+1,
+            ans: userAns || '未作答',
+            correct: correct,
+            hint: clozePassage.blanks[i].hint
+        });
+    }
+}
+var now = new Date();
+var total = clozePassage.blanks.length * 4;
+saveHistory({type:'cloze',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Cloze Score: '+score+'/'+total);
+show('history');
 }
 function submitTrans(){
 submitType('trans', trans, 't', 4);
