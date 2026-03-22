@@ -11,11 +11,18 @@ h1{text-align:center}
 .nav button{flex:1;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer}
 .nav button.active{background:#2E7D32}
 .card{background:white;padding:20px;border-radius:10px;margin:10px 0}
-.opt{padding:10px;margin:5px 0;border:2px solid #ddd;border-radius:5px;cursor:pointer}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opt{padding:10px;border:2px solid #ddd;border-radius:5px;cursor:pointer;text-align:left}
 .opt:hover{background:#e8f4ff}
 .opt.selected{border-color:#4A90E2;background:#e8f4ff}
 input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
 .submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
+.history-item{background:white;padding:15px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2}
+.history-item .header{display:flex;justify-content:space-between;margin-bottom:10px}
+.history-item .score{font-weight:bold;color:#2E7D32}
+.history-item .wrong{color:#d32f2f;margin-top:10px;padding:10px;background:#ffebee;border-radius:5px}
+.history-item .wrong-item{margin:5px 0}
+.history-item .hint{color:#666;font-size:14px}
 </style>
 </head>
 <body>
@@ -34,9 +41,9 @@ var questions = [
 {n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
 ];
 var cloze = [
-{t:'Last Sunday, Tom ______ to the park.',a:'went'},
-{t:'He ______ football.',a:'played'},
-{t:'They ______ sandwiches.',a:'ate'}
+{t:'Last Sunday, Tom ______ to the park.',a:'went',hint:'go'},
+{t:'He ______ football.',a:'played',hint:'play'},
+{t:'They ______ sandwiches.',a:'ate',hint:'eat'}
 ];
 var trans = [
 {c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
@@ -52,11 +59,13 @@ var html = '';
 if(page==='quiz'){
 for(var i=0;i<questions.length;i++){
 var q=questions[i];
-html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'<br>';
+html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
+html+='<div class="opt-grid">';
 for(var j=0;j<q.o.length;j++){
 var letter=String.fromCharCode(65+j);
 html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
 }
+html+='</div>';
 }
 html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
 }else if(page==='cloze'){
@@ -69,8 +78,45 @@ for(var i=0;i<trans.length;i++){
 html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
 }
 html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+// Load history from localStorage
+function loadHistory() {
+    var data = localStorage.getItem('chunchunHistory');
+    return data ? JSON.parse(data) : [];
+}
+
+// Save history to localStorage
+function saveHistory(record) {
+    var history = loadHistory();
+    history.unshift(record);
+    localStorage.setItem('chunchunHistory', JSON.stringify(history));
+}
+
+// Render history page
+function renderHistory() {
+    var history = loadHistory();
+    if(history.length === 0) {
+        return '<div class="card"><b>History</b><br>No records yet</div>';
+    }
+    var html = '';
+    for(var i=0;i<history.length;i++) {
+        var h = history[i];
+        html += '<div class="history-item">';
+        html += '<div class="header"><span>'+h.type.toUpperCase()+' - '+h.date+' '+h.time+'</span><span class="score">'+h.score+'/'+h.total+'</span></div>';
+        if(h.wrongList && h.wrongList.length > 0) {
+            html += '<div class="wrong"><b>Wrong Answers:</b>';
+            for(var j=0;j<h.wrongList.length;j++) {
+                var w = h.wrongList[j];
+                html += '<div class="wrong-item">Q'+w.n+': Your answer: '+w.ans+' → Correct: '+w.correct+'<div class="hint">Hint: '+w.hint+'</div></div>';
+            }
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    return html;
+}
+
 }else if(page==='history'){
-html+='<div class="card"><b>History</b><br>No records yet</div>';
+html += renderHistory();
 }
 document.getElementById('content').innerHTML = html;
 }
@@ -85,8 +131,13 @@ event.target.classList.add('selected');
 
 function submitQuiz(){
 var score=0;
+var wrongList = [];
 for(var i=0;i<questions.length;i++){
-if(answers['q'+i]===questions[i].a)score+=4;
+if(answers['q'+i]===questions[i].a){
+score+=4;
+} else {
+wrongList.push({n:i+1,ans:answers['q'+i]||'',correct:questions[i].a,hint:''});
+}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
@@ -104,15 +155,22 @@ var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
+// Save to localStorage
+saveHistory({type:'quiz',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
 alert('Score: '+score+'/12');
-show('quiz');
+show('history');
 }
 
 function submitCloze(){
 var score=0;
+var wrongList = [];
 for(var i=0;i<cloze.length;i++){
 var ans=document.getElementById('c'+i).value.toLowerCase().trim();
-if(ans===cloze[i].a)score+=4;
+if(ans===cloze[i].a){
+score+=4;
+} else {
+wrongList.push({n:i+1,ans:document.getElementById('c'+i).value,correct:cloze[i].a,hint:cloze[i].hint||''});
+}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
@@ -129,15 +187,22 @@ var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
+// Save to localStorage
+saveHistory({type:'cloze',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
 alert('Score: '+score+'/12');
-show('cloze');
+show('history');
 }
 
 function submitTrans(){
 var score=0;
+var wrongList = [];
 for(var i=0;i<trans.length;i++){
 var ans=document.getElementById('t'+i).value.toLowerCase().trim();
-if(ans===trans[i].a.toLowerCase().trim())score+=4;
+if(ans===trans[i].a.toLowerCase().trim()){
+score+=4;
+} else {
+wrongList.push({n:i+1,ans:document.getElementById('t'+i).value,correct:trans[i].a,hint:''});
+}
 }
 var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
@@ -154,8 +219,10 @@ var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
+// Save to localStorage
+saveHistory({type:'trans',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
 alert('Score: '+score+'/12');
-show('trans');
+show('history');
 }
 
 show('quiz');
