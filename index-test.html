@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="GBK">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>English Practice - Test Version</title>
+<style>
+body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
+h1{text-align:center}
+.nav{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.nav button{flex:1;min-width:70px;padding:12px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.nav button.active{background:#2E7D32}
+.nav button.test{background:#FF9800}
+.card{background:white;padding:20px;border-radius:10px;margin:10px 0}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opt{padding:10px;border:2px solid #ddd;border-radius:5px;cursor:pointer;text-align:left}
+.opt:hover{background:#e8f4ff}
+.opt.selected{border-color:#4A90E2;background:#e8f4ff}
+input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
+textarea{resize:vertical}
+.submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
+.submit.orange{background:#FF9800}
+.history-item{background:white;padding:15px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2}
+.history-item .header{display:flex;justify-content:space-between;margin-bottom:10px}
+.history-item .score{font-weight:bold;color:#2E7D32}
+.history-item .wrong{color:#d32f2f;margin-top:10px;padding:10px;background:#ffebee;border-radius:5px}
+.history-item .wrong-item{margin:5px 0}
+.history-item .hint{color:#666;font-size:14px}
+.audio-player{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0}
+.audio-player audio{width:100%}
+.listening-text{background:#fff3e0;padding:15px;border-radius:8px;margin:10px 0;border-left:4px solid #FF9800}
+.writing-tip{background:#e8f5e9;padding:15px;border-radius:8px;margin:10px 0;border-left:4px solid #4CAF50}
+</style>
+</head>
+<body>
+<h1>English Practice</h1>
+<div class="nav">
+<button id="btn-quiz" class="active" onclick="show('quiz')">Quiz</button>
+<button id="btn-cloze" onclick="show('cloze')">Cloze</button>
+<button id="btn-trans" onclick="show('trans')">Translate</button>
+<button id="btn-history" onclick="show('history')">History</button>
+<button id="btn-listen" class="test" onclick="show('listen')">🎧 Listening</button>
+<button id="btn-write" class="test" onclick="show('write')">✍️ Writing</button>
+</div>
+<div id="content"></div>
+<script>
+// ========== 原有题目数据（保持不变）==========
+var questions = [
+{n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
+{n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
+{n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
+];
+var cloze = [
+{t:'Last Sunday, Tom ______ to the park.',a:'went',hint:'go'},
+{t:'He ______ football.',a:'played',hint:'play'},
+{t:'They ______ sandwiches.',a:'ate',hint:'eat'}
+];
+var trans = [
+{c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
+{c:'She is taller than me.',a:'She is taller than me.'},
+{c:'This book is interesting.',a:'This book is interesting.'}
+];
+
+// ========== 测试题目：听力理解 ==========
+var listening = [
+{
+    title: 'Test 1: 短文理解',
+    audio: 'https://www.esl-lab.com/simplepresent/rs1.mp3', // 示例音频
+    text: 'Listen to the passage and answer the questions.',
+    questions: [
+        {q: '1. What does the speaker do every morning?', o: ['A. Exercises', 'B. Reads books', 'C. Watches TV', 'D. Plays games'], a: 'A'},
+        {q: '2. When does the speaker have breakfast?', o: ['A. At 6am', 'B. At 7am', 'C. At 8am', 'D. At 9am'], a: 'B'}
+    ]
+}
+];
+
+// ========== 测试题目：作文练习 ==========
+var writings = [
+{
+    title: 'Task 1: 看图作文',
+    tip: '根据图片提示，写一篇60词左右的短文。',
+    image: '', // 可以放图片链接
+    requirements: [
+        '使用现在进行时',
+        '包含 What, Where, Who 等信息',
+        '注意句子完整性'
+    ],
+    example: 'This is a picture of... In the picture, I can see...'
+},
+{
+    title: 'Task 2: 话题作文',
+    tip: '请以 "My Favorite Subject" 为题，写一篇50词左右的短文。',
+    requirements: [
+        '介绍你最喜欢的学科',
+        '说明喜欢的原因',
+        '使用正确的时态'
+    ],
+    example: 'My favorite subject is... I like it because...'
+}
+];
+
+var answers = {};
+
+function show(page) {
+document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+document.getElementById('btn-'+page).classList.add('active');
+var html = '';
+if(page==='quiz'){
+for(var i=0;i<questions.length;i++){
+var q=questions[i];
+html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
+html+='<div class="opt-grid">';
+for(var j=0;j<q.o.length;j++){
+var letter=String.fromCharCode(65+j);
+html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
+}
+html+='</div>';
+}
+html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
+}else if(page==='cloze'){
+for(var i=0;i<cloze.length;i++){
+html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+}
+html+='<button class="submit" onclick="submitCloze()">Submit</button>';
+}else if(page==='trans'){
+for(var i=0;i<trans.length;i++){
+html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
+}
+html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+}else if(page==='listen'){
+html += renderListening();
+}else if(page==='write'){
+html += renderWriting();
+}else if(page==='history'){
+html += renderHistory();
+}
+document.getElementById('content').innerHTML = html;
+}
+
+// ========== 听力理解渲染 ==========
+function renderListening() {
+var html = '';
+for(var i=0;i<listening.length;i++){
+var item = listening[i];
+html += '<div class="card">';
+html += '<h3>'+item.title+'</h3>';
+html += '<div class="audio-player">';
+html += '<p>🎧 点击播放听力：</p>';
+html += '<audio controls src="'+item.audio+'">';
+html += 'Your browser does not support audio.';
+html += '</audio>';
+html += '</div>';
+html += '<div class="listening-text">';
+html += '<p>'+item.text+'</p>';
+html += '</div>';
+for(var j=0;j<item.questions.length;j++){
+var q = item.questions[j];
+html += '<div class="card"><b>'+q.q+'</b></div>';
+html += '<div class="opt-grid">';
+for(var k=0;k<q.o.length;k++){
+var letter = String.fromCharCode(65+k);
+html += '<div class="opt" onclick="selectL('+i+','+j+',\''+letter+'\')" id="l'+i+'_'+j+letter+'">'+q.o[k]+'</div>';
+}
+html += '</div>';
+}
+html += '</div>';
+}
+html += '<button class="submit orange" onclick="submitListening()">Submit Listening</button>';
+return html;
+}
+
+// ========== 作文练习渲染 ==========
+function renderWriting() {
+var html = '';
+for(var i=0;i<writings.length;i++){
+var item = writings[i];
+html += '<div class="card">';
+html += '<h3>'+item.title+'</h3>';
+html += '<div class="writing-tip">';
+html += '<p><b>📝 提示：</b>'+item.tip+'</p>';
+if(item.image){
+html += '<img src="'+item.image+'" style="max-width:100%;border-radius:8px;margin:10px 0">';
+}
+html += '<p><b>要求：</b></p><ul>';
+for(var r=0;r<item.requirements.length;r++){
+html += '<li>'+item.requirements[r]+'</li>';
+}
+html += '</ul></div>';
+html += '<p><b>参考句型：</b></p>';
+html += '<p style="color:#666;font-style:italic">'+item.example+'</p>';
+html += '<textarea id="w'+i+'" rows="8" placeholder="请在这里写作文..."></textarea>';
+html += '</div>';
+}
+html += '<button class="submit orange" onclick="submitWriting()">Submit Writing</button>';
+return html;
+}
+
+// ========== 选择函数 ==========
+function selectQ(n,letter){
+answers['q'+n]=letter;
+var card = document.getElementById('q'+n+letter).parentElement;
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+event.target.classList.add('selected');
+}
+
+function selectL(testIdx, qIdx, letter){
+answers['l'+testIdx+'_'+qIdx]=letter;
+var card = document.getElementById('l'+testIdx+'_'+qIdx+letter).parentElement;
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+event.target.classList.add('selected');
+}
+
+// ========== 提交函数 ==========
+function submitQuiz(){
+submitType('quiz', questions, 'q', 4);
+}
+function submitCloze(){
+submitType('cloze', cloze, 'c', 4);
+}
+function submitTrans(){
+submitType('trans', trans, 't', 4);
+}
+
+function submitListening(){
+var score = 0;
+var wrongList = [];
+var total = 0;
+for(var i=0;i<listening.length;i++){
+for(var j=0;j<listening[i].questions.length;j++){
+total += 4;
+var key = 'l'+i+'_'+j;
+if(answers[key] === listening[i].questions[j].a){
+score += 4;
+} else {
+wrongList.push({
+    n: j+1,
+    ans: answers[key]||'',
+    correct: listening[i].questions[j].a,
+    hint: 'Listen carefully'
+});
+}
+}
+}
+var now = new Date();
+saveHistory({type:'listening',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Listening Score: '+score+'/'+total);
+show('history');
+}
+
+function submitWriting(){
+var now = new Date();
+var content = '';
+for(var i=0;i<writings.length;i++){
+content += 'Task '+(i+1)+': '+document.getElementById('w'+i).value+'\n';
+}
+// 作文不评分，只记录
+saveHistory({type:'writing',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:'-',total:'-',content:content,wrongList:[]});
+alert('Writing submitted! 作文已提交，老师会手动批改。');
+show('history');
+}
+
+function submitType(type, data, prefix, perScore){
+var score=0;
+var wrongList = [];
+for(var i=0;i<data.length;i++){
+var key = prefix+i;
+if(type==='trans'){
+var ans=document.getElementById(key).value.toLowerCase().trim();
+if(ans===data[i].a.toLowerCase().trim()){
+score+=perScore;
+} else {
+wrongList.push({n:i+1,ans:document.getElementById(key).value,correct:data[i].a,hint:''});
+}
+}else{
+if(answers[key]===data[i].a){
+score+=perScore;
+} else {
+wrongList.push({n:i+1,ans:answers[key]||'',correct:data[i].a,hint:data[i].hint||''});
+}
+}
+}
+var now = new Date();
+var total = data.length * perScore;
+// Google Form 提交（简化版）
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = now.toLocaleString(); form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = type+':'+JSON.stringify(answers); form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/'+total; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
+// 保存到 localStorage
+saveHistory({type:type,date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Score: '+score+'/'+total);
+show('history');
+}
+
+// ========== 历史记录 ==========
+function loadHistory() {
+var data = localStorage.getItem('chunchunHistory');
+return data ? JSON.parse(data) : [];
+}
+
+function saveHistory(record) {
+var history = loadHistory();
+history.unshift(record);
+localStorage.setItem('chunchunHistory', JSON.stringify(history));
+}
+
+function renderHistory() {
+var history = loadHistory();
+if(history.length === 0) {
+return '<div class="card"><b>History</b><br>No records yet</div>';
+}
+var html = '';
+for(var i=0;i<history.length;i++) {
+var h = history[i];
+var typeIcon = h.type==='listening'?'🎧':h.type==='writing'?'✍️':h.type==='quiz'?'📝':h.type==='cloze'?'📝':'';
+html += '<div class="history-item">';
+html += '<div class="header"><span>'+typeIcon+' '+h.type.toUpperCase()+' - '+h.date+' '+h.time+'</span><span class="score">'+h.score+'/'+h.total+'</span></div>';
+if(h.wrongList && h.wrongList.length > 0) {
+html += '<div class="wrong"><b>Wrong Answers:</b>';
+for(var j=0;j<h.wrongList.length;j++) {
+var w = h.wrongList[j];
+html += '<div class="wrong-item">Q'+w.n+': Your answer: '+w.ans+' → Correct: '+w.correct;
+if(w.hint) html += '<div class="hint">Hint: '+w.hint+'</div>';
+html += '</div>';
+}
+html += '</div>';
+}
+if(h.content){
+html += '<div style="margin-top:10px;padding:10px;background:#f5f5f5;border-radius:5px;"><b>Your writing:</b><p style="white-space:pre-wrap">'+h.content+'</p></div>';
+}
+html += '</div>';
+}
+return html;
+}
+
+show('quiz');
+</script>
+</body>
+</html>
