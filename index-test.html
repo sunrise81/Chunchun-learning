@@ -40,6 +40,7 @@ textarea{resize:vertical}
 <button id="btn-trans" onclick="show('trans')">Translate</button>
 <button id="btn-history" onclick="show('history')">History</button>
 <button id="btn-listen" class="test" onclick="show('listen')">🎧 Listening</button>
+<button id="btn-write" class="test" onclick="show('write')">✍️ Writing</button>
 <button id="btn-days" onclick="show('days')">📅 Days</button>
 </div>
 <div id="days-nav" style="display:none;background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:15px;text-align:center">
@@ -128,6 +129,8 @@ document.getElementById('days-nav').style.display = 'none';
 var html = '';
 if(page==='days'){
 html += renderDaysPage();
+}else if(page==='write'){
+html += renderWriting();
 }else if(page==='quiz'){
 for(var i=0;i<questions.length;i++){
 var q=questions[i];
