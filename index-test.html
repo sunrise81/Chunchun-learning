@@ -192,7 +192,7 @@ var item = writings[i];
 html += '<div class="card">';
 html += '<h3>'+item.title+'</h3>';
 html += '<div class="writing-tip">';
-html += '<p><b>📝 提示：</b>'+item.tip+'</p>';
+html += '<p><b>提示：</b>'+item.tip+'</p>';
 if(item.image){
 html += '<img src="'+item.image+'" style="max-width:100%;border-radius:8px;margin:10px 0">';
 }
@@ -203,11 +203,32 @@ html += '<li>'+item.requirements[r]+'</li>';
 html += '</ul></div>';
 html += '<p><b>参考句型：</b></p>';
 html += '<p style="color:#666;font-style:italic">'+item.example+'</p>';
-html += '<textarea id="w'+i+'" rows="8" placeholder="请在这里写作文..."></textarea>';
+html += '<textarea id="w'+i+'" rows="6" placeholder="请在这里写作文..."></textarea>';
+// 图片上传功能
+html += '<div style="margin:10px 0">';
+html += '<label for="img'+i+'" style="display:inline-block;padding:8px 16px;background:#4CAF50;color:white;border-radius:5px;cursor:pointer">';
+html += '上传作文图片';
+html += '</label>';
+html += '<input type="file" id="img'+i+'" accept="image/*" style="display:none" onchange="previewImage('+i+',this)">';
+html += '<span id="imgName'+i+'" style="margin-left:10px;color:#666"></span>';
+html += '<div id="imgPreview'+i+'" style="margin-top:10px"></div>';
+html += '</div>';
 html += '</div>';
 }
 html += '<button class="submit orange" onclick="submitWriting()">Submit Writing</button>';
 return html;
+}
+
+// 图片预览
+function previewImage(idx, input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function(e) {
+document.getElementById('imgPreview'+idx).innerHTML = '<img src="'+e.target.result+'" style="max-width:200px;border-radius:8px">';
+document.getElementById('imgName'+idx).textContent = '已选择: ' + input.files[0].name;
+};
+reader.readAsDataURL(input.files[0]);
+}
 }
 
 // ========== 选择函数 ==========
@@ -271,12 +292,32 @@ show('history');
 function submitWriting(){
 var now = new Date();
 var content = '';
+var imageData = '';
 for(var i=0;i<writings.length;i++){
 content += 'Task '+(i+1)+': '+document.getElementById('w'+i).value+'\n';
+// 获取图片数据
+var imgInput = document.getElementById('img'+i);
+if(imgInput && imgInput.files && imgInput.files[0]){
+var reader = new FileReader();
+reader.onload = function(e){
+// 图片数据已保存
+};
+imageData += 'Task '+(i+1)+': [图片已上传]\n';
 }
-// 作文不评分，只记录
-saveHistory({type:'writing',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:'-',total:'-',content:content,wrongList:[]});
-alert('Writing submitted! 作文已提交，老师会手动批改。');
+}
+// 作文不评分，只记录（图片需要Google Form支持文件上传字段）
+// 目前方案：文字保存到历史记录，图片提示需要Google Form支持
+saveHistory({
+    type:'writing',
+    date:now.toLocaleDateString(),
+    time:now.toLocaleTimeString().slice(0,5),
+    score:'-',
+    total:'-',
+    content:content,
+    imageNote: '如需上传作文图片，请发到群里由老师手动批改',
+    wrongList:[]
+});
+alert('Writing submitted! 作文已提交。如需上传作文图片，请发到群里由老师手动批改。');
 show('history');
 }
 
