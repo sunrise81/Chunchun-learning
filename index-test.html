@@ -3,7 +3,7 @@
 <head>
 <meta charset="GBK">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>English Practice - Test Version</title>
+<title id="page-title">English Practice</title>
 <style>
 body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
 h1{text-align:center}
@@ -44,29 +44,41 @@ textarea{resize:vertical}
 </div>
 <div id="content"></div>
 <script>
-// ========== 原有题目数据（保持不变）==========
-var questions = [
+// ========== URL参数处理：?day=1 ==========
+var currentDay = new URLSearchParams(window.location.search).get('day') || 'latest';
+// 如果是latest，加载当天数据；如果是数字，加载对应天的历史数据
+
+// 获取历史记录（按天分类）
+function getDayData(day) {
+    // 这里后续会从GitHub JSON文件加载对应天的数据
+    // 目前返回null表示加载默认数据
+    if(day === 'latest') return null;
+    return null; // 暂时返回null
+}
+
+var dayData = getDayData(currentDay);
+
+// 使用当天的数据或默认数据
+var questions = dayData ? dayData.questions : [
 {n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
 {n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
 {n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
 ];
-var cloze = [
+var cloze = dayData ? dayData.cloze : [
 {t:'Last Sunday, Tom ______ to the park.',a:'went',hint:'go'},
 {t:'He ______ football.',a:'played',hint:'play'},
 {t:'They ______ sandwiches.',a:'ate',hint:'eat'}
 ];
-var trans = [
+var trans = dayData ? dayData.trans : [
 {c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
 {c:'She is taller than me.',a:'She is taller than me.'},
 {c:'This book is interesting.',a:'This book is interesting.'}
 ];
-
-// ========== 测试题目：听力理解 ==========
-var listening = [
+var listening = dayData ? dayData.listening : [
 {
     title: 'Test 1: Daily Schedule（每日作息）',
-    audio: 'https://esllab.b-cdn.net/audio/mp3/daily-schedule.mp3',
-    text: 'Listen to the passage about a daily schedule and answer the questions.',
+    audio: '',
+    text: '请先听老师播放听力材料，然后回答问题。',
     transcript: 'I usually wake up at 6:30 in the morning. I brush my teeth and wash my face. Then I have breakfast at 7 o\'clock. I go to school at 7:30. School starts at 8 o\'clock.',
     questions: [
         {q: '1. What time does the speaker wake up?', o: ['A. At 6:00', 'B. At 6:30', 'C. At 7:00', 'D. At 7:30'], a: 'B'},
@@ -75,33 +87,28 @@ var listening = [
     ]
 }
 ];
-
-// ========== 测试题目：作文练习 ==========
-var writings = [
+var writings = dayData ? dayData.writings : [
 {
     title: 'Task 1: 看图作文',
     tip: '根据图片提示，写一篇60词左右的短文。',
-    image: '', // 可以放图片链接
-    requirements: [
-        '使用现在进行时',
-        '包含 What, Where, Who 等信息',
-        '注意句子完整性'
-    ],
+    image: '',
+    requirements: ['使用现在进行时', '包含 What, Where, Who 等信息', '注意句子完整性'],
     example: 'This is a picture of... In the picture, I can see...'
 },
 {
     title: 'Task 2: 话题作文',
     tip: '请以 "My Favorite Subject" 为题，写一篇50词左右的短文。',
-    requirements: [
-        '介绍你最喜欢的学科',
-        '说明喜欢的原因',
-        '使用正确的时态'
-    ],
+    requirements: ['介绍你最喜欢的学科', '说明喜欢的原因', '使用正确的时态'],
     example: 'My favorite subject is... I like it because...'
 }
 ];
 
 var answers = {};
+
+// 更新页面标题显示天数
+if(currentDay !== 'latest') {
+    document.getElementById('page-title').textContent = 'English Practice - Day ' + currentDay;
+}
 
 function show(page) {
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
