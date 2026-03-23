@@ -3,10 +3,10 @@
         "wrongList":  [
 
                       ],
-        "type":  "cloze",
-        "total":  8,
-        "score":  3,
-        "date":  "2026-03-21",
+        "type":  "quiz",
+        "total":  44,
+        "score":  0,
+        "date":  "2026-03-23",
         "wrongCount":  0,
         "day":  2
     },
@@ -14,10 +14,32 @@
         "wrongList":  [
 
                       ],
-        "type":  "cloze",
-        "total":  3,
+        "type":  "quiz",
+        "total":  44,
         "score":  0,
-        "date":  "2026-03-21",
+        "date":  "2026-03-23",
+        "wrongCount":  0,
+        "day":  2
+    },
+    {
+        "wrongList":  [
+
+                      ],
+        "type":  "quiz",
+        "total":  44,
+        "score":  0,
+        "date":  "2026-03-23",
+        "wrongCount":  0,
+        "day":  2
+    },
+    {
+        "wrongList":  [
+
+                      ],
+        "type":  "quiz",
+        "total":  44,
+        "score":  0,
+        "date":  "2026-03-23",
         "wrongCount":  0,
         "day":  2
     },
@@ -28,30 +50,8 @@
 
                                         ],
                           "type":  "cloze",
-                          "total":  6,
-                          "score":  0,
-                          "date":  "2026-03-21",
-                          "wrongCount":  0,
-                          "day":  2
-                      },
-                      {
-                          "wrongList":  [
-
-                                        ],
-                          "type":  "quiz",
-                          "total":  44,
-                          "score":  0,
-                          "date":  "2026-03-23",
-                          "wrongCount":  0,
-                          "day":  2
-                      },
-                      {
-                          "wrongList":  [
-
-                                        ],
-                          "type":  "cloze",
-                          "total":  6,
-                          "score":  1,
+                          "total":  8,
+                          "score":  3,
                           "date":  "2026-03-21",
                           "wrongCount":  0,
                           "day":  2
@@ -61,7 +61,7 @@
 
                                         ],
                           "type":  "cloze",
-                          "total":  6,
+                          "total":  3,
                           "score":  0,
                           "date":  "2026-03-21",
                           "wrongCount":  0,
@@ -69,14 +69,15 @@
                       },
                       {
                           "value":  [
-                                        "@{wrongList=System.Object[]; type=cloze; total=3; score=0; date=2026-03-21; wrongCount=0; day=2}",
-                                        "@{wrongList=System.Object[]; type=cloze; total=3; score=0; date=2026-03-21; wrongCount=0; day=2}",
                                         "@{wrongList=System.Object[]; type=cloze; total=6; score=0; date=2026-03-21; wrongCount=0; day=2}",
-                                        "@{value=System.Object[]; Count=2}"
+                                        "@{wrongList=System.Object[]; type=quiz; total=44; score=0; date=2026-03-23; wrongCount=0; day=2}",
+                                        "@{wrongList=System.Object[]; type=cloze; total=6; score=1; date=2026-03-21; wrongCount=0; day=2}",
+                                        "@{wrongList=System.Object[]; type=cloze; total=6; score=0; date=2026-03-21; wrongCount=0; day=2}",
+                                        "@{value=System.Object[]; Count=4}"
                                     ],
-                          "Count":  4
+                          "Count":  5
                       }
                   ],
-        "Count":  5
+        "Count":  3
     }
 ]
