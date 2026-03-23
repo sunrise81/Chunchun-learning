@@ -69,13 +69,13 @@ textarea{resize:vertical;min-height:60px}
 </div>
 
 <div class="nav" style="flex-wrap:wrap">
-    <button id="btn-quiz" onclick="show('quiz')">Quiz</button>
-    <button id="btn-cloze" onclick="show('cloze')">Cloze</button>
-    <button id="btn-trans" onclick="show('trans')">Translate</button>
-    <button id="btn-history" onclick="show('history')">History</button>
-    <button id="btn-listening" onclick="show('listening')">Listening</button>
-    <button id="btn-writing" onclick="show('writing')">Writing</button>
-    <button id="btn-days" onclick="show('days')">Days</button>
+    <button id="btn-quiz" onclick="show('quiz')">选择题</button>
+    <button id="btn-cloze" onclick="show('cloze')">完形填空</button>
+    <button id="btn-trans" onclick="show('trans')">翻译题</button>
+    <button id="btn-history" onclick="show('history')">历史记录</button>
+    <button id="btn-listening" onclick="show('listening')">听力</button>
+    <button id="btn-writing" onclick="show('writing')">作文</button>
+    <button id="btn-days" onclick="show('days')">历史题目</button>
 </div>
 
 <div id="content"></div>
@@ -89,7 +89,7 @@ var ALL_DAYS = {
     1: {
         title: 'Few / Little',
         topic: 'Quantifiers: few, a few, little, a little',
-        rule: 'few / a few + countable nouns (friends, books, cars)\nlittle / a little + uncountable nouns (water, time, money)\nfew / little = almost none (negative)\na few / a little = some (positive)',
+        rule: 'few / a few + 可数名词 (friends, books, cars)\nlittle / a little + 不可数名词 (water, time, money)\nfew / little = 几乎没有（否定）\na few / a little = 有一些（肯定）',
         questions: [
             {
                 stem: 'There are _____ apples left. We need to buy more.',
@@ -229,10 +229,10 @@ function renderQuiz(el) {
     var html = '';
     // Rule card
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📖 Rule</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
+    html += '<b>📖 语法规则</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
     for (var i = 0; i < qs.length; i++) {
         var q = qs[i];
-        html += '<div class="card"><div class="q-stem"><b>Q' + (i+1) + '.</b> ' + q.stem + '</div>';
+        html += '<div class="card"><div class="q-stem"><b>第' + (i+1) + '题.</b> ' + q.stem + '</div>';
         html += '<div class="opt-grid">';
         for (var j = 0; j < q.opts.length; j++) {
             var cls = 'opt';
@@ -249,7 +249,7 @@ function renderQuiz(el) {
         html += '</div>';
     }
     if (!quizSubmitted) {
-        html += '<button class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>';
+        html += '<button class="submit-btn" onclick="submitQuiz()">提交答案</button>';
     }
     el.innerHTML = html;
 }
@@ -267,7 +267,7 @@ function submitQuiz() {
     for (var i = 0; i < qs.length; i++) {
         if (quizAnswers[i] === undefined) unanswered++;
     }
-    if (unanswered > 0 && !confirm('You have ' + unanswered + ' unanswered question(s). Submit anyway?')) return;
+    if (unanswered > 0 && !confirm('还有 ' + unanswered + ' 道题未作答，确定要提交吗？')) return;
 
     quizSubmitted = true;
     var score = 0;
@@ -290,7 +290,7 @@ function submitQuiz() {
     // Show banner
     var pct = score / total;
     var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = '<div class="result-banner ' + cls + '">Quiz Score: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 Perfect!' : '') + '</div>';
+    var banner = '<div class="result-banner ' + cls + '">选择题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '') + '</div>';
     document.getElementById('content').insertAdjacentHTML('afterbegin', banner);
 }
 
@@ -303,7 +303,7 @@ function renderCloze(el) {
     }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📝 Cloze - Fill in the blanks</b><p style="margin-top:6px;font-size:.9rem;color:#555">Read the passage and fill in each blank with the correct word</p></div>';
+    html += '<b>📝 完形填空</b><p style="margin-top:6px;font-size:.9rem;color:#555">阅读短文，填写适当的单词</p></div>';
     
     // Render passage with blanks
     html += '<div class="card">';
@@ -319,13 +319,13 @@ function renderCloze(el) {
     
     // Show hints
     html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
-    html += '<b style="font-size:.9rem;color:#666">💡 Hints:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
+    html += '<b style="font-size:.9rem;color:#666">💡 提示:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
     for (var i = 0; i < cs.blanks.length; i++) {
-        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>Blank ' + (i+1) + ':</b> ' + cs.blanks[i].hint + '</div>';
+        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>第' + (i+1) + '空:</b> ' + cs.blanks[i].hint + '</div>';
     }
     html += '</div></div>';
     html += '</div>';
-    html += '<button class="submit-btn" onclick="submitCloze()">Submit Cloze</button>';
+    html += '<button class="submit-btn" onclick="submitCloze()">提交答案</button>';
     el.innerHTML = html;
 }
 
@@ -360,7 +360,7 @@ function submitCloze() {
     for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
     var banner = document.createElement('div');
     banner.className = 'result-banner ' + cls;
-    banner.textContent = 'Cloze Score: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 Perfect!' : '');
+    banner.textContent = '完形填空得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
     document.getElementById('content').insertAdjacentElement('afterbegin', banner);
 }
 
@@ -373,16 +373,16 @@ function renderTranslate(el) {
     }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>🔤 Translate Chinese to English</b><p style="margin-top:6px;font-size:.9rem;color:#555">Write the English translation. Spelling and grammar matter!</p></div>';
+    html += '<b>🔤 中译英</b><p style="margin-top:6px;font-size:.9rem;color:#555">将中文翻译成英文，注意拼写和语法！</p></div>';
     for (var i = 0; i < ts.length; i++) {
         var t = ts[i];
         html += '<div class="card">';
-        html += '<div class="trans-zh"><b>' + (i+1) + '.</b> ' + t.zh + '</div>';
+        html += '<div class="trans-zh"><b>第' + (i+1) + '题</b> ' + t.zh + '</div>';
         html += '<div class="trans-hint">💡 ' + t.zhHint + '</div>';
-        html += '<textarea id="trans' + i + '" rows="2" placeholder="Write your English translation here..."></textarea>';
+        html += '<textarea id="trans' + i + '" rows="2" placeholder="在这里写英文翻译..."></textarea>';
         html += '</div>';
     }
-    html += '<button class="submit-btn" onclick="submitTrans()">Submit Translation</button>';
+    html += '<button class="submit-btn" onclick="submitTrans()">提交答案</button>';
     el.innerHTML = html;
 }
 
@@ -428,14 +428,14 @@ function submitTrans() {
     var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
     var banner = document.createElement('div');
     banner.className = 'result-banner ' + cls;
-    banner.textContent = 'Translation Score: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 Perfect!' : '');
+    banner.textContent = '翻译题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
     document.getElementById('content').insertAdjacentElement('afterbegin', banner);
 }
 
 // ==================== DAYS TAB ====================
 function renderDays(el) {
     var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📅 Historical Exercises</b><p style="margin-top:6px;font-size:.9rem;color:#555">Click a day to view its exercises</p></div>';
+    html += '<b>📅 历史题目</b><p style="margin-top:6px;font-size:.9rem;color:#555">点击日期查看历史练习</p></div>';
     html += '<div class="card"><div class="opt-grid">';
     // Generate day buttons (1-30)
     for (var i = 1; i <= 30; i++) {
@@ -444,32 +444,32 @@ function renderDays(el) {
     }
     html += '</div></div>';
     // Add back to today button
-    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">← Back to Today</a>';
+    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">← 返回今天</a>';
     el.innerHTML = html;
 }
 
 // ==================== LISTENING TAB ====================
 function renderListening(el) {
-    var html = '<div class="empty-state"><div class="icon">🎧</div><p>Listening exercises coming soon!<br>Check back later for audio-based practice.</p></div>';
+    var html = '<div class="empty-state"><div class="icon">🎧</div><p>听力练习即将推出！<br>敬请期待...</p></div>';
     html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>📝 How it will work:</b>';
+    html += '<b>📝 功能说明:</b>';
     html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>Listen to audio clips</li>';
-    html += '<li>Answer questions about what you hear</li>';
-    html += '<li>Improve your listening skills</li>';
+    html += '<li>听音频片段</li>';
+    html += '<li>回答听力问题</li>';
+    html += '<li>提高听力技能</li>';
     html += '</ul></div>';
     el.innerHTML = html;
 }
 
 // ==================== WRITING TAB ====================
 function renderWriting(el) {
-    var html = '<div class="empty-state"><div class="icon">✍️</div><p>Writing exercises coming soon!<br>Check back later for essay practice.</p></div>';
+    var html = '<div class="empty-state"><div class="icon">✍️</div><p>作文练习即将推出！<br>敬请期待...</p></div>';
     html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>📝 How it will work:</b>';
+    html += '<b>📝 功能说明:</b>';
     html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>Write essays on given topics</li>';
-    html += '<li>Get AI-powered feedback</li>';
-    html += '<li>Learn to improve your writing</li>';
+    html += '<li>根据给定题目写作文</li>';
+    html += '<li>获取AI批改反馈</li>';
+    html += '<li>提升写作能力</li>';
     html += '</ul></div>';
     el.innerHTML = html;
 }
@@ -478,7 +478,7 @@ function renderWriting(el) {
 function renderHistory(el) {
     var history = loadHistory();
     if (history.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No practice records yet.<br>Complete a quiz, cloze, or translation to see your history!</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
         return;
     }
     var html = '';
@@ -489,32 +489,33 @@ function renderHistory(el) {
         var isPerfect = pct === 1;
         
         html += '<div class="history-item">';
-        html += '<div class="h-header"><span class="h-type">' + h.type + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">Delete</button></div>';
+        var typeName = h.type === 'quiz' ? '选择题' : h.type === 'cloze' ? '完形填空' : '翻译题';
+        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
+        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">删除</button></div>';
         
         if (h.wrongList && h.wrongList.length > 0) {
             html += '<div class="h-wrong">';
-            html += '<b style="color:#c62828;font-size:.9rem">❌ Wrong Answers:</b>';
+            html += '<b style="color:#c62828;font-size:.9rem">❌ 错题:</b>';
             for (var j = 0; j < h.wrongList.length; j++) {
                 var w = h.wrongList[j];
                 html += '<div class="h-wrong-item" style="margin-top:8px">';
-                html += '<div><b>Q' + w.n + ':</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
+                html += '<div><b>第' + w.n + '题:</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
                 if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
                 html += '</div>';
             }
             html += '</div>';
         } else {
             // All correct
-            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ Perfect! All correct!</div>';
+            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ 太棒了！全部正确！</div>';
         }
         html += '</div>';
     }
-    html += '<button class="clear-btn" onclick="if(confirm(\'Clear all history?\')){localStorage.removeItem(\'chunchunHistory\');submitDeleteToForm(\'all\');show(\'history\')}">Clear All History</button>';
+    html += '<button class="clear-btn" onclick="if(confirm(\'确定要清空所有历史记录吗？\')){localStorage.removeItem(\'chunchunHistory\');submitDeleteToForm(\'all\');show(\'history\')}">清空所有历史记录</button>';
     el.innerHTML = html;
 }
 
 function deleteRecord(index) {
-    if (!confirm('Delete this record?')) return;
+    if (!confirm('确定要删除这条记录吗？')) return;
     var history = loadHistory();
     var deleted = history.splice(index, 1);
     localStorage.setItem('chunchunHistory', JSON.stringify(history));
