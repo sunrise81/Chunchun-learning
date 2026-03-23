@@ -270,5 +270,5 @@ show('history');
 }
 
 show('quiz');
-alert('Day:'+new URLSearchParams(window.location.search).get('day')+', Data:'+typeof dayData);
+document.getElementById('content').innerHTML = '<div style=\'padding:20px;\'><h3>Debug Info</h3><p>URL params: ' + window.location.search + '</p><p>Day: ' + new URLSearchParams(window.location.search).get('day') + '</p><p>dayData: ' + (typeof dayData) + '</p><p>dayData[1]: ' + (dayData ? dayData[1] : 'null') + '</p></div>';
 const historyData = [
