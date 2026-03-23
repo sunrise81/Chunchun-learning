@@ -96,6 +96,7 @@ var answers = {};
 function show(page) {
 var d=getDayFromURL();var dn=d?parseInt(d):null;if(dn&&dayData[dn]){if(page=='quiz'&&dayData[dn].questions)window.questions=dayData[dn].questions;if(page=='cloze'&&dayData[dn].cloze)window.cloze=dayData[dn].cloze;}
 
+
 document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
 document.getElementById('btn-'+page).classList.add('active');
 var html = '';
