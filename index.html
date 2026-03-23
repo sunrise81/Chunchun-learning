@@ -33,7 +33,8 @@ input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;bor
 <button id="btn-trans" onclick="show('trans')">Translate</button>
 <button id="btn-history" onclick="show('history')">History</button>
 </div>
-<div id="content"></div>
+<div id='debug'></div>
+<div id='content'></div>
 <script>
 function getDayData(day) {
     if (day === 'latest') return null;
@@ -270,5 +271,6 @@ show('history');
 }
 
 show('quiz');
+document.getElementById('debug').style.display='block';document.getElementById('debug').innerHTML='Day:'+new URLSearchParams(window.location.search).get('day')+' | dayData type:'+(typeof dayData)+' | has data:'+(dayData ? 'yes' : 'no');
 document.getElementById('content').innerHTML = '<div style=\'padding:20px;\'><h3>Debug Info</h3><p>URL params: ' + window.location.search + '</p><p>Day: ' + new URLSearchParams(window.location.search).get('day') + '</p><p>dayData: ' + (typeof dayData) + '</p><p>dayData[1]: ' + (dayData ? dayData[1] : 'null') + '</p></div>';
 const historyData = [
