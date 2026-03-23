@@ -1,232 +1,507 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Cloze Practice</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Georgia', serif;
-            background: #f5f0eb;
-            color: #2c2c2c;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 680px;
-            width: 100%;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 36px;
-        }
-        .day-number {
-            font-size: 2.4rem;
-            font-weight: bold;
-            color: #1a1a2e;
-        }
-        .date {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 4px;
-        }
-        .topic {
-            text-align: center;
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 28px;
-            font-style: italic;
-        }
-        .cloze-paragraph {
-            font-size: 1.15rem;
-            line-height: 2.4;
-            background: #fff;
-            padding: 28px 32px;
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        }
-        .blank {
-            display: inline-block;
-            min-width: 80px;
-            width: auto;
-            border: none;
-            border-bottom: 2px solid #888;
-            padding: 2px 8px;
-            margin: 0 2px;
-            font-family: inherit;
-            font-size: inherit;
-            text-align: center;
-            background: transparent;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .blank:focus {
-            border-bottom-color: #4a6fa5;
-        }
-        .blank.correct {
-            border-bottom-color: #2e8b57;
-            color: #2e8b57;
-            font-weight: bold;
-        }
-        .blank.incorrect {
-            border-bottom-color: #c0392b;
-            color: #c0392b;
-        }
-        .controls {
-            text-align: center;
-            margin-top: 28px;
-        }
-        button {
-            font-family: inherit;
-            font-size: 1rem;
-            padding: 10px 28px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 0 6px;
-            transition: background 0.2s;
-        }
-        #checkBtn {
-            background: #4a6fa5;
-            color: #fff;
-        }
-        #checkBtn:hover { background: #3b5d8a; }
-        #revealBtn {
-            background: #ddd;
-            color: #333;
-        }
-        #revealBtn:hover { background: #ccc; }
-        .score {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 1rem;
-            color: #555;
-            min-height: 24px;
-        }
-    </style>
+<meta charset="GBK">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title id="page-title">English Practice</title>
+<style>
+body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f5f5}
+h1{text-align:center}
+.nav{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.nav button{flex:1;min-width:70px;padding:12px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.nav button.active{background:#2E7D32}
+.nav button.test{background:#FF9800}
+.card{background:white;padding:20px;border-radius:10px;margin:10px 0}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opt{padding:10px;border:2px solid #ddd;border-radius:5px;cursor:pointer;text-align:left}
+.opt:hover{background:#e8f4ff}
+.opt.selected{border-color:#4A90E2;background:#e8f4ff}
+input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;border-radius:5px;box-sizing:border-box}
+textarea{resize:vertical}
+.submit{width:100%;padding:15px;background:#4A90E2;color:white;border:none;border-radius:8px;font-size:18px;margin-top:15px}
+.submit.orange{background:#FF9800}
+.history-item{background:white;padding:15px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2}
+.history-item .header{display:flex;justify-content:space-between;margin-bottom:10px}
+.history-item .score{font-weight:bold;color:#2E7D32}
+.history-item .wrong{color:#d32f2f;margin-top:10px;padding:10px;background:#ffebee;border-radius:5px}
+.history-item .wrong-item{margin:5px 0}
+.history-item .hint{color:#666;font-size:14px}
+.audio-player{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0}
+.audio-player audio{width:100%}
+.listening-text{background:#fff3e0;padding:15px;border-radius:8px;margin:10px 0;border-left:4px solid #FF9800}
+.writing-tip{background:#e8f5e9;padding:15px;border-radius:8px;margin:10px 0;border-left:4px solid #4CAF50}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="day-number" id="dayNumber"></div>
-            <div class="date" id="dateDisplay"></div>
-        </div>
-        <div class="topic" id="topic"></div>
-        <div class="cloze-paragraph" id="clozeArea"></div>
-        <div class="controls">
-            <button id="checkBtn" onclick="checkAnswers()">Check</button>
-            <button id="revealBtn" onclick="revealAnswers()">Reveal</button>
-        </div>
-        <div class="score" id="score"></div>
-    </div>
+<h1>English Practice</h1>
+<div class="nav">
+<button id="btn-quiz" class="active" onclick="show('quiz')">Quiz</button>
+<button id="btn-cloze" onclick="show('cloze')">Cloze</button>
+<button id="btn-trans" onclick="show('trans')">Translate</button>
+<button id="btn-history" onclick="show('history')">History</button>
+<button id="btn-listen" class="test" onclick="show('listen')">?? Listening</button>
+<button id="btn-write" class="test" onclick="show('write')">?? Writing</button>
+<button id="btn-days" onclick="show('days')">?? Days</button>
+</div>
+<div id="days-nav" style="display:none;background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:15px;text-align:center">
+<b>选择查看历史题目：</b><br>
+<div id="days-list" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px"></div>
+</div>
+<div id="content"></div>
+<script>
+// ========== URL参数处理：?day=1 ==========
+var currentDay = new URLSearchParams(window.location.search).get('day') || 'latest';
+// 如果是latest，加载当天数据；如果是数字，加载对应天的历史数据
 
-    <script>
-        function getDayData(day) {
-            const data = {
-                1: {
-                    topic: "Few vs. Little — Countable & Uncountable Nouns",
-                    paragraph: [
-                        "There are only ",
-                        { blank: true, answer: "a few" },
-                        " eggs left in the fridge, so we can't make a big omelette. We also have very ",
-                        { blank: true, answer: "little" },
-                        " milk, which means cereal is out of the question. I noticed ",
-                        { blank: true, answer: "a few" },
-                        " apples on the counter — maybe enough for a small pie. Unfortunately, there is ",
-                        { blank: true, answer: "little" },
-                        " sugar in the pantry, so the pie won't be very sweet. ",
-                        { blank: true, answer: "Few" },
-                        " restaurants nearby are open this early, and I have ",
-                        { blank: true, answer: "little" },
-                        " patience to wait in line. Let's just grab the ",
-                        { blank: true, answer: "few" },
-                        " granola bars we have and head out — we have very ",
-                        { blank: true, answer: "little" },
-                        " time before the train leaves."
-                    ]
-                }
-            };
-            return data[day] || null;
-        }
+// 获取历史记录（按天分类）
+function getDayData(day) {
+    // 这里后续会从GitHub JSON文件加载对应天的数据
+    // 目前返回null表示加载默认数据
+    if(day === 'latest') return null;
+    return null; // 暂时返回null
+}
 
-        const START_DATE = new Date('2026-03-23');
+var dayData = getDayData(currentDay);
 
-        function getCurrentDay() {
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
-            const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-            return Math.max(1, diff + 1);
-        }
+// 使用当天的数据或默认数据
+var questions = dayData ? dayData.questions : [
+{n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
+{n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
+{n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
+];
+var cloze = dayData ? dayData.cloze : [
+{t:'Last Sunday, Tom ______ to the park.',a:'went',hint:'go'},
+{t:'He ______ football.',a:'played',hint:'play'},
+{t:'They ______ sandwiches.',a:'ate',hint:'eat'}
+];
+var trans = dayData ? dayData.trans : [
+{c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
+{c:'She is taller than me.',a:'She is taller than me.'},
+{c:'This book is interesting.',a:'This book is interesting.'}
+];
+var listening = dayData ? dayData.listening : [
+{
+    title: 'Test 1: Daily Schedule（每日作息）',
+    audio: '',
+    text: '请先听老师播放听力材料，然后回答问题。',
+    transcript: 'I usually wake up at 6:30 in the morning. I brush my teeth and wash my face. Then I have breakfast at 7 o\'clock. I go to school at 7:30. School starts at 8 o\'clock.',
+    questions: [
+        {q: '1. What time does the speaker wake up?', o: ['A. At 6:00', 'B. At 6:30', 'C. At 7:00', 'D. At 7:30'], a: 'B'},
+        {q: '2. When does the speaker have breakfast?', o: ['A. At 6:30', 'B. At 7:00', 'C. At 7:30', 'D. At 8:00'], a: 'B'},
+        {q: '3. What time does school start?', o: ['A. At 7:00', 'B. At 7:30', 'C. At 8:00', 'D. At 8:30'], a: 'C'}
+    ]
+}
+];
+var writings = dayData ? dayData.writings : [
+{
+    title: 'Task 1: 看图作文',
+    tip: '根据图片提示，写一篇60词左右的短文。',
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400',
+    requirements: ['使用现在进行时', '包含 What, Where, Who 等信息', '注意句子完整性'],
+    example: 'This is a picture of... In the picture, I can see...'
+},
+{
+    title: 'Task 2: 话题作文',
+    tip: '请以 "My Favorite Subject" 为题，写一篇50词左右的短文。',
+    requirements: ['介绍你最喜欢的学科', '说明喜欢的原因', '使用正确的时态'],
+    example: 'My favorite subject is... I like it because...'
+}
+];
 
-        function formatDate(date) {
-            return date.toLocaleDateString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
-        }
+var answers = {};
 
-        function render() {
-            const day = getCurrentDay();
-            const data = getDayData(day);
+// 更新页面标题显示天数
+if(currentDay !== 'latest') {
+    document.getElementById('page-title').textContent = 'English Practice - Day ' + currentDay;
+}
 
-            document.getElementById('dayNumber').textContent = 'Day ' + day;
-            document.getElementById('dateDisplay').textContent = formatDate(new Date());
+function show(page) {
+document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+document.getElementById('btn-'+page).classList.add('active');
 
-            if (!data) {
-                document.getElementById('topic').textContent = '';
-                document.getElementById('clozeArea').innerHTML = '<em>No data for today yet. Check back tomorrow!</em>';
-                document.querySelector('.controls').style.display = 'none';
-                return;
-            }
+// 显示/隐藏历史导航
+if(page === 'days'){
+document.getElementById('days-nav').style.display = 'block';
+} else {
+document.getElementById('days-nav').style.display = 'none';
+}
 
-            document.getElementById('topic').textContent = data.topic;
+var html = '';
+if(page==='days'){
+html += renderDaysPage();
+}else if(page==='write'){
+html += renderWriting();
+}else if(page==='quiz'){
+for(var i=0;i<questions.length;i++){
+var q=questions[i];
+html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
+html+='<div class="opt-grid">';
+for(var j=0;j<q.o.length;j++){
+var letter=String.fromCharCode(65+j);
+html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
+}
+html+='</div>';
+}
+html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
+}else if(page==='cloze'){
+html += '<div class="card">';
+html += '<h3>完形填空</h3>';
+html += '<p style="color:#666">阅读下面短文，在空白处填入适当的单词。</p>';
+html += '</div>';
+// 完形填空：显示一段文章，多个空
+var clozePassage = {
+    text: 'Today is a sunny day. Tom ____ (go) to the park with his friends. They ____ (play) football there. Tom ____ (be) very happy because it is his birthday.',
+    blanks: [
+        {idx: 0, answer: 'goes', hint: '第三人称单数'},
+        {idx: 1, answer: 'play', hint: '一般现在时'},
+        {idx: 2, answer: 'is', hint: 'be动词'}
+    ]
+};
+// 渲染文章，将空位用输入框替代
+var parts = clozePassage.text.split('____');
+for(var i=0; i<parts.length; i++){
+    html += '<span>' + parts[i] + '</span>';
+    if(i < clozePassage.blanks.length){
+        html += '<input id="c'+i+'" placeholder="填词" style="width:100px;display:inline-block;padding:5px;margin:0 5px;border:2px solid #4A90E2;border-radius:5px">';
+    }
+}
+html += '<div class="card" style="margin-top:15px;background:#fff3cd">';
+html += '<b>提示：</b>注意动词时态和第三人称单数变化';
+html += '</div>';
+html += '<button class="submit" onclick="submitCloze()">Submit</button>';
+}else if(page==='trans'){
+for(var i=0;i<trans.length;i++){
+html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
+}
+html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+}else if(page==='listen'){
+html += renderListening();
+}else if(page==='write'){
+html += renderWriting();
+}else if(page==='history'){
+html += renderHistory();
+}
+document.getElementById('content').innerHTML = html;
+}
 
-            var html = '';
-            var blankIndex = 0;
-            for (var i = 0; i < data.paragraph.length; i++) {
-                var part = data.paragraph[i];
-                if (typeof part === 'string') {
-                    html += part;
-                } else if (part.blank) {
-                    var size = Math.max(part.answer.length + 2, 8);
-                    html += '<input type="text" class="blank" data-answer="' + part.answer + '" data-index="' + blankIndex + '" size="' + size + '" autocomplete="off" spellcheck="false">';
-                    blankIndex++;
-                }
-            }
-            document.getElementById('clozeArea').innerHTML = html;
-        }
+// ========== 听力理解渲染 ==========
+function renderListening() {
+var html = '';
+for(var i=0;i<listening.length;i++){
+var item = listening[i];
+html += '<div class="card">';
+html += '<h3>'+item.title+'</h3>';
+if(item.audio){
+html += '<div class="audio-player">';
+html += '<p>?? 点击播放听力：</p>';
+html += '<audio controls src="'+item.audio+'">';
+html += 'Your browser does not support audio.';
+html += '</audio>';
+html += '</div>';
+} else {
+html += '<div class="audio-player">';
+html += '<p>?? 听力材料由老师播放，请点击下方按钮开始作答</p>';
+html += '</div>';
+}
+html += '<div class="listening-text">';
+html += '<p>'+item.text+'</p>';
+html += '</div>';
+for(var j=0;j<item.questions.length;j++){
+var q = item.questions[j];
+html += '<div class="card"><b>'+q.q+'</b></div>';
+html += '<div class="opt-grid">';
+for(var k=0;k<q.o.length;k++){
+var letter = String.fromCharCode(65+k);
+html += '<div class="opt" onclick="selectL('+i+','+j+',\''+letter+'\')" id="l'+i+'_'+j+letter+'">'+q.o[k]+'</div>';
+}
+html += '</div>';
+}
+html += '</div>';
+}
+html += '<button class="submit orange" onclick="submitListening()">Submit Listening</button>';
+return html;
+}
 
-        function checkAnswers() {
-            var blanks = document.querySelectorAll('.blank');
-            var correct = 0;
-            blanks.forEach(function(input) {
-                var userAnswer = input.value.trim().toLowerCase();
-                var expected = input.dataset.answer.toLowerCase();
-                input.classList.remove('correct', 'incorrect');
-                if (userAnswer === expected) {
-                    input.classList.add('correct');
-                    correct++;
-                } else if (userAnswer !== '') {
-                    input.classList.add('incorrect');
-                }
-            });
-            document.getElementById('score').textContent = correct + ' / ' + blanks.length + ' correct';
-        }
+// ========== 作文练习渲染 ==========
+function renderWriting() {
+var html = '';
+for(var i=0;i<writings.length;i++){
+var item = writings[i];
+html += '<div class="card">';
+html += '<h3>'+item.title+'</h3>';
+html += '<div class="writing-tip">';
+html += '<p><b>提示：</b>'+item.tip+'</p>';
+if(item.image){
+html += '<img src="'+item.image+'" style="max-width:100%;border-radius:8px;margin:10px 0">';
+}
+html += '<p><b>要求：</b></p><ul>';
+for(var r=0;r<item.requirements.length;r++){
+html += '<li>'+item.requirements[r]+'</li>';
+}
+html += '</ul></div>';
+html += '<p><b>参考句型：</b></p>';
+html += '<p style="color:#666;font-style:italic">'+item.example+'</p>';
+html += '<textarea id="w'+i+'" rows="6" placeholder="请在这里写作文..."></textarea>';
+// 图片上传功能
+html += '<div style="margin:10px 0">';
+html += '<label for="img'+i+'" style="display:inline-block;padding:8px 16px;background:#4CAF50;color:white;border-radius:5px;cursor:pointer">';
+html += '上传作文图片';
+html += '</label>';
+html += '<input type="file" id="img'+i+'" accept="image/*" style="display:none" onchange="previewImage('+i+',this)">';
+html += '<span id="imgName'+i+'" style="margin-left:10px;color:#666"></span>';
+html += '<div id="imgPreview'+i+'" style="margin-top:10px"></div>';
+html += '</div>';
+html += '</div>';
+}
+html += '<button class="submit orange" onclick="submitWriting()">Submit Writing</button>';
+return html;
+}
 
-        function revealAnswers() {
-            var blanks = document.querySelectorAll('.blank');
-            blanks.forEach(function(input) {
-                input.value = input.dataset.answer;
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
-            });
-            document.getElementById('score').textContent = 'All answers revealed.';
-        }
+// 图片预览
+function previewImage(idx, input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+reader.onload = function(e) {
+document.getElementById('imgPreview'+idx).innerHTML = '<img src="'+e.target.result+'" style="max-width:200px;border-radius:8px">';
+document.getElementById('imgName'+idx).textContent = '已选择: ' + input.files[0].name;
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
 
-        render();
-    </script>
+// ========== 选择函数 ==========
+function selectQ(n,letter){
+answers['q'+n]=letter;
+var card = document.getElementById('q'+n+letter).parentElement;
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+event.target.classList.add('selected');
+}
+
+function selectL(testIdx, qIdx, letter){
+answers['l'+testIdx+'_'+qIdx]=letter;
+var card = document.getElementById('l'+testIdx+'_'+qIdx+letter).parentElement;
+card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+event.target.classList.add('selected');
+}
+
+// ========== 提交函数 ==========
+function submitQuiz(){
+submitType('quiz', questions, 'q', 4);
+}
+function submitCloze(){
+// 完形填空：使用新的数据格式
+var clozePassage = {
+    text: 'Today is a sunny day. Tom ____ (go) to the park with his friends. They ____ (play) football there. Tom ____ (be) very happy because it is his birthday.',
+    blanks: [
+        {idx: 0, answer: 'goes', hint: '第三人称单数'},
+        {idx: 1, answer: 'play', hint: '一般现在时'},
+        {idx: 2, answer: 'is', hint: 'be动词'}
+    ]
+};
+var score = 0;
+var wrongList = [];
+for(var i=0; i<clozePassage.blanks.length; i++){
+    var userAns = document.getElementById('c'+i).value.toLowerCase().trim();
+    var correct = clozePassage.blanks[i].answer;
+    if(userAns === correct){
+        score += 4;
+    } else {
+        wrongList.push({
+            n: i+1,
+            ans: userAns || '未作答',
+            correct: correct,
+            hint: clozePassage.blanks[i].hint
+        });
+    }
+}
+var now = new Date();
+var total = clozePassage.blanks.length * 4;
+saveHistory({type:'cloze',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Cloze Score: '+score+'/'+total);
+show('history');
+}
+function submitTrans(){
+submitType('trans', trans, 't', 4);
+}
+
+function submitListening(){
+var score = 0;
+var wrongList = [];
+var total = 0;
+for(var i=0;i<listening.length;i++){
+for(var j=0;j<listening[i].questions.length;j++){
+total += 4;
+var key = 'l'+i+'_'+j;
+var q = listening[i].questions[j];
+var userAns = answers[key] || '';
+// 获取用户选择的选项内容
+var userAnsText = userAns ? q.o[userAns.charCodeAt(0)-65] : '';
+// 获取正确答案的选项内容
+var correctAnsText = q.o[q.a.charCodeAt(0)-65];
+if(userAns === q.a){
+score += 4;
+} else {
+wrongList.push({
+    n: j+1,
+    ans: userAnsText || '未作答',
+    correct: correctAnsText,
+    hint: '听力原文: ' + listening[i].transcript
+});
+}
+}
+}
+var now = new Date();
+saveHistory({type:'listening',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Listening Score: '+score+'/'+total);
+show('history');
+}
+
+function submitWriting(){
+var now = new Date();
+var content = '';
+var imageData = '';
+for(var i=0;i<writings.length;i++){
+content += 'Task '+(i+1)+': '+document.getElementById('w'+i).value+'\n';
+// 获取图片数据
+var imgInput = document.getElementById('img'+i);
+if(imgInput && imgInput.files && imgInput.files[0]){
+var reader = new FileReader();
+reader.onload = function(e){
+// 图片数据已保存
+};
+imageData += 'Task '+(i+1)+': [图片已上传]\n';
+}
+}
+// 作文不评分，只记录（图片需要Google Form支持文件上传字段）
+// 目前方案：文字保存到历史记录，图片提示需要Google Form支持
+saveHistory({
+    type:'writing',
+    date:now.toLocaleDateString(),
+    time:now.toLocaleTimeString().slice(0,5),
+    score:'-',
+    total:'-',
+    content:content,
+    imageNote: '如需上传作文图片，请发到群里由老师手动批改',
+    wrongList:[]
+});
+alert('Writing submitted! 作文已提交。如需上传作文图片，请发到群里由老师手动批改。');
+show('history');
+}
+
+function submitType(type, data, prefix, perScore){
+var score=0;
+var wrongList = [];
+for(var i=0;i<data.length;i++){
+var key = prefix+i;
+if(type==='trans'){
+var ans=document.getElementById(key).value.toLowerCase().trim();
+if(ans===data[i].a.toLowerCase().trim()){
+score+=perScore;
+} else {
+wrongList.push({n:i+1,ans:document.getElementById(key).value,correct:data[i].a,hint:''});
+}
+}else{
+if(answers[key]===data[i].a){
+score+=perScore;
+} else {
+var userAns = answers[key] || '';
+var userAnsText = userAns && data[i].o ? data[i].o[userAns.charCodeAt(0)-65] : '未作答';
+var correctAnsText = data[i].o ? data[i].o[data[i].a.charCodeAt(0)-65] : data[i].a;
+wrongList.push({n:i+1,ans:userAnsText,correct:correctAnsText,hint:data[i].hint||''});
+}
+}
+}
+var now = new Date();
+var total = data.length * perScore;
+// Google Form 提交（简化版）
+var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var form = document.createElement('form');
+form.action = formUrl;
+form.method = 'POST';
+form.target = '_blank';
+var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = now.toLocaleString(); form.appendChild(f1);
+var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = type+':'+JSON.stringify(answers); form.appendChild(f2);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/'+total; form.appendChild(f3);
+document.body.appendChild(form);
+form.submit();
+document.body.removeChild(form);
+// 保存到 localStorage
+saveHistory({type:type,date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:total,wrongList:wrongList});
+alert('Score: '+score+'/'+total);
+show('history');
+}
+
+// ========== 历史记录 ==========
+function loadHistory() {
+var data = localStorage.getItem('chunchunHistory');
+return data ? JSON.parse(data) : [];
+}
+
+function saveHistory(record) {
+var history = loadHistory();
+history.unshift(record);
+localStorage.setItem('chunchunHistory', JSON.stringify(history));
+}
+
+// ========== 历史题目导航页 ==========
+function renderDaysPage() {
+var html = '<div class="card">';
+html += '<h3>?? 历史题目</h3>';
+html += '<p>点击下方链接查看历史练习题目：</p>';
+html += '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">';
+
+// 当前可用天数（后续可从GitHub JSON动态获取）
+var availableDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+for(var i=0; i<availableDays.length; i++){
+var day = availableDays[i];
+var isCurrentDay = (currentDay == day);
+html += '<a href="?day='+day+'" style="';
+html += 'padding:12px 20px;';
+html += 'background:'+(isCurrentDay?'#2E7D32':'#4A90E2')+';';
+html += 'color:white;border-radius:8px;text-decoration:none;';
+html += 'font-weight:bold;">';
+html += 'Day '+day;
+html += '</a>';
+}
+html += '</div>';
+html += '<div style="margin-top:20px;text-align:center">';
+html += '<a href="index.html" style="color:#666">返回最新题目</a>';
+html += '</div>';
+html += '</div>';
+return html;
+}
+
+function renderHistory() {
+var history = loadHistory();
+if(history.length === 0) {
+return '<div class="card"><b>History</b><br>No records yet</div>';
+}
+var html = '';
+for(var i=0;i<history.length;i++) {
+var h = history[i];
+var typeIcon = h.type==='listening'?'??':h.type==='writing'?'??':h.type==='quiz'?'??':h.type==='cloze'?'??':'';
+html += '<div class="history-item">';
+html += '<div class="header"><span>'+typeIcon+' '+h.type.toUpperCase()+' - '+h.date+' '+h.time+'</span><span class="score">'+h.score+'/'+h.total+'</span></div>';
+if(h.wrongList && h.wrongList.length > 0) {
+html += '<div class="wrong"><b>Wrong Answers:</b>';
+for(var j=0;j<h.wrongList.length;j++) {
+var w = h.wrongList[j];
+html += '<div class="wrong-item">Q'+w.n+': Your answer: '+w.ans+' → Correct: '+w.correct;
+if(w.hint) html += '<div class="hint">Hint: '+w.hint+'</div>';
+html += '</div>';
+}
+html += '</div>';
+}
+if(h.content){
+html += '<div style="margin-top:10px;padding:10px;background:#f5f5f5;border-radius:5px;"><b>Your writing:</b><p style="white-space:pre-wrap">'+h.content+'</p></div>';
+}
+html += '</div>';
+}
+return html;
+}
+
+show('quiz');
+</script>
 </body>
 </html>
+
