@@ -36,8 +36,9 @@ textarea{resize:vertical;min-height:60px}
 .explanation{font-size:.88rem;color:#666;margin-top:6px;padding:8px 10px;background:#f9f9f9;border-radius:6px;display:none}
 .explanation.show{display:block}
 .cloze-sentence{font-size:1.05rem;line-height:1.8}
+.cloze-passage{font-size:1.05rem;line-height:2}
 .cloze-hint{font-size:.85rem;color:#888;margin-top:2px}
-.cloze-input{display:inline-block;width:120px;padding:6px 10px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2;background:transparent;font-size:1rem;text-align:center;outline:none}
+.cloze-input{display:inline-block;width:100px;padding:6px 10px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2;background:transparent;font-size:1rem;text-align:center;outline:none}
 .cloze-input:focus{border-bottom-color:#2E7D32}
 .cloze-input.correct{border-bottom-color:#2E7D32;color:#2E7D32;font-weight:700}
 .cloze-input.wrong{border-bottom-color:#d32f2f;color:#d32f2f}
@@ -139,38 +140,17 @@ var ALL_DAYS = {
                 exp: '"little" = almost none, with uncountable noun "information". Negative.'
             }
         ],
-        cloze: [
-            {
-                sentence: 'I have _____ coins in my pocket, just enough for the vending machine.',
-                answer: 'a few',
-                hint: 'countable, positive (some coins)'
-            },
-            {
-                sentence: 'There is _____ sugar left. We cannot make a cake.',
-                answer: 'little',
-                hint: 'uncountable, negative (almost none)'
-            },
-            {
-                sentence: 'She speaks _____ French, so she can order food in Paris.',
-                answer: 'a little',
-                hint: 'uncountable, positive (some French)'
-            },
-            {
-                sentence: '_____ students were absent today. Almost everyone came.',
-                answer: 'Few',
-                hint: 'countable, negative (almost none)'
-            },
-            {
-                sentence: 'Can I borrow _____ books from your shelf?',
-                answer: 'a few',
-                hint: 'countable, positive (some books)'
-            },
-            {
-                sentence: 'He showed _____ interest in the movie. He fell asleep!',
-                answer: 'little',
-                hint: 'uncountable, negative (almost no interest)'
-            }
-        ],
+        cloze: {
+            passage: 'Tom and Mary are good friends. Tom has _____ friends at school, but he feels happy because Mary is always there for him. Mary has _____ knowledge about history, and she often shares interesting stories with Tom. Yesterday, they went to the beach together. Tom found _____ shells, and Mary collected _____ postcards. They had _____ water left, so they bought some from the shop. It was _____ fun day!',
+            blanks: [
+                { answer: 'few', hint: 'countable, negative (almost none)' },
+                { answer: 'little', hint: 'uncountable, negative (almost none)' },
+                { answer: 'a few', hint: 'countable, positive (some shells)' },
+                { answer: 'a few', hint: 'countable, positive (some postcards)' },
+                { answer: 'little', hint: 'uncountable, negative (almost none)' },
+                { answer: 'a', hint: 'fun is uncountable, use a + adjective'}
+            ]
+        },
         translate: [
             {
                 zh: 'There are few students in the classroom.',
@@ -317,34 +297,48 @@ function submitQuiz() {
 // ==================== CLOZE TAB ====================
 function renderCloze(el) {
     var cs = DATA.cloze;
+    if (!cs || !cs.passage || !cs.blanks || cs.blanks.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
+        return;
+    }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📝 Fill in the blank</b><p style="margin-top:6px;font-size:.9rem;color:#555">Type the correct word: few, a few, little, or a little</p></div>';
-    for (var i = 0; i < cs.length; i++) {
-        var c = cs[i];
-        var parts = c.sentence.split('_____');
-        html += '<div class="card">';
-        html += '<div class="cloze-sentence"><b>' + (i+1) + '.</b> ';
-        html += parts[0];
-        html += '<input type="text" class="cloze-input" id="cloze' + i + '" placeholder="..." autocomplete="off" spellcheck="false">';
-        if (parts[1]) html += parts[1];
-        html += '</div>';
-        html += '<div class="cloze-hint">Hint: ' + c.hint + '</div>';
-        html += '</div>';
+    html += '<b>📝 Cloze - Fill in the blanks</b><p style="margin-top:6px;font-size:.9rem;color:#555">Read the passage and fill in each blank with the correct word</p></div>';
+    
+    // Render passage with blanks
+    html += '<div class="card">';
+    html += '<div class="cloze-passage" style="font-size:1.05rem;line-height:2">';
+    var parts = cs.passage.split('_____');
+    for (var i = 0; i < parts.length; i++) {
+        html += '<span>' + parts[i] + '</span>';
+        if (i < cs.blanks.length) {
+            html += '<input type="text" class="cloze-input" id="cloze' + i + '" placeholder="?" autocomplete="off" spellcheck="false">';
+        }
     }
+    html += '</div>';
+    
+    // Show hints
+    html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
+    html += '<b style="font-size:.9rem;color:#666">💡 Hints:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
+    for (var i = 0; i < cs.blanks.length; i++) {
+        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>Blank ' + (i+1) + ':</b> ' + cs.blanks[i].hint + '</div>';
+    }
+    html += '</div></div>';
+    html += '</div>';
     html += '<button class="submit-btn" onclick="submitCloze()">Submit Cloze</button>';
     el.innerHTML = html;
 }
 
 function submitCloze() {
-    if (!DATA) return;
+    if (!DATA || !DATA.cloze || !DATA.cloze.blanks) return;
     var cs = DATA.cloze;
+    var blanks = cs.blanks;
     var score = 0;
     var wrongList = [];
-    for (var i = 0; i < cs.length; i++) {
+    for (var i = 0; i < blanks.length; i++) {
         var input = document.getElementById('cloze' + i);
         var userAns = input.value.trim().toLowerCase();
-        var correct = cs[i].answer.toLowerCase();
+        var correct = blanks[i].answer.toLowerCase();
         if (userAns === correct) {
             score++;
             input.classList.add('correct');
@@ -353,14 +347,13 @@ function submitCloze() {
             wrongList.push({
                 n: i + 1,
                 ans: input.value.trim() || 'no answer',
-                correct: cs[i].answer,
-                hint: cs[i].hint
+                correct: blanks[i].answer,
+                hint: blanks[i].hint
             });
         }
     }
-    var total = cs.length;
+    var total = blanks.length;
     saveRecord('cloze', score, total, wrongList);
-    // Replace button with banner
     var pct = score / total;
     var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
     var btns = document.querySelectorAll('.submit-btn');
@@ -374,15 +367,19 @@ function submitCloze() {
 // ==================== TRANSLATE TAB ====================
 function renderTranslate(el) {
     var ts = DATA.translate;
+    if (!ts || ts.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">🔤</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
+        return;
+    }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>🔤 Translate into English</b><p style="margin-top:6px;font-size:.9rem;color:#555">Write the English sentence. Spelling and grammar matter!</p></div>';
+    html += '<b>🔤 Translate Chinese to English</b><p style="margin-top:6px;font-size:.9rem;color:#555">Write the English translation. Spelling and grammar matter!</p></div>';
     for (var i = 0; i < ts.length; i++) {
         var t = ts[i];
         html += '<div class="card">';
         html += '<div class="trans-zh"><b>' + (i+1) + '.</b> ' + t.zh + '</div>';
         html += '<div class="trans-hint">💡 ' + t.zhHint + '</div>';
-        html += '<textarea id="trans' + i + '" rows="2" placeholder="Type your English translation..."></textarea>';
+        html += '<textarea id="trans' + i + '" rows="2" placeholder="Write your English translation here..."></textarea>';
         html += '</div>';
     }
     html += '<button class="submit-btn" onclick="submitTrans()">Submit Translation</button>';
@@ -490,18 +487,26 @@ function renderHistory(el) {
         var h = history[i];
         var pct = h.total > 0 ? h.score / h.total : 0;
         var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
+        var isPerfect = pct === 1;
+        
         html += '<div class="history-item">';
-        html += '<div class="h-header"><span class="h-type">' + h.type + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + '</span></div>';
+        html += '<div class="h-header"><span class="h-type">' + h.type + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
         html += '<div class="h-time">' + h.date + ' ' + h.time + '</div>';
+        
         if (h.wrongList && h.wrongList.length > 0) {
             html += '<div class="h-wrong">';
+            html += '<b style="color:#c62828;font-size:.9rem">❌ Wrong Answers:</b>';
             for (var j = 0; j < h.wrongList.length; j++) {
                 var w = h.wrongList[j];
-                html += '<div class="h-wrong-item">#' + w.n + ': <span style="text-decoration:line-through">' + escHtml(w.ans) + '</span> → <span class="h-correct">' + escHtml(w.correct) + '</span>';
-                if (w.hint) html += '<br><span style="color:#888;font-size:.82rem">' + escHtml(w.hint) + '</span>';
+                html += '<div class="h-wrong-item" style="margin-top:8px">';
+                html += '<div><b>Q' + w.n + ':</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
+                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
                 html += '</div>';
             }
             html += '</div>';
+        } else {
+            // All correct
+            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ Perfect! All correct!</div>';
         }
         html += '</div>';
     }
