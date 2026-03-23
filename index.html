@@ -33,152 +33,94 @@ input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;bor
 <button id="btn-trans" onclick="show('trans')">Translate</button>
 <button id="btn-history" onclick="show('history')">History</button>
 </div>
-<div id='debug'></div>
-<div id='content'></div>
+<div id="content"></div>
 <script>
 var currentDay = new URLSearchParams(window.location.search).get('day') || 'latest';
 
 function getDayData(day) {
-  var data = {
-    '1': {
-      title: 'Day 1: Few / Little',
-      topic: 'Quantifiers: few & little',
-      questions: [
-        {question: 'She has few friends in the new city.',options: ['few','little','a few','a little'],answer: 0,explanation: 'Few is used with countable nouns.'},
-        {question: 'There is little water left in the bottle.',options: ['few','little','a few','many'],answer: 1,explanation: 'Little is used with uncountable nouns.'},
-        {question: 'I have a few minutes before my meeting.',options: ['little','few','a few','a little'],answer: 2,explanation: 'A few means some, countable.'},
-        {question: 'Could you lend me a little money?',options: ['few','a few','a little','little'],answer: 2,explanation: 'A little means some, uncountable.'},
-        {question: 'Very few people know about this secret.',options: ['little','a little','a few','few'],answer: 3,explanation: 'Few has negative meaning.'},
-        {question: 'There is very little hope of finding them.',options: ['few','a few','little','a little'],answer: 2,explanation: 'Little has negative meaning.'},
-        {question: 'He spoke a little English, so we managed to communicate.',options: ['few','a few','little','a little'],answer: 3,explanation: 'A little means some.'},
-        {question: 'Only a few students passed the difficult exam.',options: ['little','a little','a few','few'],answer: 2,explanation: 'A few positive meaning.'}
-      ],
-      cloze: [
-        {sentence: 'I only need a few more seconds to finish this.',answer: 'a few',hint: 'countable, positive'},
-        {sentence: 'She has little patience when people are late.',answer: 'little',hint: 'uncountable, negative'},
-        {sentence: 'Can I have a little sugar in my tea?',answer: 'a little',hint: 'uncountable, positive'},
-        {sentence: 'Very few cars were parked outside.',answer: 'few',hint: 'countable, negative'},
-        {sentence: 'We have little time left, so let us hurry.',answer: 'little',hint: 'uncountable, negative'},
-        {sentence: 'I met a few old friends at the reunion.',answer: 'a few',hint: 'countable, positive'}
-      ]
-    }
-  };
-
-  if (day === 'latest') {
-    var keys = Object.keys(data);
-    return data[keys[keys.length - 1]];
-  }
-
-  return data[String(day)] || null;
-}
-
-function getDayData(day) {
-    if (day === 'latest') return null;
-    if (day == 1) {
-        return {
-            type: 'few-little',
-            title: 'Day 1: few/little',
+    var data = {
+        '1': {
             questions: [
-{n:1,c:'There are _____ apples on the table.',o:['A.few','B.a few','C.little','D.a little'],a:'B'},
-{n:2,c:'I have _____ time left.',o:['A.few','B.a few','C.little','D.a little'],a:'C'},
-{n:3,c:'_____ students passed the exam.',o:['A.Few','B.A few','C.Little','D.A little'],a:'B'},
-{n:4,c:'She knows _____ about this topic.',o:['A.few','B.a few','C.little','D.a little'],a:'C'},
-{n:5,c:'There is _____ milk in the glass.',o:['A.few','B.a few','C.little','D.a little'],a:'D'},
-{n:6,c:'_____ people came to the meeting yesterday.',o:['A.Few','B.A few','C.Little','D.A little'],a:'B'},
-{n:7,c:'He has _____ friends here.',o:['A.few','B.a few','C.little','D.a little'],a:'B'},
-{n:8,c:'_____ water is left in the bottle.',o:['A.Few','B.A few','C.Little','D.A little'],a:'C'}
+{c:'She has _____ friends in the new city.',o:['A. few','B. little','C. a few','D. a little'],a:'A'},
+{c:'There is _____ water left in the bottle.',o:['A. few','B. little','C. a few','D. many'],a:'B'},
+{c:'I have _____ minutes before my meeting.',o:['A. little','B. few','C. a few','D. a little'],a:'C'},
+{c:'Could you lend me _____ money?',o:['A. few','B. a few','C. a little','D. little'],a:'C'},
+{c:'Very _____ people know about this secret.',o:['A. little','B. a little','C. a few','D. few'],a:'D'},
+{c:'There is very _____ hope of finding them.',o:['A. few','B. a few','C. little','D. a little'],a:'C'},
+{c:'He spoke _____ English, so we managed to communicate.',o:['A. few','B. a few','C. little','D. a little'],a:'D'},
+{c:'Only _____ students passed the difficult exam.',o:['A. little','B. a little','C. a few','D. few'],a:'C'}
             ],
             cloze: [
-{t:'There is _____ water in the cup.',a:'little',hint:'little'},
-{t:'I have _____ friends in this city.',a:'few',hint:'few'},
-{t:'Can you give me _____ information?',a:'a little',hint:'a little'},
-{t:'_____ students are absent today.',a:'Few',hint:'Few'},
-{t:'She speaks _____ English.',a:'a little',hint:'a little'},
-{t:'There are _____ books on the shelf.',a:'a few',hint:'a few'}
+{t:'I only need _____ more seconds to finish this.',a:'a few',hint:'countable, positive'},
+{t:'She has _____ patience when people are late.',a:'little',hint:'uncountable, negative'},
+{t:'Can I have _____ sugar in my tea?',a:'a little',hint:'uncountable, positive'},
+{t:'Very _____ cars were parked outside.',a:'few',hint:'countable, negative'},
+{t:'We have _____ time left, so let us hurry.',a:'little',hint:'uncountable, negative'},
+{t:'I met _____ old friends at the reunion.',a:'a few',hint:'countable, positive'}
             ]
-        };
-    }
-    return null;
+        }
+    };
+    if (day === 'latest') return null;
+    return data[day] || null;
 }
-var currentDay = new URLSearchParams(window.location.search).get('day') || 'latest';
+
 var dayData = getDayData(currentDay);
-
-
-
 var questions = dayData ? dayData.questions : [
-{n:1,c:"There are _____ apples on the table.",o:["A. few","B. a few","C. little","D. a little"],a:"B"},
-{n:2,c:"I have _____ time left.",o:["A. few","B. a few","C. little","D. a little"],a:"C"},
-{n:3,c:"_____ students passed the exam.",o:["A. Few","B. A few","C. Little","D. A little"],a:"B"},
-{n:4,c:"She knows _____ about this topic.",o:["A. few","B. a few","C. little","D. a little"],a:"C"},
-{n:5,c:"There is _____ milk in the glass.",o:["A. few","B. a few","C. little","D. a little"],a:"D"},
-{n:6,c:"_____ people came to the meeting yesterday.",o:["A. Few","B. A few","C. Little","D. A little"],a:"B"},
-{n:7,c:"He has _____ friends here.",o:["A. few","B. a few","C. little","D. a little"],a:"B"},
-{n:8,c:"_____ water is left in the bottle.",o:["A. Few","B. A few","C. Little","D. A little"],a:"C"}
+{n:1,c:'No questions loaded. Add ?day=1 to URL.',o:['A.','B.','C.','D.'],a:'A'}
 ];
 var cloze = dayData ? dayData.cloze : [
-{t:"There is _____ water in the cup.",a:"little",hint:"little (涓嶅彲鏁?"},
-{t:"I have _____ friends in this city.",a:"few",hint:"few (鍙暟)"},
-{t:"Can you give me _____ information?",a:"a little",hint:"a little (涓€浜?"},
-{t:"_____ students are absent today.",a:"Few",hint:"Few (鍑犱箮娌℃湁)"},
-{t:"She speaks _____ English.",a:"a little",hint:"a little (涓€鐐?"},
-{t:"There are _____ books on the shelf.",a:"a few",hint:"a few (涓€浜?"}
+{t:'No cloze loaded. Add ?day=1 to URL.',a:'',hint:''}
 ];
 var trans = [
-{c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
-{c:'She is taller than me.',a:'She is taller than me.'},
-{c:'This book is interesting.',a:'This book is interesting.'}
+{c:'No translation available.',a:''}
 ];
 var answers = {};
 
 function show(page) {
-var d=getDayFromURL();var dn=d?parseInt(d):null;if(dn&&dayData[dn]){if(page=='quiz'&&dayData[dn].questions)window.questions=dayData[dn].questions;if(page=='cloze'&&dayData[dn].cloze)window.cloze=dayData[dn].cloze;}
+    if(page==='quiz' && dayData && dayData.questions) window.questions = dayData.questions;
+    if(page==='cloze' && dayData && dayData.cloze) window.cloze = dayData.cloze;
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+    document.getElementById('btn-'+page).classList.add('active');
+    var html = '';
+    if(page==='quiz'){
+    for(var i=0;i<questions.length;i++){
+    var q=questions[i];
+    html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
+    html+='<div class="opt-grid">';
+    for(var j=0;j<q.o.length;j++){
+    var letter=String.fromCharCode(65+j);
+    html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
+    }
+    html+='</div>';
+    }
+    html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
+    }else if(page==='cloze'){
+    for(var i=0;i<cloze.length;i++){
+    html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
+    }
+    html+='<button class="submit" onclick="submitCloze()">Submit</button>';
+    }else if(page==='trans'){
+    for(var i=0;i<trans.length;i++){
+    html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
+    }
+    html+='<button class="submit" onclick="submitTrans()">Submit</button>';
+    }else if(page==='history'){
+    html += renderHistory();
+    }
+    document.getElementById('content').innerHTML = html;
+}
 
-
-document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-document.getElementById('btn-'+page).classList.add('active');
-var html = '';
-if(page==='quiz'){
-for(var i=0;i<questions.length;i++){
-var q=questions[i];
-html+='<div class="card"><b>Q'+(i+1)+'</b>. '+q.c+'</div>';
-html+='<div class="opt-grid">';
-for(var j=0;j<q.o.length;j++){
-var letter=String.fromCharCode(65+j);
-html+='<div class="opt" onclick="selectQ('+i+',\''+letter+'\')" id="q'+i+letter+'">'+q.o[j]+'</div>';
-}
-html+='</div>';
-}
-html+='<button class="submit" onclick="submitQuiz()">Submit</button>';
-}else if(page==='cloze'){
-for(var i=0;i<cloze.length;i++){
-html+='<div class="card"><b>Blank '+(i+1)+'</b>: '+cloze[i].t+'<br><input id="c'+i+'" placeholder="your answer"></div>';
-}
-html+='<button class="submit" onclick="submitCloze()">Submit</button>';
-}else if(page==='trans'){
-for(var i=0;i<trans.length;i++){
-html+='<div class="card"><b>'+(i+1)+'</b>. '+trans[i].c+'<br><textarea id="t'+i+'" rows="2"></textarea></div>';
-}
-html+='<button class="submit" onclick="submitTrans()">Submit</button>';
-}else if(page==='history'){
-html += renderHistory();
-}
-document.getElementById('content').innerHTML = html;
-}
-
-// Load history from localStorage
 function loadHistory() {
     var data = localStorage.getItem('chunchunHistory');
     return data ? JSON.parse(data) : [];
 }
 
-// Save history to localStorage
 function saveHistory(record) {
     var history = loadHistory();
     history.unshift(record);
     localStorage.setItem('chunchunHistory', JSON.stringify(history));
 }
 
-// Render history page
 function renderHistory() {
     var history = loadHistory();
     if(history.length === 0) {
@@ -193,7 +135,7 @@ function renderHistory() {
             html += '<div class="wrong"><b>Wrong Answers:</b>';
             for(var j=0;j<h.wrongList.length;j++) {
                 var w = h.wrongList[j];
-                html += '<div class="wrong-item">Q'+w.n+': Your answer: '+w.ans+' → Correct: '+w.correct+'<div class="hint">Hint: '+w.hint+'</div></div>';
+                html += '<div class="wrong-item">Q'+w.n+': Your answer: '+w.ans+' -> Correct: '+w.correct+'<div class="hint">Hint: '+w.hint+'</div></div>';
             }
             html += '</div>';
         }
@@ -204,7 +146,6 @@ function renderHistory() {
 
 function selectQ(n,letter){
 answers['q'+n]=letter;
-// Only deselect within the same question card
 var card = document.getElementById('q'+n+letter).parentElement;
 card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
 event.target.classList.add('selected');
@@ -224,7 +165,6 @@ var now = new Date();
 var dateStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes();
 var ansStr = '';
 for(var n in answers){ansStr += n+':'+answers[n]+',';}
-// Submit to Google Form
 var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
 var form = document.createElement('form');
 form.action = formUrl;
@@ -232,13 +172,12 @@ form.method = 'POST';
 form.target = '_blank';
 var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
 var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/'+(questions.length*4); form.appendChild(f3);
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
-// Save to localStorage
-saveHistory({type:'quiz',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
-alert('Score: '+score+'/12');
+saveHistory({type:'quiz',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:questions.length*4,wrongList:wrongList});
+alert('Score: '+score+'/'+(questions.length*4));
 show('history');
 }
 
@@ -247,7 +186,7 @@ var score=0;
 var wrongList = [];
 for(var i=0;i<cloze.length;i++){
 var ans=document.getElementById('c'+i).value.toLowerCase().trim();
-if(ans===cloze[i].a){
+if(ans===cloze[i].a.toLowerCase().trim()){
 score+=4;
 } else {
 wrongList.push({n:i+1,ans:document.getElementById('c'+i).value,correct:cloze[i].a,hint:cloze[i].hint||''});
@@ -264,13 +203,12 @@ form.method = 'POST';
 form.target = '_blank';
 var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
 var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/'+(cloze.length*4); form.appendChild(f3);
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
-// Save to localStorage
-saveHistory({type:'cloze',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
-alert('Score: '+score+'/12');
+saveHistory({type:'cloze',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:cloze.length*4,wrongList:wrongList});
+alert('Score: '+score+'/'+(cloze.length*4));
 show('history');
 }
 
@@ -296,17 +234,17 @@ form.method = 'POST';
 form.target = '_blank';
 var f1 = document.createElement('input'); f1.name = 'entry.705164145'; f1.value = dateStr; form.appendChild(f1);
 var f2 = document.createElement('input'); f2.name = 'entry.9424799'; f2.value = ansStr; form.appendChild(f2);
-var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/12'; form.appendChild(f3);
+var f3 = document.createElement('input'); f3.name = 'entry.1864991047'; f3.value = score+'/'+(trans.length*4); form.appendChild(f3);
 document.body.appendChild(form);
 form.submit();
 document.body.removeChild(form);
-// Save to localStorage
-saveHistory({type:'trans',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:12,wrongList:wrongList});
-alert('Score: '+score+'/12');
+saveHistory({type:'trans',date:now.toLocaleDateString(),time:now.toLocaleTimeString().slice(0,5),score:score,total:trans.length*4,wrongList:wrongList});
+alert('Score: '+score+'/'+(trans.length*4));
 show('history');
 }
 
 show('quiz');
-document.getElementById('debug').style.display='block';document.getElementById('debug').innerHTML='Day:'+new URLSearchParams(window.location.search).get('day')+' | dayData type:'+(typeof dayData)+' | has data:'+(dayData ? 'yes' : 'no');
-document.getElementById('content').innerHTML = '<div style=\'padding:20px;\'><h3>Debug Info</h3><p>URL params: ' + window.location.search + '</p><p>Day: ' + new URLSearchParams(window.location.search).get('day') + '</p><p>dayData: ' + (typeof dayData) + '</p><p>dayData[1]: ' + (dayData ? dayData[1] : 'null') + '</p></div>';
-const historyData = [
+const historyData = [];
+</script>
+</body>
+</html>
