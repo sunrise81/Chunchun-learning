@@ -408,15 +408,15 @@ function submitTrans() {
         } else {
             input.style.borderColor = '#d32f2f';
             input.style.color = '#d32f2f';
-            // Show correct answer
+            // Show correct answer in English
             var corrDiv = document.createElement('div');
             corrDiv.style.cssText = 'font-size:.88rem;color:#2E7D32;margin-top:4px;padding:6px 10px;background:#e8f5e9;border-radius:6px';
-            corrDiv.textContent = '✓ ' + ts[i].zh;
+            corrDiv.textContent = '✓ Answer: ' + ts[i].answer;
             input.parentElement.appendChild(corrDiv);
             wrongList.push({
                 n: i + 1,
                 ans: input.value.trim() || 'no answer',
-                correct: ts[i].zh,
+                correct: ts[i].answer,
                 hint: ts[i].zhHint
             });
         }
