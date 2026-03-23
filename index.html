@@ -395,7 +395,6 @@ function submitTrans() {
         var input = document.getElementById('trans' + i);
         var userAns = input.value.trim().toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
         var matched = false;
-        // Check against all accepted answers
         var acceptList = ts[i].accept || [ts[i].answer];
         for (var a = 0; a < acceptList.length; a++) {
             var expected = acceptList[a].toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
