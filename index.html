@@ -11,8 +11,8 @@ body{font-family:-apple-system,sans-serif;max-width:640px;margin:0 auto;padding:
 .header h1{font-size:1.6rem;color:#1a1a2e}
 .header .day-info{font-size:.95rem;color:#666;margin-top:4px}
 .header .topic{font-size:1rem;color:#4A90E2;font-weight:600;margin-top:6px}
-.nav{display:flex;gap:8px;margin:12px 0 16px}
-.nav button{flex:1;padding:12px 6px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}
+.nav{display:flex;gap:6px;margin:12px 0 16px;flex-wrap:wrap}
+.nav button{flex:1;min-width:calc(33% - 6px);padding:10px 4px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
 .nav button.active{background:#2E7D32}
 .nav button:active{opacity:.85}
 .card{background:#fff;padding:16px;border-radius:10px;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
@@ -67,11 +67,14 @@ textarea{resize:vertical;min-height:60px}
     <div class="topic" id="topicInfo"></div>
 </div>
 
-<div class="nav">
+<div class="nav" style="flex-wrap:wrap">
     <button id="btn-quiz" onclick="show('quiz')">Quiz</button>
     <button id="btn-cloze" onclick="show('cloze')">Cloze</button>
     <button id="btn-trans" onclick="show('trans')">Translate</button>
     <button id="btn-history" onclick="show('history')">History</button>
+    <button id="btn-listening" onclick="show('listening')">Listening</button>
+    <button id="btn-writing" onclick="show('writing')">Writing</button>
+    <button id="btn-days" onclick="show('days')">Days</button>
 </div>
 
 <div id="content"></div>
@@ -218,6 +221,18 @@ function show(tab) {
     document.querySelectorAll('.nav button').forEach(function(b) { b.classList.remove('active'); });
     document.getElementById('btn-' + tab).classList.add('active');
     var el = document.getElementById('content');
+    if (tab === 'days') {
+        renderDays(el);
+        return;
+    }
+    if (tab === 'listening') {
+        renderListening(el);
+        return;
+    }
+    if (tab === 'writing') {
+        renderWriting(el);
+        return;
+    }
     if (!DATA) {
         el.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
         return;
@@ -419,6 +434,48 @@ function submitTrans() {
     banner.className = 'result-banner ' + cls;
     banner.textContent = 'Translation Score: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 Perfect!' : '');
     document.getElementById('content').insertAdjacentElement('afterbegin', banner);
+}
+
+// ==================== DAYS TAB ====================
+function renderDays(el) {
+    var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
+    html += '<b>📅 Historical Exercises</b><p style="margin-top:6px;font-size:.9rem;color:#555">Click a day to view its exercises</p></div>';
+    html += '<div class="card"><div class="opt-grid">';
+    // Generate day buttons (1-30)
+    for (var i = 1; i <= 30; i++) {
+        var isCurrent = i === DAY;
+        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ✓' : '') + '</a>';
+    }
+    html += '</div></div>';
+    // Add back to today button
+    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">← Back to Today</a>';
+    el.innerHTML = html;
+}
+
+// ==================== LISTENING TAB ====================
+function renderListening(el) {
+    var html = '<div class="empty-state"><div class="icon">🎧</div><p>Listening exercises coming soon!<br>Check back later for audio-based practice.</p></div>';
+    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
+    html += '<b>📝 How it will work:</b>';
+    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
+    html += '<li>Listen to audio clips</li>';
+    html += '<li>Answer questions about what you hear</li>';
+    html += '<li>Improve your listening skills</li>';
+    html += '</ul></div>';
+    el.innerHTML = html;
+}
+
+// ==================== WRITING TAB ====================
+function renderWriting(el) {
+    var html = '<div class="empty-state"><div class="icon">✍️</div><p>Writing exercises coming soon!<br>Check back later for essay practice.</p></div>';
+    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
+    html += '<b>📝 How it will work:</b>';
+    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
+    html += '<li>Write essays on given topics</li>';
+    html += '<li>Get AI-powered feedback</li>';
+    html += '<li>Learn to improve your writing</li>';
+    html += '</ul></div>';
+    el.innerHTML = html;
 }
 
 // ==================== HISTORY TAB ====================
