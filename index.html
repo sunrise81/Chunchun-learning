@@ -36,6 +36,42 @@ input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;bor
 <div id='debug'></div>
 <div id='content'></div>
 <script>
+var currentDay = new URLSearchParams(window.location.search).get('day') || 'latest';
+
+function getDayData(day) {
+  var data = {
+    '1': {
+      title: 'Day 1: Few / Little',
+      topic: 'Quantifiers: few & little',
+      questions: [
+        {question: 'She has few friends in the new city.',options: ['few','little','a few','a little'],answer: 0,explanation: 'Few is used with countable nouns.'},
+        {question: 'There is little water left in the bottle.',options: ['few','little','a few','many'],answer: 1,explanation: 'Little is used with uncountable nouns.'},
+        {question: 'I have a few minutes before my meeting.',options: ['little','few','a few','a little'],answer: 2,explanation: 'A few means some, countable.'},
+        {question: 'Could you lend me a little money?',options: ['few','a few','a little','little'],answer: 2,explanation: 'A little means some, uncountable.'},
+        {question: 'Very few people know about this secret.',options: ['little','a little','a few','few'],answer: 3,explanation: 'Few has negative meaning.'},
+        {question: 'There is very little hope of finding them.',options: ['few','a few','little','a little'],answer: 2,explanation: 'Little has negative meaning.'},
+        {question: 'He spoke a little English, so we managed to communicate.',options: ['few','a few','little','a little'],answer: 3,explanation: 'A little means some.'},
+        {question: 'Only a few students passed the difficult exam.',options: ['little','a little','a few','few'],answer: 2,explanation: 'A few positive meaning.'}
+      ],
+      cloze: [
+        {sentence: 'I only need a few more seconds to finish this.',answer: 'a few',hint: 'countable, positive'},
+        {sentence: 'She has little patience when people are late.',answer: 'little',hint: 'uncountable, negative'},
+        {sentence: 'Can I have a little sugar in my tea?',answer: 'a little',hint: 'uncountable, positive'},
+        {sentence: 'Very few cars were parked outside.',answer: 'few',hint: 'countable, negative'},
+        {sentence: 'We have little time left, so let us hurry.',answer: 'little',hint: 'uncountable, negative'},
+        {sentence: 'I met a few old friends at the reunion.',answer: 'a few',hint: 'countable, positive'}
+      ]
+    }
+  };
+
+  if (day === 'latest') {
+    var keys = Object.keys(data);
+    return data[keys[keys.length - 1]];
+  }
+
+  return data[String(day)] || null;
+}
+
 function getDayData(day) {
     if (day === 'latest') return null;
     if (day == 1) {
