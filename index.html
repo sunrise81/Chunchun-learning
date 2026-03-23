@@ -36,14 +36,22 @@ input,textarea{width:100%;padding:10px;margin:5px 0;border:2px solid #4A90E2;bor
 <div id="content"></div>
 <script>
 var questions = [
-{n:1,c:'She ______ to music every morning.',o:['A. listen','B. listens','C. listened','D. listening'],a:'B'},
-{n:2,c:'The book is ______ the table.',o:['A. in','B. on','C. at','D. to'],a:'B'},
-{n:3,c:'I ______ a new book yesterday.',o:['A. buy','B. buys','C. bought','D. buying'],a:'C'}
+{n:1,c:"There are _____ apples on the table.",o:["A. few","B. a few","C. little","D. a little"],a:"B"},
+{n:2,c:"I have _____ time left.",o:["A. few","B. a few","C. little","D. a little"],a:"C"},
+{n:3,c:"_____ students passed the exam.",o:["A. Few","B. A few","C. Little","D. A little"],a:"B"},
+{n:4,c:"She knows _____ about this topic.",o:["A. few","B. a few","C. little","D. a little"],a:"C"},
+{n:5,c:"There is _____ milk in the glass.",o:["A. few","B. a few","C. little","D. a little"],a:"D"},
+{n:6,c:"_____ people came to the meeting yesterday.",o:["A. Few","B. A few","C. Little","D. A little"],a:"B"},
+{n:7,c:"He has _____ friends here.",o:["A. few","B. a few","C. little","D. a little"],a:"B"},
+{n:8,c:"_____ water is left in the bottle.",o:["A. Few","B. A few","C. Little","D. A little"],a:"C"}
 ];
 var cloze = [
-{t:'Last Sunday, Tom ______ to the park.',a:'went',hint:'go'},
-{t:'He ______ football.',a:'played',hint:'play'},
-{t:'They ______ sandwiches.',a:'ate',hint:'eat'}
+{t:"There is _____ water in the cup.",a:"little",hint:"little (涓嶅彲鏁?"},
+{t:"I have _____ friends in this city.",a:"few",hint:"few (鍙暟)"},
+{t:"Can you give me _____ information?",a:"a little",hint:"a little (涓€浜?"},
+{t:"_____ students are absent today.",a:"Few",hint:"Few (鍑犱箮娌℃湁)"},
+{t:"She speaks _____ English.",a:"a little",hint:"a little (涓€鐐?"},
+{t:"There are _____ books on the shelf.",a:"a few",hint:"a few (涓€浜?"}
 ];
 var trans = [
 {c:'I bought a new schoolbag yesterday.',a:'I bought a new schoolbag yesterday.'},
@@ -227,31 +235,3 @@ show('history');
 
 show('quiz');
 const historyData = [
-            {type:'cloze',day:2,date:'2026-03-21',time:'12:26',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:2,wrongList:[{n:2,ans:'played',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:2,wrongList:[{n:2,ans:'play',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:3,wrongList:[{n:1,ans:'go',correct:'went',hint:'go'},{n:2,ans:'played',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:2,wrongList:[{n:2,ans:'played',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:4,total:12,wrongCount:2,wrongList:[{n:2,ans:'play',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'23:32',score:4,total:12,wrongCount:2,wrongList:[{n:2,ans:'molay',correct:'had',hint:'have'},{n:3,ans:'eat',correct:'played',hint:'play'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:8,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:12,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:1,wrongList:[{n:1,ans:'123',correct:'went',hint:'go'}]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'00:00',score:0,total:12,wrongCount:0,wrongList:[]},
-            {type:'cloze',day:2,date:'2026-03-21',time:'23:37',score:4,total:12,wrongCount:0,wrongList:[]},];
-</script>
-</body>
-</html>
-
