@@ -491,7 +491,7 @@ function renderHistory(el) {
         
         html += '<div class="history-item">';
         html += '<div class="h-header"><span class="h-type">' + h.type + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + '</div>';
+        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">Delete</button></div>';
         
         if (h.wrongList && h.wrongList.length > 0) {
             html += '<div class="h-wrong">';
@@ -510,8 +510,31 @@ function renderHistory(el) {
         }
         html += '</div>';
     }
-    html += '<button class="clear-btn" onclick="if(confirm(\'Clear all history?\')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">Clear History</button>';
+    html += '<button class="clear-btn" onclick="if(confirm(\'Clear all history?\')){localStorage.removeItem(\'chunchunHistory\');submitDeleteToForm(\'all\');show(\'history\')}">Clear All History</button>';
     el.innerHTML = html;
+}
+
+function deleteRecord(index) {
+    if (!confirm('Delete this record?')) return;
+    var history = loadHistory();
+    var deleted = history.splice(index, 1);
+    localStorage.setItem('chunchunHistory', JSON.stringify(history));
+    // Submit deletion to Google Form
+    if (deleted.length > 0) {
+        submitDeleteToForm(deleted[0]);
+    }
+    show('history');
+}
+
+function submitDeleteToForm(record) {
+    try {
+        var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+        var msg = record === 'all' ? 'ALL RECORDS DELETED' : 'DELETED: ' + record.type + ' - ' + record.date + ' ' + record.time;
+        var img = new Image();
+        img.src = formUrl + '?entry.705164145=' + encodeURIComponent(new Date().toISOString()) +
+            '&entry.9424799=' + encodeURIComponent(msg) +
+            '&entry.1864991047=' + encodeURIComponent('DELETED');
+    } catch(e) {}
 }
 
 // ==================== HISTORY STORAGE ====================
