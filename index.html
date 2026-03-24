@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>灏忚僵鑻辫缁冧範</title>
+<title>小轩英语练习</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f0f2f5;color:#222}
@@ -63,19 +63,19 @@ textarea{resize:vertical;min-height:60px}
 <body>
 
 <div class="header">
-    <h1>灏忚僵鑻辫缁冧範</h1>
+    <h1>小轩英语练习</h1>
     <div class="day-info" id="dayInfo"></div>
     <div class="topic" id="topicInfo"></div>
 </div>
 
 <div class="nav" style="flex-wrap:wrap">
-    <button id="btn-quiz" onclick="show('quiz')">閫夋嫨棰?/button>
-    <button id="btn-cloze" onclick="show('cloze')">瀹屽舰濉┖</button>
-    <button id="btn-trans" onclick="show('trans')">缈昏瘧棰?/button>
-    <button id="btn-history" onclick="show('history')">鍘嗗彶璁板綍</button>
-    <button id="btn-listening" onclick="show('listening')">鍚姏</button>
-    <button id="btn-writing" onclick="show('writing')">浣滄枃</button>
-    <button id="btn-days" onclick="show('days')">鍘嗗彶棰樼洰</button>
+    <button id="btn-quiz" onclick="show('quiz')">选择题</button>
+    <button id="btn-cloze" onclick="show('cloze')">完形填空</button>
+    <button id="btn-trans" onclick="show('trans')">翻译题</button>
+    <button id="btn-history" onclick="show('history')">历史记录</button>
+    <button id="btn-listening" onclick="show('listening')">听力</button>
+    <button id="btn-writing" onclick="show('writing')">作文</button>
+    <button id="btn-days" onclick="show('days')">历史题目</button>
 </div>
 
 <div id="content"></div>
@@ -87,73 +87,73 @@ var START_DATE = new Date('2026-03-23');
 // ==================== DAY DATA ====================
 var ALL_DAYS = {
     1: {
-        title: 'There be 鍙ュ瀷',
-        topic: 'There is / There are 杩囧幓寮?,
-        rule: 'There is + 鍗曟暟鍚嶈瘝/涓嶅彲鏁板悕璇峔nThere are + 澶嶆暟鍚嶈瘝\n杩囧幓寮? There was / There were\n鏃堕棿鐘惰: yesterday, last week, 2 years ago',
+        title: 'There be 句型',
+        topic: 'There is / There are 过去式',
+        rule: 'There is + 单数名词/不可数名词\nThere are + 复数名词\n过去式: There was / There were\n时间状语: yesterday, last week, 2 years ago',
         questions: [
             {
                 stem: 'There _____ a book on the table.',
                 opts: ['is', 'are', 'was', 'were'],
                 ans: 0,
-                exp: 'a book鏄崟鏁帮紝鐢╥s'
+                exp: 'a book是单数，用is'
             },
             {
                 stem: 'There _____ some books on the desk.',
                 opts: ['is', 'are', 'was', 'were'],
                 ans: 1,
-                exp: 'some books鏄鏁帮紝鐢╝re'
+                exp: 'some books是复数，用are'
             },
             {
                 stem: 'There _____ a cat under the bed yesterday.',
                 opts: ['is', 'are', 'was', 'were'],
                 ans: 2,
-                exp: 'yesterday琛ㄧず杩囧幓锛岀敤was'
+                exp: 'yesterday表示过去，用was'
             },
             {
                 stem: 'There _____ many birds in the tree last week.',
                 opts: ['is', 'are', 'was', 'were'],
                 ans: 3,
-                exp: 'birds鏄鏁帮紝last week琛ㄧず杩囧幓锛岀敤were'
+                exp: 'birds是复数，last week表示过去，用were'
             },
             {
                 stem: '_____ there any milk in the fridge?',
                 opts: ['Is', 'Are', 'Was', 'Were'],
                 ans: 1,
-                exp: 'milk鏄笉鍙暟锛屼絾鐤戦棶鍙ョ敤are'
+                exp: 'milk是不可数，但疑问句用are'
             },
             {
                 stem: 'There _____ any students in the classroom.',
                 opts: ['isn\'t', 'aren\'t', 'wasn\'t', 'weren\'t'],
                 ans: 1,
-                exp: 'students鏄鏁帮紝鐢╝ren\'t'
+                exp: 'students是复数，用aren\'t'
             }
         ],
         cloze: {
             passage: 'Yesterday, I _____ to the park. There _____ many people there. There _____ a big lake in the park. There _____ some boats on the water. It _____ a nice day!',
             blanks: [
-                { answer: 'went', hint: '鍘?..锛堣繃鍘诲紡锛? },
-                { answer: 'were', hint: '鏈?..锛堝鏁帮紝杩囧幓寮忥級' },
-                { answer: 'was', hint: '鏈?..锛堝崟鏁帮紝杩囧幓寮忥級' },
-                { answer: 'were', hint: '鏈?..锛堝鏁帮紝杩囧幓寮忥級' },
-                { answer: 'was', hint: '鏄?..锛堣繃鍘诲紡锛? }
+                { answer: 'went', hint: '去...（过去式）' },
+                { answer: 'were', hint: '有...（复数，过去式）' },
+                { answer: 'was', hint: '有...（单数，过去式）' },
+                { answer: 'were', hint: '有...（复数，过去式）' },
+                { answer: 'was', hint: '是...（过去式）' }
             ]
         },
         translate: [
             {
-                zh: '妗屽瓙涓婃湁涓€鏀瑪銆?,
-                zhHint: '鍗曟暟鍚嶈瘝锛岀敤There is',
+                zh: '桌子上有一支笔。',
+                zhHint: '单数名词，用There is',
                 answer: 'there is a pen on the table',
                 accept: ['there is a pen on the table']
             },
             {
-                zh: '鏄ㄥぉ鏁欏閲屾湁涓€浜涘鐢熴€?,
-                zhHint: '澶嶆暟+杩囧幓寮忥紝鐢═here were',
+                zh: '昨天教室里有一些学生。',
+                zhHint: '复数+过去式，用There were',
                 answer: 'there were some students in the classroom yesterday',
                 accept: ['there were some students in the classroom yesterday']
             },
             {
-                zh: '鍏洯閲屾湁涓€鍙嫍銆?,
-                zhHint: '鍗曟暟鍚嶈瘝锛岀敤There is',
+                zh: '公园里有一只狗。',
+                zhHint: '单数名词，用There is',
                 answer: 'there is a dog in the park',
                 accept: ['there is a dog in the park']
             }
@@ -201,7 +201,7 @@ function show(tab) {
         return;
     }
     if (!DATA) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">馃摎</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
         return;
     }
     if (tab === 'quiz') renderQuiz(el);
@@ -215,10 +215,10 @@ function renderQuiz(el) {
     var qs = DATA.questions;
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>馃摉 璇硶瑙勫垯</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
+    html += '<b>📖 语法规则</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
     for (var i = 0; i < qs.length; i++) {
         var q = qs[i];
-        html += '<div class="card"><div class="q-stem"><b>绗? + (i+1) + '棰?</b> ' + q.stem + '</div>';
+        html += '<div class="card"><div class="q-stem"><b>第' + (i+1) + '题.</b> ' + q.stem + '</div>';
         html += '<div class="opt-grid">';
         for (var j = 0; j < q.opts.length; j++) {
             var cls = 'opt';
@@ -235,7 +235,7 @@ function renderQuiz(el) {
         html += '</div>';
     }
     if (!quizSubmitted) {
-        html += '<button class="submit-btn" onclick="submitQuiz()">鎻愪氦绛旀</button>';
+        html += '<button class="submit-btn" onclick="submitQuiz()">提交答案</button>';
     }
     el.innerHTML = html;
 }
@@ -253,7 +253,7 @@ function submitQuiz() {
     for (var i = 0; i < qs.length; i++) {
         if (quizAnswers[i] === undefined) unanswered++;
     }
-    if (unanswered > 0 && !confirm('杩樻湁 ' + unanswered + ' 閬撻鏈綔绛旓紝纭畾瑕佹彁浜ゅ悧锛?)) return;
+    if (unanswered > 0 && !confirm('还有 ' + unanswered + ' 道题未作答，确定要提交吗？')) return;
 
     quizSubmitted = true;
     var score = 0;
@@ -275,7 +275,7 @@ function submitQuiz() {
     show('quiz');
     var pct = score / total;
     var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = '<div class="result-banner ' + cls + '">閫夋嫨棰樺緱鍒? ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '') + '</div>';
+    var banner = '<div class="result-banner ' + cls + '">选择题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '') + '</div>';
     document.getElementById('content').insertAdjacentHTML('afterbegin', banner);
 }
 
@@ -283,12 +283,12 @@ function submitQuiz() {
 function renderCloze(el) {
     var cs = DATA.cloze;
     if (!cs || !cs.passage || !cs.blanks || cs.blanks.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">馃摑</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
         return;
     }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>馃摑 瀹屽舰濉┖</b><p style="margin-top:6px;font-size:.9rem;color:#555">闃呰鐭枃锛屽～鍐欓€傚綋鐨勫崟璇?/p></div>';
+    html += '<b>📝 完形填空</b><p style="margin-top:6px;font-size:.9rem;color:#555">阅读短文，填写适当的单词</p></div>';
     html += '<div class="card">';
     html += '<div class="cloze-passage" style="font-size:1.05rem;line-height:2">';
     var parts = cs.passage.split('_____');
@@ -300,12 +300,12 @@ function renderCloze(el) {
     }
     html += '</div>';
     html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
-    html += '<b style="font-size:.9rem;color:#666">馃挕 鎻愮ず:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
+    html += '<b style="font-size:.9rem;color:#666">💡 提示:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
     for (var i = 0; i < cs.blanks.length; i++) {
-        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>绗? + (i+1) + '绌?</b> ' + cs.blanks[i].hint + '</div>';
+        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>第' + (i+1) + '空:</b> ' + cs.blanks[i].hint + '</div>';
     }
     html += '</div></div></div>';
-    html += '<button class="submit-btn" onclick="submitCloze()">鎻愪氦绛旀</button>';
+    html += '<button class="submit-btn" onclick="submitCloze()">提交答案</button>';
     el.innerHTML = html;
 }
 
@@ -340,7 +340,7 @@ function submitCloze() {
     for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
     var banner = document.createElement('div');
     banner.className = 'result-banner ' + cls;
-    banner.textContent = '瀹屽舰濉┖寰楀垎: ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '');
+    banner.textContent = '完形填空得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
     document.getElementById('content').insertAdjacentElement('afterbegin', banner);
 }
 
@@ -348,21 +348,21 @@ function submitCloze() {
 function renderTranslate(el) {
     var ts = DATA.translate;
     if (!ts || ts.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">馃敜</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">🔤</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
         return;
     }
     var html = '';
     html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>馃敜 涓瘧鑻?/b><p style="margin-top:6px;font-size:.9rem;color:#555">灏嗕腑鏂囩炕璇戞垚鑻辨枃锛屾敞鎰忔嫾鍐欏拰璇硶锛?/p></div>';
+    html += '<b>🔤 中译英</b><p style="margin-top:6px;font-size:.9rem;color:#555">将中文翻译成英文，注意拼写和语法！</p></div>';
     for (var i = 0; i < ts.length; i++) {
         var t = ts[i];
         html += '<div class="card">';
-        html += '<div class="trans-zh"><b>绗? + (i+1) + '棰?/b> ' + t.zh + '</div>';
-        html += '<div class="trans-hint">馃挕 ' + t.zhHint + '</div>';
-        html += '<textarea id="trans' + i + '" rows="2" placeholder="鍦ㄨ繖閲屽啓鑻辨枃缈昏瘧..."></textarea>';
+        html += '<div class="trans-zh"><b>第' + (i+1) + '题</b> ' + t.zh + '</div>';
+        html += '<div class="trans-hint">💡 ' + t.zhHint + '</div>';
+        html += '<textarea id="trans' + i + '" rows="2" placeholder="在这里写英文翻译..."></textarea>';
         html += '</div>';
     }
-    html += '<button class="submit-btn" onclick="submitTrans()">鎻愪氦绛旀</button>';
+    html += '<button class="submit-btn" onclick="submitTrans()">提交答案</button>';
     el.innerHTML = html;
 }
 
@@ -389,7 +389,7 @@ function submitTrans() {
             input.style.color = '#d32f2f';
             var corrDiv = document.createElement('div');
             corrDiv.style.cssText = 'font-size:.88rem;color:#2E7D32;margin-top:4px;padding:6px 10px;background:#e8f5e9;border-radius:6px';
-            corrDiv.textContent = '鉁?Answer: ' + ts[i].answer;
+            corrDiv.textContent = '✓ Answer: ' + ts[i].answer;
             input.parentElement.appendChild(corrDiv);
             wrongList.push({
                 n: i + 1,
@@ -407,46 +407,46 @@ function submitTrans() {
     var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
     var banner = document.createElement('div');
     banner.className = 'result-banner ' + cls;
-    banner.textContent = '缈昏瘧棰樺緱鍒? ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '');
+    banner.textContent = '翻译题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
     document.getElementById('content').insertAdjacentElement('afterbegin', banner);
 }
 
 // ==================== DAYS TAB ====================
 function renderDays(el) {
     var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>馃搮 鍘嗗彶棰樼洰</b><p style="margin-top:6px;font-size:.9rem;color:#555">鐐瑰嚮鏃ユ湡鏌ョ湅鍘嗗彶缁冧範</p></div>';
+    html += '<b>📅 历史题目</b><p style="margin-top:6px;font-size:.9rem;color:#555">点击日期查看历史练习</p></div>';
     html += '<div class="card"><div class="opt-grid">';
     for (var i = 1; i <= 30; i++) {
         var isCurrent = i === DAY;
-        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' 鉁? : '') + '</a>';
+        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ✓' : '') + '</a>';
     }
     html += '</div></div>';
-    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">鈫?杩斿洖浠婂ぉ</a>';
+    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">← 返回今天</a>';
     el.innerHTML = html;
 }
 
 // ==================== LISTENING TAB ====================
 function renderListening(el) {
-    var html = '<div class="empty-state"><div class="icon">馃帶</div><p>鍚姏缁冧範鍗冲皢鎺ㄥ嚭锛?br>鏁鏈熷緟...</p></div>';
+    var html = '<div class="empty-state"><div class="icon">🎧</div><p>听力练习即将推出！<br>敬请期待...</p></div>';
     html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>馃摑 鍔熻兘璇存槑:</b>';
+    html += '<b>📝 功能说明:</b>';
     html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>鍚煶棰戠墖娈?/li>';
-    html += '<li>鍥炵瓟鍚姏闂</li>';
-    html += '<li>鎻愰珮鍚姏鎶€鑳?/li>';
+    html += '<li>听音频片段</li>';
+    html += '<li>回答听力问题</li>';
+    html += '<li>提高听力技能</li>';
     html += '</ul></div>';
     el.innerHTML = html;
 }
 
 // ==================== WRITING TAB ====================
 function renderWriting(el) {
-    var html = '<div class="empty-state"><div class="icon">鉁嶏笍</div><p>浣滄枃缁冧範鍗冲皢鎺ㄥ嚭锛?br>鏁鏈熷緟...</p></div>';
+    var html = '<div class="empty-state"><div class="icon">✍️</div><p>作文练习即将推出！<br>敬请期待...</p></div>';
     html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>馃摑 鍔熻兘璇存槑:</b>';
+    html += '<b>📝 功能说明:</b>';
     html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>鏍规嵁缁欏畾棰樼洰鍐欎綔鏂?/li>';
-    html += '<li>鑾峰彇AI鎵规敼鍙嶉</li>';
-    html += '<li>鎻愬崌鍐欎綔鑳藉姏</li>';
+    html += '<li>根据给定题目写作文</li>';
+    html += '<li>获取AI批改反馈</li>';
+    html += '<li>提升写作能力</li>';
     html += '</ul></div>';
     el.innerHTML = html;
 }
@@ -455,7 +455,7 @@ function renderWriting(el) {
 function renderHistory(el) {
     var history = loadHistory();
     if (history.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">馃搵</div><p>鏆傛棤缁冧範璁板綍銆?br>瀹屾垚缁冧範鍚庡嵆鍙湪姝ゆ煡鐪嬪巻鍙茶褰曪紒</p></div>';
+        el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
         return;
     }
     var html = '';
@@ -466,32 +466,32 @@ function renderHistory(el) {
         var isPerfect = pct === 1;
         
         html += '<div class="history-item">';
-        var typeName = h.type === 'quiz' ? '閫夋嫨棰? : h.type === 'cloze' ? '瀹屽舰濉┖' : '缈昏瘧棰?;
-        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 馃帀' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">鍒犻櫎</button></div>';
+        var typeName = h.type === 'quiz' ? '选择题' : h.type === 'cloze' ? '完形填空' : '翻译题';
+        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
+        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">删除</button></div>';
         
         if (h.wrongList && h.wrongList.length > 0) {
             html += '<div class="h-wrong">';
-            html += '<b style="color:#c62828;font-size:.9rem">鉂?閿欓:</b>';
+            html += '<b style="color:#c62828;font-size:.9rem">❌ 错题:</b>';
             for (var j = 0; j < h.wrongList.length; j++) {
                 var w = h.wrongList[j];
                 html += '<div class="h-wrong-item" style="margin-top:8px">';
-                html += '<div><b>绗? + w.n + '棰?</b> ' + escHtml(w.ans) + ' 鈫?<span class="h-correct">' + escHtml(w.correct) + '</span></div>';
-                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">馃挕 ' + escHtml(w.hint) + '</div>';
+                html += '<div><b>第' + w.n + '题:</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
+                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
                 html += '</div>';
             }
             html += '</div>';
         } else {
-            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">鉁?澶浜嗭紒鍏ㄩ儴姝ｇ‘锛?/div>';
+            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ 太棒了！全部正确！</div>';
         }
         html += '</div>';
     }
-    html += '<button class="clear-btn" onclick="if(confirm(\'纭畾瑕佹竻绌烘墍鏈夊巻鍙茶褰曞悧锛焅')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">娓呯┖鎵€鏈夊巻鍙茶褰?/button>';
+    html += '<button class="clear-btn" onclick="if(confirm(\'确定要清空所有历史记录吗？\')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">清空所有历史记录</button>';
     el.innerHTML = html;
 }
 
 function deleteRecord(index) {
-    if (!confirm('纭畾瑕佸垹闄よ繖鏉¤褰曞悧锛?)) return;
+    if (!confirm('确定要删除这条记录吗？')) return;
     var history = loadHistory();
     history.splice(index, 1);
     localStorage.setItem('chunchunHistory', JSON.stringify(history));
@@ -532,4 +532,3 @@ show('quiz');
 </script>
 </body>
 </html>
-
