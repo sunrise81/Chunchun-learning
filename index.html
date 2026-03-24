@@ -1,768 +1,535 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小升初英语练习 - Day 2: few/a few/little/a little</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .question-card {
-            position: relative;
-        }
-
-        .question-number {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: linear-gradient(135deg, #2e7d32, #1b5e20);
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .question-type {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #1b5e20;
-            padding: 3px 12px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            margin-left: 10px;
-        }
-
-        .fill-blank .question-type {
-            background: #fff3e0;
-            color: #e65100;
-        }
-
-        .question-text {
-            font-size: 1.4em;
-            color: #333;
-            margin: 20px 0;
-            line-height: 1.6;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #2e7d32;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-        }
-
-        .option:hover {
-            border-color: #2e7d32;
-            background: #f1f8e9;
-        }
-
-        .option.selected {
-            border-color: #2e7d32;
-            background: #e8f5e9;
-        }
-
-        .option.correct {
-            border-color: #4caf50;
-            background: #e8f5e9;
-        }
-
-        .option.wrong {
-            border-color: #f44336;
-            background: #ffebee;
-        }
-
-        .option-marker {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-weight: bold;
-            color: #666;
-            flex-shrink: 0;
-        }
-
-        .option.selected .option-marker {
-            background: #2e7d32;
-            color: white;
-        }
-
-        .option.correct .option-marker {
-            background: #4caf50;
-            color: white;
-        }
-
-        .option.wrong .option-marker {
-            background: #f44336;
-            color: white;
-        }
-
-        .fill-blank-input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.2em;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            margin: 15px 0;
-            transition: all 0.3s ease;
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-        }
-
-        .fill-blank-input:focus {
-            outline: none;
-            border-color: #2e7d32;
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
-        }
-
-        .fill-blank-input.correct {
-            border-color: #4caf50;
-            background: #e8f5e9;
-        }
-
-        .fill-blank-input.wrong {
-            border-color: #f44336;
-            background: #ffebee;
-        }
-
-        .hint-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff8e1;
-            border: 1px solid #ffc107;
-            color: #f57c00;
-            padding: 10px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95em;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-        }
-
-        .hint-btn:hover {
-            background: #fff3cd;
-        }
-
-        .hint-content {
-            display: none;
-            background: #fff8e1;
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 12px;
-            color: #e65100;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-
-        .hint-content.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #2e7d32, #1b5e20);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(27, 94, 32, 0.4);
-        }
-
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .result-card {
-            display: none;
-        }
-
-        .result-card.show {
-            display: block;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .score-display {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .score-number {
-            font-size: 4em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #2e7d32, #1b5e20);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .score-label {
-            font-size: 1.3em;
-            color: #666;
-            margin-top: 10px;
-        }
-
-        .score-message {
-            font-size: 1.1em;
-            margin-top: 15px;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-        }
-
-        .score-message.excellent {
-            background: #e8f5e9;
-            color: #1b5e20;
-        }
-
-        .score-message.good {
-            background: #fff9c4;
-            color: #f57f17;
-        }
-
-        .score-message.keep-trying {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .knowledge-card {
-            background: #e8f5e9;
-            border: 1px solid #a5d6a7;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .knowledge-card h3 {
-            color: #1b5e20;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        .knowledge-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95em;
-        }
-
-        .knowledge-table th {
-            background: #2e7d32;
-            color: white;
-            padding: 10px 15px;
-            text-align: center;
-        }
-
-        .knowledge-table td {
-            padding: 10px 15px;
-            border: 1px solid #c8e6c9;
-            text-align: center;
-        }
-
-        .knowledge-table tr:nth-child(even) td {
-            background: #f1f8e9;
-        }
-
-        .knowledge-table .key-word {
-            font-weight: bold;
-            color: #1b5e20;
-        }
-
-        .history-card {
-            margin-top: 30px;
-        }
-
-        .history-title {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .history-date {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .history-score {
-            font-weight: bold;
-            color: #2e7d32;
-        }
-
-        .clear-history {
-            background: #ff5252;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-top: 15px;
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-        }
-
-        .progress-bar {
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2e7d32, #66bb6a);
-            transition: width 0.3s ease;
-        }
-
-        .legend {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 5px;
-        }
-
-        .legend-color.correct { background: #4caf50; }
-        .legend-color.wrong   { background: #f44336; }
-        .legend-color.hint    { background: #ffc107; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>灏忚僵鑻辫缁冧範</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f0f2f5;color:#222}
+.header{text-align:center;padding:16px 0 8px}
+.header h1{font-size:1.6rem;color:#1a1a2e}
+.header .day-info{font-size:.95rem;color:#666;margin-top:4px}
+.header .topic{font-size:1rem;color:#4A90E2;font-weight:600;margin-top:6px}
+.nav{display:flex;gap:6px;margin:12px 0 16px;flex-wrap:wrap}
+.nav button{flex:1;min-width:calc(33% - 6px);padding:10px 4px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.nav button.active{background:#2E7D32}
+.nav button:active{opacity:.85}
+.card{background:#fff;padding:16px;border-radius:10px;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card b{color:#333}
+.q-stem{font-size:1.05rem;line-height:1.6;margin-bottom:4px}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.opt{padding:10px 12px;border:2px solid #e0e0e0;border-radius:6px;cursor:pointer;font-size:.95rem;transition:all .15s}
+.opt:hover{background:#e8f4ff;border-color:#90caf9}
+.opt.selected{border-color:#4A90E2;background:#e3f0ff;font-weight:600}
+.opt.correct{border-color:#2E7D32;background:#e8f5e9;color:#2E7D32}
+.opt.wrong{border-color:#d32f2f;background:#ffebee;color:#d32f2f}
+input[type=text],textarea{width:100%;padding:10px 12px;margin:6px 0;border:2px solid #4A90E2;border-radius:6px;font-size:1rem;box-sizing:border-box}
+textarea{resize:vertical;min-height:60px}
+.submit-btn{width:100%;padding:14px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;margin-top:16px;cursor:pointer;transition:background .2s}
+.submit-btn:hover{background:#357ABD}
+.submit-btn:active{background:#2E6DAA}
+.result-banner{text-align:center;padding:20px;border-radius:10px;margin:12px 0;font-size:1.1rem;font-weight:700}
+.result-banner.good{background:#e8f5e9;color:#2E7D32;border:2px solid #a5d6a7}
+.result-banner.ok{background:#fff3e0;color:#e65100;border:2px solid #ffcc80}
+.result-banner.bad{background:#ffebee;color:#c62828;border:2px solid #ef9a9a}
+.explanation{font-size:.88rem;color:#666;margin-top:6px;padding:8px 10px;background:#f9f9f9;border-radius:6px;display:none}
+.explanation.show{display:block}
+.cloze-sentence{font-size:1.05rem;line-height:1.8}
+.cloze-passage{font-size:1.05rem;line-height:2}
+.cloze-hint{font-size:.85rem;color:#888;margin-top:2px}
+.cloze-input{display:inline-block;width:100px;padding:6px 10px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2;background:transparent;font-size:1rem;text-align:center;outline:none}
+.cloze-input:focus{border-bottom-color:#2E7D32}
+.cloze-input.correct{border-bottom-color:#2E7D32;color:#2E7D32;font-weight:700}
+.cloze-input.wrong{border-bottom-color:#d32f2f;color:#d32f2f}
+.trans-zh{font-size:1.1rem;color:#333;margin-bottom:6px}
+.trans-hint{font-size:.85rem;color:#999;margin-bottom:4px}
+.history-item{background:#fff;padding:14px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.history-item .h-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.history-item .h-type{font-weight:700;color:#4A90E2;text-transform:uppercase;font-size:.9rem}
+.history-item .h-score{font-weight:700;font-size:1.1rem}
+.history-item .h-score.perfect{color:#2E7D32}
+.history-item .h-score.partial{color:#e65100}
+.history-item .h-time{font-size:.82rem;color:#999}
+.history-item .h-wrong{margin-top:8px;padding:10px;background:#ffebee;border-radius:6px;font-size:.9rem}
+.history-item .h-wrong-item{margin:4px 0;color:#c62828}
+.history-item .h-wrong-item .h-correct{color:#2E7D32;font-weight:600}
+.clear-btn{display:block;margin:20px auto 0;padding:8px 20px;background:#eee;color:#999;border:none;border-radius:6px;font-size:.85rem;cursor:pointer}
+.clear-btn:hover{background:#ddd;color:#666}
+.empty-state{text-align:center;padding:40px 20px;color:#999}
+.empty-state .icon{font-size:2.5rem;margin-bottom:10px}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>&#x1F4DA; 小升初英语练习</h1>
-            <p>Day 2：few / a few / little / a little（巩固练习）</p>
-        </div>
 
-        <!-- 知识点速记 -->
-        <div class="card">
-            <div class="knowledge-card">
-                <h3>&#x1F4D6; 知识点速记</h3>
-                <table class="knowledge-table">
-                    <tr>
-                        <th>词语</th>
-                        <th>修饰名词类型</th>
-                        <th>含义</th>
-                        <th>记忆口诀</th>
-                    </tr>
-                    <tr>
-                        <td class="key-word">few</td>
-                        <td>可数名词（复数）</td>
-                        <td>几乎没有（否定）</td>
-                        <td>few = 很少，令人担心</td>
-                    </tr>
-                    <tr>
-                        <td class="key-word">a few</td>
-                        <td>可数名词（复数）</td>
-                        <td>有一些（肯定）</td>
-                        <td>a few = 有几个，还不错</td>
-                    </tr>
-                    <tr>
-                        <td class="key-word">little</td>
-                        <td>不可数名词</td>
-                        <td>几乎没有（否定）</td>
-                        <td>little = 太少了，不够用</td>
-                    </tr>
-                    <tr>
-                        <td class="key-word">a little</td>
-                        <td>不可数名词</td>
-                        <td>有一点（肯定）</td>
-                        <td>a little = 有一点，够用了</td>
-                    </tr>
-                </table>
-            </div>
+<div class="header">
+    <h1>灏忚僵鑻辫缁冧範</h1>
+    <div class="day-info" id="dayInfo"></div>
+    <div class="topic" id="topicInfo"></div>
+</div>
 
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-            </div>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color correct"></div>
-                    <span>回答正确</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color wrong"></div>
-                    <span>回答错误</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color hint"></div>
-                    <span>点击查看提示</span>
-                </div>
-            </div>
-        </div>
+<div class="nav" style="flex-wrap:wrap">
+    <button id="btn-quiz" onclick="show('quiz')">閫夋嫨棰?/button>
+    <button id="btn-cloze" onclick="show('cloze')">瀹屽舰濉┖</button>
+    <button id="btn-trans" onclick="show('trans')">缈昏瘧棰?/button>
+    <button id="btn-history" onclick="show('history')">鍘嗗彶璁板綍</button>
+    <button id="btn-listening" onclick="show('listening')">鍚姏</button>
+    <button id="btn-writing" onclick="show('writing')">浣滄枃</button>
+    <button id="btn-days" onclick="show('days')">鍘嗗彶棰樼洰</button>
+</div>
 
-        <div id="questionsContainer"></div>
+<div id="content"></div>
 
-        <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">提交答案</button>
+<script>
+// ==================== CONFIG ====================
+var START_DATE = new Date('2026-03-23');
 
-        <div class="card result-card" id="resultCard">
-            <div class="score-display">
-                <div class="score-number" id="scoreNumber">0/8</div>
-                <div class="score-label">你的得分</div>
-                <div class="score-message" id="scoreMessage"></div>
-            </div>
-        </div>
-
-        <div class="card history-card">
-            <div class="history-title">&#x1F4CB; 练习历史记录</div>
-            <div class="history-list" id="historyList"></div>
-            <button class="clear-history" onclick="clearHistory()">清除历史记录</button>
-        </div>
-    </div>
-
-    <script>
-        const STORAGE_KEY = 'englishPracticeDay2History_v1';
-
-        const questions = [
+// ==================== DAY DATA ====================
+var ALL_DAYS = {
+    1: {
+        title: 'There be 鍙ュ瀷',
+        topic: 'There is / There are 杩囧幓寮?,
+        rule: 'There is + 鍗曟暟鍚嶈瘝/涓嶅彲鏁板悕璇峔nThere are + 澶嶆暟鍚嶈瘝\n杩囧幓寮? There was / There were\n鏃堕棿鐘惰: yesterday, last week, 2 years ago',
+        questions: [
             {
-                type: "choice",
-                question: "Tom only has _____ money in his pocket. He can't buy that toy.",
-                options: ["few", "a few", "little", "a little"],
-                correct: "little",
-                hint: "money（钱）是不可数名词，用 little 或 a little。句子说「他买不起那个玩具」，说明钱很少，表示否定（几乎没有），用 little。"
+                stem: 'There _____ a book on the table.',
+                opts: ['is', 'are', 'was', 'were'],
+                ans: 0,
+                exp: 'a book鏄崟鏁帮紝鐢╥s'
             },
             {
-                type: "choice",
-                question: "There are _____ chairs in the room. Everyone can sit down.",
-                options: ["few", "a few", "little", "a little"],
-                correct: "a few",
-                hint: "chairs（椅子）是可数名词复数，用 few 或 a few。句子说「每个人都能坐下」，说明椅子足够，表示肯定（有一些），用 a few。"
+                stem: 'There _____ some books on the desk.',
+                opts: ['is', 'are', 'was', 'were'],
+                ans: 1,
+                exp: 'some books鏄鏁帮紝鐢╝re'
             },
             {
-                type: "choice",
-                question: "She has _____ friends here. She feels very lonely.",
-                options: ["few", "a few", "little", "a little"],
-                correct: "few",
-                hint: "friends（朋友）是可数名词复数，用 few 或 a few。句子说她「感到很孤独」，说明朋友极少，表示否定（几乎没有），用 few。"
+                stem: 'There _____ a cat under the bed yesterday.',
+                opts: ['is', 'are', 'was', 'were'],
+                ans: 2,
+                exp: 'yesterday琛ㄧず杩囧幓锛岀敤was'
             },
             {
-                type: "choice",
-                question: "Can I have _____ sugar in my tea? Just a tiny bit.",
-                options: ["few", "a few", "little", "a little"],
-                correct: "a little",
-                hint: "sugar（糖）是不可数名词，用 little 或 a little。说话人想要「一点点」糖，表示肯定（需要一点），用 a little。"
+                stem: 'There _____ many birds in the tree last week.',
+                opts: ['is', 'are', 'was', 'were'],
+                ans: 3,
+                exp: 'birds鏄鏁帮紝last week琛ㄧず杩囧幓锛岀敤were'
             },
             {
-                type: "choice",
-                question: "_____ children know how to cook. They always need help in the kitchen.",
-                options: ["Few", "A few", "Little", "A little"],
-                correct: "Few",
-                hint: "children（孩子）是可数名词复数，用 few 或 a few。句子说他们「总是需要帮助」，说明会做饭的孩子极少，表示否定（几乎没有），用 Few（句首大写）。"
+                stem: '_____ there any milk in the fridge?',
+                opts: ['Is', 'Are', 'Was', 'Were'],
+                ans: 1,
+                exp: 'milk鏄笉鍙暟锛屼絾鐤戦棶鍙ョ敤are'
             },
             {
-                type: "fill",
-                question: "I can speak _____ Japanese. I learned it for two months. （一点，不可数）",
-                correct: "a little",
-                hint: "Japanese（日语）是语言，属于不可数名词。括号提示「一点」且表示肯定（会说一点），填 a little。"
-            },
-            {
-                type: "fill",
-                question: "There are _____ eggs left in the fridge. We should go shopping. （几乎没有，可数）",
-                correct: "few",
-                hint: "eggs（鸡蛋）是可数名词复数。括号提示「几乎没有」且需要去购物，表示否定，填 few。"
-            },
-            {
-                type: "fill",
-                question: "I have read _____ books about science this year. They are very interesting. （几本，可数，肯定）",
-                correct: "a few",
-                hint: "books（书）是可数名词复数。括号提示「几本」且表示肯定（有几本，很有趣），填 a few。"
+                stem: 'There _____ any students in the classroom.',
+                opts: ['isn\'t', 'aren\'t', 'wasn\'t', 'weren\'t'],
+                ans: 1,
+                exp: 'students鏄鏁帮紝鐢╝ren\'t'
             }
-        ];
+        ],
+        cloze: {
+            passage: 'Yesterday, I _____ to the park. There _____ many people there. There _____ a big lake in the park. There _____ some boats on the water. It _____ a nice day!',
+            blanks: [
+                { answer: 'went', hint: '鍘?..锛堣繃鍘诲紡锛? },
+                { answer: 'were', hint: '鏈?..锛堝鏁帮紝杩囧幓寮忥級' },
+                { answer: 'was', hint: '鏈?..锛堝崟鏁帮紝杩囧幓寮忥級' },
+                { answer: 'were', hint: '鏈?..锛堝鏁帮紝杩囧幓寮忥級' },
+                { answer: 'was', hint: '鏄?..锛堣繃鍘诲紡锛? }
+            ]
+        },
+        translate: [
+            {
+                zh: '妗屽瓙涓婃湁涓€鏀瑪銆?,
+                zhHint: '鍗曟暟鍚嶈瘝锛岀敤There is',
+                answer: 'there is a pen on the table',
+                accept: ['there is a pen on the table']
+            },
+            {
+                zh: '鏄ㄥぉ鏁欏閲屾湁涓€浜涘鐢熴€?,
+                zhHint: '澶嶆暟+杩囧幓寮忥紝鐢═here were',
+                answer: 'there were some students in the classroom yesterday',
+                accept: ['there were some students in the classroom yesterday']
+            },
+            {
+                zh: '鍏洯閲屾湁涓€鍙嫍銆?,
+                zhHint: '鍗曟暟鍚嶈瘝锛岀敤There is',
+                answer: 'there is a dog in the park',
+                accept: ['there is a dog in the park']
+            }
+        ]
+    }
+};
 
-        let userAnswers = {};
-        let submitted = false;
+// ==================== AUTO DAY CALCULATION ====================
+function getCurrentDay() {
+    var urlDay = new URLSearchParams(window.location.search).get('day');
+    if (urlDay) return parseInt(urlDay);
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
+    var diff = Math.floor((today - start) / 86400000);
+    return Math.max(1, diff + 1);
+}
 
-        function renderQuestions() {
-            const container = document.getElementById('questionsContainer');
-            container.innerHTML = '';
+var DAY = getCurrentDay();
+var DATA = ALL_DAYS[DAY] || null;
 
-            questions.forEach((q, index) => {
-                const card = document.createElement('div');
-                card.className = 'card question-card' + (q.type === 'fill' ? ' fill-blank' : '');
+// ==================== HEADER ====================
+document.getElementById('dayInfo').textContent = 'Day ' + DAY + '  \u2022  ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+document.getElementById('topicInfo').textContent = DATA ? DATA.topic : 'No content for today';
 
-                let html = `
-                    <div class="question-number">第 ${index + 1} 题</div>
-                    <span class="question-type">${q.type === 'choice' ? '选择题' : '填空题'}</span>
-                    <div class="question-text">${q.question}</div>
-                `;
+// ==================== STATE ====================
+var quizAnswers = {};
+var quizSubmitted = false;
 
-                if (q.type === 'choice') {
-                    html += `<div class="options" id="options-${index}">`;
-                    q.options.forEach((option, optIndex) => {
-                        const letter = String.fromCharCode(65 + optIndex);
-                        html += `
-                            <div class="option" onclick="selectOption(${index}, '${option}', this)">
-                                <div class="option-marker">${letter}</div>
-                                <span>${option}</span>
-                            </div>
-                        `;
-                    });
-                    html += `</div>`;
-                } else {
-                    html += `
-                        <input type="text" class="fill-blank-input" id="fill-${index}"
-                               placeholder="请填写答案（few / a few / little / a little）..."
-                               oninput="saveFillAnswer(${index}, this.value)">
-                    `;
-                }
+// ==================== SHOW TAB ====================
+function show(tab) {
+    document.querySelectorAll('.nav button').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('btn-' + tab).classList.add('active');
+    var el = document.getElementById('content');
+    if (tab === 'days') {
+        renderDays(el);
+        return;
+    }
+    if (tab === 'listening') {
+        renderListening(el);
+        return;
+    }
+    if (tab === 'writing') {
+        renderWriting(el);
+        return;
+    }
+    if (!DATA) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">馃摎</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
+        return;
+    }
+    if (tab === 'quiz') renderQuiz(el);
+    else if (tab === 'cloze') renderCloze(el);
+    else if (tab === 'trans') renderTranslate(el);
+    else if (tab === 'history') renderHistory(el);
+}
 
-                html += `
-                    <button class="hint-btn" id="hintBtn-${index}" onclick="toggleHint(${index})">
-                        &#x1F4A1; 查看提示
-                    </button>
-                    <div class="hint-content" id="hint-${index}">
-                        ${q.hint}
-                    </div>
-                `;
+// ==================== QUIZ TAB ====================
+function renderQuiz(el) {
+    var qs = DATA.questions;
+    var html = '';
+    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
+    html += '<b>馃摉 璇硶瑙勫垯</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
+    for (var i = 0; i < qs.length; i++) {
+        var q = qs[i];
+        html += '<div class="card"><div class="q-stem"><b>绗? + (i+1) + '棰?</b> ' + q.stem + '</div>';
+        html += '<div class="opt-grid">';
+        for (var j = 0; j < q.opts.length; j++) {
+            var cls = 'opt';
+            if (quizSubmitted) {
+                if (j === q.ans) cls += ' correct';
+                else if (quizAnswers[i] === j) cls += ' wrong';
+            } else if (quizAnswers[i] === j) {
+                cls += ' selected';
+            }
+            html += '<div class="' + cls + '" data-q="' + i + '" data-o="' + j + '" onclick="pickQuiz(' + i + ',' + j + ')">' + String.fromCharCode(65+j) + '. ' + q.opts[j] + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="explanation' + (quizSubmitted ? ' show' : '') + '" id="exp' + i + '">' + q.exp + '</div>';
+        html += '</div>';
+    }
+    if (!quizSubmitted) {
+        html += '<button class="submit-btn" onclick="submitQuiz()">鎻愪氦绛旀</button>';
+    }
+    el.innerHTML = html;
+}
 
-                card.innerHTML = html;
-                container.appendChild(card);
+function pickQuiz(qi, oi) {
+    if (quizSubmitted) return;
+    quizAnswers[qi] = oi;
+    show('quiz');
+}
+
+function submitQuiz() {
+    if (!DATA) return;
+    var qs = DATA.questions;
+    var unanswered = 0;
+    for (var i = 0; i < qs.length; i++) {
+        if (quizAnswers[i] === undefined) unanswered++;
+    }
+    if (unanswered > 0 && !confirm('杩樻湁 ' + unanswered + ' 閬撻鏈綔绛旓紝纭畾瑕佹彁浜ゅ悧锛?)) return;
+
+    quizSubmitted = true;
+    var score = 0;
+    var wrongList = [];
+    for (var i = 0; i < qs.length; i++) {
+        if (quizAnswers[i] === qs[i].ans) {
+            score++;
+        } else {
+            wrongList.push({
+                n: i + 1,
+                ans: quizAnswers[i] !== undefined ? String.fromCharCode(65 + quizAnswers[i]) + '. ' + qs[i].opts[quizAnswers[i]] : 'no answer',
+                correct: String.fromCharCode(65 + qs[i].ans) + '. ' + qs[i].opts[qs[i].ans],
+                hint: qs[i].exp
             });
-
-            loadHistoryDisplay();
         }
+    }
+    var total = qs.length;
+    saveRecord('quiz', score, total, wrongList);
+    show('quiz');
+    var pct = score / total;
+    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
+    var banner = '<div class="result-banner ' + cls + '">閫夋嫨棰樺緱鍒? ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '') + '</div>';
+    document.getElementById('content').insertAdjacentHTML('afterbegin', banner);
+}
 
-        function selectOption(qIndex, option, element) {
-            if (submitted) return;
-            const options = document.querySelectorAll(`#options-${qIndex} .option`);
-            options.forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            userAnswers[qIndex] = option;
+// ==================== CLOZE TAB ====================
+function renderCloze(el) {
+    var cs = DATA.cloze;
+    if (!cs || !cs.passage || !cs.blanks || cs.blanks.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">馃摑</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
+        return;
+    }
+    var html = '';
+    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
+    html += '<b>馃摑 瀹屽舰濉┖</b><p style="margin-top:6px;font-size:.9rem;color:#555">闃呰鐭枃锛屽～鍐欓€傚綋鐨勫崟璇?/p></div>';
+    html += '<div class="card">';
+    html += '<div class="cloze-passage" style="font-size:1.05rem;line-height:2">';
+    var parts = cs.passage.split('_____');
+    for (var i = 0; i < parts.length; i++) {
+        html += '<span>' + parts[i] + '</span>';
+        if (i < cs.blanks.length) {
+            html += '<input type="text" class="cloze-input" id="cloze' + i + '" placeholder="?" autocomplete="off" spellcheck="false">';
         }
+    }
+    html += '</div>';
+    html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
+    html += '<b style="font-size:.9rem;color:#666">馃挕 鎻愮ず:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
+    for (var i = 0; i < cs.blanks.length; i++) {
+        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>绗? + (i+1) + '绌?</b> ' + cs.blanks[i].hint + '</div>';
+    }
+    html += '</div></div></div>';
+    html += '<button class="submit-btn" onclick="submitCloze()">鎻愪氦绛旀</button>';
+    el.innerHTML = html;
+}
 
-        function saveFillAnswer(qIndex, value) {
-            if (submitted) return;
-            userAnswers[qIndex] = value.trim().toLowerCase();
-        }
-
-        function toggleHint(index) {
-            const hint = document.getElementById(`hint-${index}`);
-            hint.classList.toggle('show');
-        }
-
-        function submitAnswers() {
-            if (submitted) return;
-
-            let correctCount = 0;
-
-            questions.forEach((q, index) => {
-                const userAnswer = (userAnswers[index] || '').toLowerCase();
-                const correctLower = q.correct.toLowerCase();
-                const isCorrect = userAnswer === correctLower;
-
-                if (isCorrect) correctCount++;
-
-                if (q.type === 'choice') {
-                    const options = document.querySelectorAll(`#options-${index} .option`);
-                    options.forEach(opt => {
-                        const optText = opt.querySelector('span').textContent;
-                        if (optText.toLowerCase() === correctLower) {
-                            opt.classList.add('correct');
-                        } else if (opt.classList.contains('selected') && !isCorrect) {
-                            opt.classList.add('wrong');
-                        }
-                        opt.style.pointerEvents = 'none';
-                    });
-                } else {
-                    const input = document.getElementById(`fill-${index}`);
-                    input.classList.add(isCorrect ? 'correct' : 'wrong');
-                    input.disabled = true;
-                    if (!isCorrect) {
-                        const displayVal = input.value.trim() || '（未作答）';
-                        input.value = displayVal + '  ✗ 正确答案：' + q.correct;
-                    }
-                }
-
-                if (!isCorrect) {
-                    document.getElementById(`hint-${index}`).classList.add('show');
-                }
+function submitCloze() {
+    if (!DATA || !DATA.cloze || !DATA.cloze.blanks) return;
+    var cs = DATA.cloze;
+    var blanks = cs.blanks;
+    var score = 0;
+    var wrongList = [];
+    for (var i = 0; i < blanks.length; i++) {
+        var input = document.getElementById('cloze' + i);
+        var userAns = input.value.trim().toLowerCase();
+        var correct = blanks[i].answer.toLowerCase();
+        if (userAns === correct) {
+            score++;
+            input.classList.add('correct');
+        } else {
+            input.classList.add('wrong');
+            wrongList.push({
+                n: i + 1,
+                ans: input.value.trim() || 'no answer',
+                correct: blanks[i].answer,
+                hint: blanks[i].hint
             });
+        }
+    }
+    var total = blanks.length;
+    saveRecord('cloze', score, total, wrongList);
+    var pct = score / total;
+    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
+    var btns = document.querySelectorAll('.submit-btn');
+    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
+    var banner = document.createElement('div');
+    banner.className = 'result-banner ' + cls;
+    banner.textContent = '瀹屽舰濉┖寰楀垎: ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '');
+    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
+}
 
-            document.querySelectorAll('.hint-btn').forEach(btn => btn.disabled = true);
+// ==================== TRANSLATE TAB ====================
+function renderTranslate(el) {
+    var ts = DATA.translate;
+    if (!ts || ts.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">馃敜</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
+        return;
+    }
+    var html = '';
+    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
+    html += '<b>馃敜 涓瘧鑻?/b><p style="margin-top:6px;font-size:.9rem;color:#555">灏嗕腑鏂囩炕璇戞垚鑻辨枃锛屾敞鎰忔嫾鍐欏拰璇硶锛?/p></div>';
+    for (var i = 0; i < ts.length; i++) {
+        var t = ts[i];
+        html += '<div class="card">';
+        html += '<div class="trans-zh"><b>绗? + (i+1) + '棰?/b> ' + t.zh + '</div>';
+        html += '<div class="trans-hint">馃挕 ' + t.zhHint + '</div>';
+        html += '<textarea id="trans' + i + '" rows="2" placeholder="鍦ㄨ繖閲屽啓鑻辨枃缈昏瘧..."></textarea>';
+        html += '</div>';
+    }
+    html += '<button class="submit-btn" onclick="submitTrans()">鎻愪氦绛旀</button>';
+    el.innerHTML = html;
+}
 
-            const total = questions.length;
-            document.getElementById('scoreNumber').textContent = `${correctCount}/${total}`;
+function submitTrans() {
+    if (!DATA) return;
+    var ts = DATA.translate;
+    var score = 0;
+    var wrongList = [];
+    for (var i = 0; i < ts.length; i++) {
+        var input = document.getElementById('trans' + i);
+        var userAns = input.value.trim().toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
+        var matched = false;
+        var acceptList = ts[i].accept || [ts[i].answer];
+        for (var a = 0; a < acceptList.length; a++) {
+            var expected = acceptList[a].toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
+            if (userAns === expected) { matched = true; break; }
+        }
+        if (matched) {
+            score++;
+            input.style.borderColor = '#2E7D32';
+            input.style.color = '#2E7D32';
+        } else {
+            input.style.borderColor = '#d32f2f';
+            input.style.color = '#d32f2f';
+            var corrDiv = document.createElement('div');
+            corrDiv.style.cssText = 'font-size:.88rem;color:#2E7D32;margin-top:4px;padding:6px 10px;background:#e8f5e9;border-radius:6px';
+            corrDiv.textContent = '鉁?Answer: ' + ts[i].answer;
+            input.parentElement.appendChild(corrDiv);
+            wrongList.push({
+                n: i + 1,
+                ans: input.value.trim() || 'no answer',
+                correct: ts[i].answer,
+                hint: ts[i].zhHint
+            });
+        }
+    }
+    var total = ts.length;
+    saveRecord('translate', score, total, wrongList);
+    var btns = document.querySelectorAll('.submit-btn');
+    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
+    var pct = score / total;
+    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
+    var banner = document.createElement('div');
+    banner.className = 'result-banner ' + cls;
+    banner.textContent = '缈昏瘧棰樺緱鍒? ' + score + ' / ' + total + (pct === 1 ? ' 馃帀 鍏ㄥ!' : '');
+    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
+}
 
-            const msgEl = document.getElementById('scoreMessage');
-            const pct = correctCount / total;
-            if (pct >= 0.875) {
-                msgEl.textContent = '太棒了！你掌握得非常好！继续保持！';
-                msgEl.className = 'score-message excellent';
-            } else if (pct >= 0.625) {
-                msgEl.textContent = '不错！再仔细看看错题的提示，你会更好！';
-                msgEl.className = 'score-message good';
-            } else {
-                msgEl.textContent = '继续加油！多看上面的知识点表格，再试一次吧！';
-                msgEl.className = 'score-message keep-trying';
+// ==================== DAYS TAB ====================
+function renderDays(el) {
+    var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
+    html += '<b>馃搮 鍘嗗彶棰樼洰</b><p style="margin-top:6px;font-size:.9rem;color:#555">鐐瑰嚮鏃ユ湡鏌ョ湅鍘嗗彶缁冧範</p></div>';
+    html += '<div class="card"><div class="opt-grid">';
+    for (var i = 1; i <= 30; i++) {
+        var isCurrent = i === DAY;
+        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' 鉁? : '') + '</a>';
+    }
+    html += '</div></div>';
+    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">鈫?杩斿洖浠婂ぉ</a>';
+    el.innerHTML = html;
+}
+
+// ==================== LISTENING TAB ====================
+function renderListening(el) {
+    var html = '<div class="empty-state"><div class="icon">馃帶</div><p>鍚姏缁冧範鍗冲皢鎺ㄥ嚭锛?br>鏁鏈熷緟...</p></div>';
+    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
+    html += '<b>馃摑 鍔熻兘璇存槑:</b>';
+    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
+    html += '<li>鍚煶棰戠墖娈?/li>';
+    html += '<li>鍥炵瓟鍚姏闂</li>';
+    html += '<li>鎻愰珮鍚姏鎶€鑳?/li>';
+    html += '</ul></div>';
+    el.innerHTML = html;
+}
+
+// ==================== WRITING TAB ====================
+function renderWriting(el) {
+    var html = '<div class="empty-state"><div class="icon">鉁嶏笍</div><p>浣滄枃缁冧範鍗冲皢鎺ㄥ嚭锛?br>鏁鏈熷緟...</p></div>';
+    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
+    html += '<b>馃摑 鍔熻兘璇存槑:</b>';
+    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
+    html += '<li>鏍规嵁缁欏畾棰樼洰鍐欎綔鏂?/li>';
+    html += '<li>鑾峰彇AI鎵规敼鍙嶉</li>';
+    html += '<li>鎻愬崌鍐欎綔鑳藉姏</li>';
+    html += '</ul></div>';
+    el.innerHTML = html;
+}
+
+// ==================== HISTORY TAB ====================
+function renderHistory(el) {
+    var history = loadHistory();
+    if (history.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">馃搵</div><p>鏆傛棤缁冧範璁板綍銆?br>瀹屾垚缁冧範鍚庡嵆鍙湪姝ゆ煡鐪嬪巻鍙茶褰曪紒</p></div>';
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < history.length; i++) {
+        var h = history[i];
+        var pct = h.total > 0 ? h.score / h.total : 0;
+        var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
+        var isPerfect = pct === 1;
+        
+        html += '<div class="history-item">';
+        var typeName = h.type === 'quiz' ? '閫夋嫨棰? : h.type === 'cloze' ? '瀹屽舰濉┖' : '缈昏瘧棰?;
+        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 馃帀' : '') + '</span></div>';
+        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">鍒犻櫎</button></div>';
+        
+        if (h.wrongList && h.wrongList.length > 0) {
+            html += '<div class="h-wrong">';
+            html += '<b style="color:#c62828;font-size:.9rem">鉂?閿欓:</b>';
+            for (var j = 0; j < h.wrongList.length; j++) {
+                var w = h.wrongList[j];
+                html += '<div class="h-wrong-item" style="margin-top:8px">';
+                html += '<div><b>绗? + w.n + '棰?</b> ' + escHtml(w.ans) + ' 鈫?<span class="h-correct">' + escHtml(w.correct) + '</span></div>';
+                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">馃挕 ' + escHtml(w.hint) + '</div>';
+                html += '</div>';
             }
-
-            document.getElementById('resultCard').classList.add('show');
-            document.getElementById('submitBtn').disabled = true;
-
-            const progress = (correctCount / total) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-
-            saveToHistory(correctCount, total);
-            submitted = true;
-
-            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+            html += '</div>';
+        } else {
+            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">鉁?澶浜嗭紒鍏ㄩ儴姝ｇ‘锛?/div>';
         }
+        html += '</div>';
+    }
+    html += '<button class="clear-btn" onclick="if(confirm(\'纭畾瑕佹竻绌烘墍鏈夊巻鍙茶褰曞悧锛焅')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">娓呯┖鎵€鏈夊巻鍙茶褰?/button>';
+    el.innerHTML = html;
+}
 
-        function saveToHistory(score, total) {
-            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            const now = new Date().toLocaleString('zh-CN');
-            history.unshift({ date: now, score: score, total: total });
-            if (history.length > 10) history.pop();
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-            loadHistoryDisplay();
-        }
+function deleteRecord(index) {
+    if (!confirm('纭畾瑕佸垹闄よ繖鏉¤褰曞悧锛?)) return;
+    var history = loadHistory();
+    history.splice(index, 1);
+    localStorage.setItem('chunchunHistory', JSON.stringify(history));
+    show('history');
+}
 
-        function loadHistoryDisplay() {
-            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            const list = document.getElementById('historyList');
+// ==================== HISTORY STORAGE ====================
+function loadHistory() {
+    try {
+        var data = localStorage.getItem('chunchunHistory');
+        return data ? JSON.parse(data) : [];
+    } catch(e) { return []; }
+}
 
-            if (history.length === 0) {
-                list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">暂无练习记录</p>';
-                return;
-            }
+function saveRecord(type, score, total, wrongList) {
+    var now = new Date();
+    var record = {
+        type: type,
+        day: DAY,
+        score: score,
+        total: total,
+        date: now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate(),
+        time: pad(now.getHours()) + ':' + pad(now.getMinutes()),
+        wrongList: wrongList
+    };
+    var history = loadHistory();
+    history.unshift(record);
+    if (history.length > 50) history = history.slice(0, 50);
+    localStorage.setItem('chunchunHistory', JSON.stringify(history));
+}
 
-            list.innerHTML = history.map(item => {
-                const pct = item.score / item.total;
-                const color = pct >= 0.875 ? '#2e7d32' : pct >= 0.625 ? '#f57c00' : '#c62828';
-                return `
-                    <div class="history-item">
-                        <span class="history-date">${item.date}</span>
-                        <span class="history-score" style="color:${color}">${item.score}/${item.total}</span>
-                    </div>
-                `;
-            }).join('');
-        }
+// ==================== UTILS ====================
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-        function clearHistory() {
-            if (confirm('确定要清除所有历史记录吗？')) {
-                localStorage.removeItem(STORAGE_KEY);
-                loadHistoryDisplay();
-            }
-        }
-
-        renderQuestions();
-    </script>
+// ==================== INIT ====================
+show('quiz');
+</script>
 </body>
 </html>
+
