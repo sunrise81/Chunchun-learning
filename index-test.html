@@ -280,32 +280,31 @@ var ALL_DAYS = {
                 answer: 'few children came to the party',
                 accept: ['few children came to the party', 'only a few children came to the party']
             }
-        ]
-    },
+        ],
     3: {
         title: "other/another/the other/others 辨析",
-        topic: "other/another/the other/others - other类代词辨析",
-        rule: "【语法规则】\nanother = 泛指另一个（三个以上中任意一个），后接可数名词单数\nother = 其他的（形容词），后接可数名词复数\nthe other = 两者中的另一个，或全部剩余（特指）\nothers = 其他的人/物（代词，不加名词）",
+        topic: "other类代词辨析",
+        rule: "another=泛指另一个 后接可数名词单数 | other=其他的 后接可数名词复数 | the other=两者中的另一个 或全部剩余 | others=其他的人/物 作代词不加名词",
         questions: [
-            {stem:"This is my book. _____ book is on the desk.",opts:["Another","Other","The other","Others"],ans:2,exp:"【解析】这里只有两本书，一本在这里，另一本在桌上。两者中特指"另一个"用the other，且后接名词book，所以选C。Others是代词，不能直接修饰名词。"},
-            {stem:"Some students are playing football, _____ are watching.",opts:["the other","others","another","other"],ans:1,exp:"【解析】全班人数不确定，部分学生在踢球，"其余的学生"泛指观看。others作代词，不加名词，正好符合。the other表示全部剩余且范围确定时使用。"},
-            {stem:"I don't like this pen. Please give me _____ one.",opts:["the other","others","another","other"],ans:2,exp:"【解析】从多支笔中再拿一支，范围不确定，用another（泛指"另一个"）。another后接单数可数名词one，完全符合。the other表示仅剩的那一个。"},
-            {stem:"There are 40 students in our class. 20 are boys, _____ are girls.",opts:["the other","others","another","other"],ans:0,exp:"【解析】班级总人数确定（40人），20人是男生，剩余全部（20人）是女生，范围明确。the other特指全部剩余，此处the other 20省略了数词，选A。"},
-            {stem:"I have two apples. One is red, _____ is green.",opts:["the other","others","another","other"],ans:0,exp:"【解析】只有两个苹果，一个红色，另一个绿色——两者中特指"另一个"，用the other。这是the other最典型的用法：one…, the other…"},
-            {stem:"_____ students in our school study very hard.",opts:["Other","Others","Another","The other"],ans:0,exp:"【解析】other作形容词修饰复数名词students，表示"其他的学生"。Others是代词，不能直接加名词；another只接单数名词；the other表示特定剩余范围。"}
+            {stem:"This is my book. _____ book is on the desk.",opts:["Another","Other","The other","Others"],ans:2,exp:"两本书另一本用the other"},
+            {stem:"Some students are playing, _____ are watching.",opts:["the other","others","another","other"],ans:1,exp:"others=其他的人"},
+            {stem:"I dont like this pen. Give me _____ one.",opts:["the other","others","another","other"],ans:2,exp:"another=再拿一个"},
+            {stem:"40 students, 20 are boys, _____ are girls.",opts:["the other","others","another","other"],ans:0,exp:"the other=剩余全部"},
+            {stem:"Two apples, one red, _____ is green.",opts:["the other","others","another","other"],ans:0,exp:"两者中的另一个"},
+            {stem:"_____ students study hard.",opts:["Other","Others","Another","The other"],ans:0,exp:"Other+复数名词"}
         ],
         cloze: {
-            passage: "I have three pencils. One is broken, _____ works well. I want to buy _____ one. Some pencils are mine, _____ are Lily's.",
+            passage: "I have three pencils. One is broken, _____ works well. I want to buy _____ one. Some are mine, _____ are Lily's.",
             blanks: [
-                {answer:"another",hint:"三支铅笔中，一支坏了，泛指另一支好用的——三者中任意另一个用another（代词用法）"},
-                {answer:"another",hint:"想再买一支（不限定哪支），用another表示泛指的"另一个"，后接单数名词one"},
-                {answer:"others",hint:"部分是我的，其余的（泛指，数量不确定）是Lily的。others作代词，不加名词"}
+                {answer:"another",hint:"三者中任意另一个"},
+                {answer:"another",hint:"泛指再一个"},
+                {answer:"others",hint:"其余的"}
             ]
         },
         translate: [
-            {zh:"另一个人是我的朋友。",zhHint:"another = 泛指另一个（不特定）；person 单数",answer:"Another person is my friend."},
-            {zh:"其他学生都回家了。",zhHint:"the other students = 特指（某群体中）其余全部学生；have gone home 现在完成时",answer:"The other students have gone home."},
-            {zh:"给我另外一个。",zhHint:"give me = 祈使句；another one = 再给一个（泛指）",answer:"Give me another one."}
+            {zh:"另一个人是我的朋友。",zhHint:"another+单数",answer:"Another person is my friend."},
+            {zh:"其他学生都回家了。",zhHint:"the other+复数",answer:"The other students have gone home."},
+            {zh:"给我另外一个。",zhHint:"another one",answer:"Give me another one."}
         ]
     }
 };
