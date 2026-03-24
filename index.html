@@ -87,75 +87,148 @@ var START_DATE = new Date('2026-03-23');
 // ==================== DAY DATA ====================
 var ALL_DAYS = {
     1: {
-        title: 'There be 句型',
-        topic: 'There is / There are 过去式',
-        rule: 'There is + 单数名词/不可数名词\nThere are + 复数名词\n过去式: There was / There were\n时间状语: yesterday, last week, 2 years ago',
+        title: 'few/a few/little/a little',
+        topic: 'few/a few/little/a little - 可数与不可数名词',
+        rule: 'few / a few → 用于可数名词复数\na little / little → 用于不可数名词\n\na few = 一些（肯定含义）\nfew = 几乎没有（否定含义）\na little = 一点点（肯定含义）\nlittle = 几乎没有（否定含义）\n\n✔ a few books, few people\n✔ a little water, little time',
         questions: [
             {
-                stem: 'There _____ a book on the table.',
-                opts: ['is', 'are', 'was', 'were'],
-                ans: 0,
-                exp: 'a book是单数，用is'
-            },
-            {
-                stem: 'There _____ some books on the desk.',
-                opts: ['is', 'are', 'was', 'were'],
+                stem: 'I have _____ friends here, so I never feel lonely.',
+                opts: ['few', 'a few', 'little', 'a little'],
                 ans: 1,
-                exp: 'some books是复数，用are'
+                exp: 'friends是可数名词，含义是肯定（有几个朋友，所以不孤独），用a few'
             },
             {
-                stem: 'There _____ a cat under the bed yesterday.',
-                opts: ['is', 'are', 'was', 'were'],
+                stem: 'She has _____ money left. She can\'t buy anything.',
+                opts: ['few', 'a few', 'little', 'a little'],
                 ans: 2,
-                exp: 'yesterday表示过去，用was'
+                exp: 'money是不可数名词，含义是否定（几乎没有钱），用little'
             },
             {
-                stem: 'There _____ many birds in the tree last week.',
-                opts: ['is', 'are', 'was', 'were'],
+                stem: 'There are _____ cookies on the plate — help yourself!',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 1,
+                exp: 'cookies是可数名词，含义是肯定（有一些饼干，请随意取），用a few'
+            },
+            {
+                stem: 'Can I have _____ sugar in my tea, please?',
+                opts: ['few', 'a few', 'little', 'a little'],
                 ans: 3,
-                exp: 'birds是复数，last week表示过去，用were'
+                exp: 'sugar是不可数名词，含义是肯定（加一点糖），用a little'
             },
             {
-                stem: '_____ there any milk in the fridge?',
-                opts: ['Is', 'Are', 'Was', 'Were'],
-                ans: 1,
-                exp: 'milk是不可数，但疑问句用are'
+                stem: 'There are _____ students in the class today. Most are absent.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 0,
+                exp: 'students是可数名词，含义是否定（几乎没有学生，大多数缺席），用few'
             },
             {
-                stem: 'There _____ any students in the classroom.',
-                opts: ['isn\'t', 'aren\'t', 'wasn\'t', 'weren\'t'],
-                ans: 1,
-                exp: 'students是复数，用aren\'t'
+                stem: 'I have _____ time before class. Let\'s talk quickly.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 3,
+                exp: 'time是不可数名词，含义是肯定（有一点时间可以聊），用a little'
             }
         ],
         cloze: {
-            passage: 'Yesterday, I _____ to the park. There _____ many people there. There _____ a big lake in the park. There _____ some boats on the water. It _____ a nice day!',
+            passage: 'Tom has _____ money in his wallet, so he can buy a snack. But he has _____ time because class starts soon. He sees _____ friends outside the shop. There is _____ milk left at home, so he also buys some. He has _____ choices — he picks chocolate milk.',
             blanks: [
-                { answer: 'went', hint: '去...（过去式）' },
-                { answer: 'were', hint: '有...（复数，过去式）' },
-                { answer: 'was', hint: '有...（单数，过去式）' },
-                { answer: 'were', hint: '有...（复数，过去式）' },
-                { answer: 'was', hint: '是...（过去式）' }
+                { answer: 'a little', hint: '钱（不可数，有一点 → 肯定）' },
+                { answer: 'little', hint: '时间（不可数，几乎没有 → 否定）' },
+                { answer: 'a few', hint: '朋友（可数，有几个 → 肯定）' },
+                { answer: 'little', hint: '牛奶（不可数，几乎没有 → 否定）' },
+                { answer: 'a few', hint: '选择（可数，有几个 → 肯定）' }
             ]
         },
         translate: [
             {
-                zh: '桌子上有一支笔。',
-                zhHint: '单数名词，用There is',
-                answer: 'there is a pen on the table',
-                accept: ['there is a pen on the table']
+                zh: '我有一点时间，我们可以聊聊。',
+                zhHint: '时间是不可数名词，肯定含义，用a little',
+                answer: 'I have a little time so we can chat',
+                accept: ['i have a little time so we can chat', 'i have a little time we can chat']
             },
             {
-                zh: '昨天教室里有一些学生。',
-                zhHint: '复数+过去式，用There were',
-                answer: 'there were some students in the classroom yesterday',
-                accept: ['there were some students in the classroom yesterday']
+                zh: '架子上有几本书。',
+                zhHint: '书是可数名词，肯定含义，用a few',
+                answer: 'there are a few books on the shelf',
+                accept: ['there are a few books on the shelf']
             },
             {
-                zh: '公园里有一只狗。',
-                zhHint: '单数名词，用There is',
-                answer: 'there is a dog in the park',
-                accept: ['there is a dog in the park']
+                zh: '她几乎没有朋友，所以她感到孤独。',
+                zhHint: '朋友是可数名词，否定含义，用few',
+                answer: 'she has few friends so she feels lonely',
+                accept: ['she has few friends so she feels lonely', 'she has few friends and she feels lonely']
+            }
+        ]
+    },
+    2: {
+        title: 'few/a few/little/a little 综合练习',
+        topic: 'few/a few/little/a little - 综合练习',
+        rule: '复习:\nfew + 可数名词复数 = 几乎没有（否定）\na few + 可数名词复数 = 一些（肯定）\nlittle + 不可数名词 = 几乎没有（否定）\na little + 不可数名词 = 一点（肯定）\n\n技巧: 看前后句子的意思来判断是肯定还是否定！',
+        questions: [
+            {
+                stem: 'There is _____ juice in the bottle. Do you want some?',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 3,
+                exp: 'juice是不可数名词，"你想要吗"说明是肯定含义，用a little'
+            },
+            {
+                stem: 'He spoke _____ words and then left the room.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 1,
+                exp: 'words是可数名词，"说了几句话"是肯定含义，用a few'
+            },
+            {
+                stem: 'There is _____ hope. I\'m afraid we cannot fix it.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 2,
+                exp: 'hope是不可数名词，"我们无法修好"说明是否定含义，用little'
+            },
+            {
+                stem: 'She has _____ experience, but she is willing to learn.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 2,
+                exp: 'experience是不可数名词，"但她愿意学"暗示经验不多，用little'
+            },
+            {
+                stem: 'I ate _____ biscuits and drank some tea.',
+                opts: ['few', 'a few', 'little', 'a little'],
+                ans: 1,
+                exp: 'biscuits是可数名词，"吃了几块饼干"是肯定含义，用a few'
+            },
+            {
+                stem: '_____ people know the answer. It\'s a very difficult question.',
+                opts: ['Few', 'A few', 'Little', 'A little'],
+                ans: 0,
+                exp: 'people是可数名词，"这是个难题"说明几乎没有人知道，用Few'
+            }
+        ],
+        cloze: {
+            passage: 'Yesterday I went to the supermarket. I had _____ money, just enough for basic things. I bought _____ apples and _____ rice. There were _____ people in the store — it was almost empty. I had _____ energy left when I got home, so I went straight to bed.',
+            blanks: [
+                { answer: 'a little', hint: '钱（不可数，有一点 → 肯定）' },
+                { answer: 'a few', hint: '苹果（可数，有几个 → 肯定）' },
+                { answer: 'a little', hint: '米（不可数，有一点 → 肯定）' },
+                { answer: 'few', hint: '人（可数，几乎没有 → 否定，接近空荡）' },
+                { answer: 'little', hint: '精力（不可数，几乎没有 → 否定）' }
+            ]
+        },
+        translate: [
+            {
+                zh: '冰箱里几乎没有食物了。',
+                zhHint: '食物food是不可数名词，否定含义，用little',
+                answer: 'there is little food in the fridge',
+                accept: ['there is little food in the fridge', 'there is little food in the refrigerator']
+            },
+            {
+                zh: '他花了一点时间来解决这个问题。',
+                zhHint: '时间是不可数名词，肯定含义，用a little',
+                answer: 'he spent a little time solving the problem',
+                accept: ['he spent a little time solving the problem', 'he spent a little time to solve the problem']
+            },
+            {
+                zh: '只有几个孩子来参加了派对。',
+                zhHint: '孩子children是可数名词，否定含义，用few',
+                answer: 'few children came to the party',
+                accept: ['few children came to the party', 'only a few children came to the party']
             }
         ]
     }
