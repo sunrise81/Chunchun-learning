@@ -1,673 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>����Ӣ����ϰ</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>纯纯英语练习 - Day 3</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f0f2f5;color:#222}
-.header{text-align:center;padding:16px 0 8px}
-.header h1{font-size:1.6rem;color:#1a1a2e}
-.header .day-info{font-size:.95rem;color:#666;margin-top:4px}
-.header .topic{font-size:1rem;color:#4A90E2;font-weight:600;margin-top:6px}
-.nav{display:flex;gap:6px;margin:12px 0 16px;flex-wrap:wrap}
-.nav button{flex:1;min-width:calc(33% - 6px);padding:10px 4px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+body{font-family:-apple-system,Microsoft YaHei,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f0f2f5}
+.header{text-align:center;padding:16px}
+.header h1{color:#1a1a2e;font-size:1.6rem}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.nav button{flex:1;min-width:30%;padding:10px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer}
 .nav button.active{background:#2E7D32}
-.nav button:active{opacity:.85}
 .card{background:#fff;padding:16px;border-radius:10px;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.card b{color:#333}
-.q-stem{font-size:1.05rem;line-height:1.6;margin-bottom:4px}
-.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.opt{padding:10px 12px;border:2px solid #e0e0e0;border-radius:6px;cursor:pointer;font-size:.95rem;transition:all .15s}
-.opt:hover{background:#e8f4ff;border-color:#90caf9}
-.opt.selected{border-color:#4A90E2;background:#e3f0ff;font-weight:600}
-.opt.correct{border-color:#2E7D32;background:#e8f5e9;color:#2E7D32}
-.opt.wrong{border-color:#d32f2f;background:#ffebee;color:#d32f2f}
-input[type=text],textarea{width:100%;padding:10px 12px;margin:6px 0;border:2px solid #4A90E2;border-radius:6px;font-size:1rem;box-sizing:border-box}
-textarea{resize:vertical;min-height:60px}
-.submit-btn{width:100%;padding:14px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;margin-top:16px;cursor:pointer;transition:background .2s}
-.submit-btn:hover{background:#357ABD}
-.submit-btn:active{background:#2E6DAA}
-.result-banner{text-align:center;padding:20px;border-radius:10px;margin:12px 0;font-size:1.1rem;font-weight:700}
-.result-banner.good{background:#e8f5e9;color:#2E7D32;border:2px solid #a5d6a7}
-.result-banner.ok{background:#fff3e0;color:#e65100;border:2px solid #ffcc80}
-.result-banner.bad{background:#ffebee;color:#c62828;border:2px solid #ef9a9a}
-.explanation{font-size:.88rem;color:#666;margin-top:6px;padding:8px 10px;background:#f9f9f9;border-radius:6px;display:none}
-.explanation.show{display:block}
-.cloze-sentence{font-size:1.05rem;line-height:1.8}
-.cloze-passage{font-size:1.05rem;line-height:2}
-.cloze-hint{font-size:.85rem;color:#888;margin-top:2px}
-.cloze-input{display:inline-block;width:100px;padding:6px 10px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2;background:transparent;font-size:1rem;text-align:center;outline:none}
-.cloze-input:focus{border-bottom-color:#2E7D32}
-.cloze-input.correct{border-bottom-color:#2E7D32;color:#2E7D32;font-weight:700}
-.cloze-input.wrong{border-bottom-color:#d32f2f;color:#d32f2f}
-.trans-zh{font-size:1.1rem;color:#333;margin-bottom:6px}
-.trans-hint{font-size:.85rem;color:#999;margin-bottom:4px}
-.history-item{background:#fff;padding:14px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.history-item .h-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.history-item .h-type{font-weight:700;color:#4A90E2;text-transform:uppercase;font-size:.9rem}
-.history-item .h-score{font-weight:700;font-size:1.1rem}
-.history-item .h-score.perfect{color:#2E7D32}
-.history-item .h-score.partial{color:#e65100}
-.history-item .h-time{font-size:.82rem;color:#999}
-.history-item .h-wrong{margin-top:8px;padding:10px;background:#ffebee;border-radius:6px;font-size:.9rem}
-.history-item .h-wrong-item{margin:4px 0;color:#c62828}
-.history-item .h-wrong-item .h-correct{color:#2E7D32;font-weight:600}
-.clear-btn{display:block;margin:20px auto 0;padding:8px 20px;background:#eee;color:#999;border:none;border-radius:6px;font-size:.85rem;cursor:pointer}
-.clear-btn:hover{background:#ddd;color:#666}
-.empty-state{text-align:center;padding:40px 20px;color:#999}
-.empty-state .icon{font-size:2.5rem;margin-bottom:10px}
+.q-stem{font-size:1.05rem;margin-bottom:8px}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{padding:10px;border:2px solid #e0e0e0;border-radius:6px;cursor:pointer}
+.opt:hover{background:#e8f4ff}
+.opt.selected{background:#e3f0ff;border-color:#4A90E2}
+.opt.correct{background:#e8f5e9;border-color:#2E7D32}
+.opt.wrong{background:#ffebee;border-color:#d32f2f}
+.cloze-input{width:100px;padding:6px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2}
+textarea{width:100%;padding:10px;margin:10px 0;border:2px solid #4A90E2;border-radius:6px}
+.submit-btn{width:100%;padding:14px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:17px;margin-top:16px;cursor:pointer}
+.result-banner{text-align:center;padding:20px;border-radius:10px;margin:12px 0}
+.result-banner.good{background:#e8f5e9;color:#2E7D32}
+.result-banner.ok{background:#fff3e0;color:#e65100}
+.result-banner.bad{background:#ffebee;color:#c62828}
+.history-item{background:#fff;padding:14px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2}
+.empty-state{text-align:center;padding:40px;color:#999}
 </style>
 </head>
 <body>
-
 <div class="header">
-    <h1>����Ӣ����ϰ</h1>
-    <div class="day-info" id="dayInfo"></div>
-    <div class="topic" id="topicInfo"></div>
+<h1>纯纯英语练习 - Day 3</h1>
+<p>other/another/the other/others 辨析</p>
 </div>
-
-<div class="nav" style="flex-wrap:wrap">
-    <button id="btn-quiz" onclick="show('quiz')">ѡ����</button>
-    <button id="btn-cloze" onclick="show('cloze')">�������</button>
-    <button id="btn-trans" onclick="show('trans')">������</button>
-    <button id="btn-history" onclick="show('history')">��ʷ��¼</button>
-    <button id="btn-listening" onclick="show('listening')">����</button>
-    <button id="btn-writing" onclick="show('writing')">����</button>
-    <button id="btn-days" onclick="show('days')">��ʷ��Ŀ</button>
+<div class="nav">
+<button id="btn-quiz" class="active" onclick="show('quiz')">选择题</button>
+<button id="btn-cloze" onclick="show('cloze')">完形填空</button>
+<button id="btn-trans" onclick="show('trans')">翻译题</button>
+<button id="btn-history" onclick="show('history')">历史记录</button>
 </div>
-
 <div id="content"></div>
-
 <script>
-// ==================== CONFIG ====================
-var START_DATE = new Date('2026-03-23');
-
-// ==================== GOOGLE SHEET SYNC ====================
+var DAY = 3;
 var FORM_URL = 'https://script.google.com/macros/s/AKfycbzWtC4mccz2RO85GId5hOGOkN9JfmeAUMfTGm9tbLp3OLMqO7O0aJTHP4J5jCfye5qYJw/exec';
-var SHEET_ID = '1M0C0T5kataHNp6C_cXeeuINeq8g_zs2sxi1rW5K_KhU';
-// Replace these with your actual Google Form entry IDs (inspect form source to find them)
-var ENTRY_IDS = { type: "type", day: "day", score: "score", total: "total", date: "date", time: "time", wrong: "wrong", del: "del", rid: "rid" };
 
-function submitToSheet(record, isDelete) {
-    var rid = record.rid || (record.type + '|' + record.day + '|' + record.date + '|' + record.time);
-    var body = new URLSearchParams();
-    body.append(ENTRY_IDS.type,  record.type);
-    body.append(ENTRY_IDS.day,   String(record.day));
-    body.append(ENTRY_IDS.score, String(record.score));
-    body.append(ENTRY_IDS.total, String(record.total));
-    body.append(ENTRY_IDS.date,  record.date);
-    body.append(ENTRY_IDS.time,  record.time);
-    body.append(ENTRY_IDS.wrong, JSON.stringify(record.wrongList || []));
-    body.append(ENTRY_IDS.del,   isDelete ? '1' : '0');
-    body.append(ENTRY_IDS.rid,   rid);
-    fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: body }).catch(function(){});
+var QUESTIONS = [
+  {q:'This is my book. _____ book is on the desk.',a:['Another','Other','The other','Others'],ans:2,exp:'两本书，另一本用The other'},
+  {q:'Some students are playing, _____ are watching.',a:['the other','others','another','other'],ans:1,exp:'others=其他的人'},
+  {q:'I dont like this pen. Give me _____ one.',a:['the other','others','another','other'],ans:2,exp:'another=再拿一个'},
+  {q:'40 students, 20 are boys, _____ are girls.',a:['the other','others','another','other'],ans:0,exp:'the other=剩余全部'},
+  {q:'Two apples, one red, _____ is green.',a:['the other','others','another','other'],ans:0,exp:'两者中的另一个'},
+  {q:'_____ students study hard.',a:['Other','Others','Another','The other'],ans:0,exp:'Other+复数名词'}
+];
+
+var CLOZE = [
+  {a:'another',hint:'三者中任意另一个'},
+  {a:'another',hint:'泛指再一个'},
+  {a:'others',hint:'其余的'}
+];
+
+var TRANS = [
+  {zh:'另一个人是我的朋友。',hint:'another+单数',ans:'Another person is my friend.'},
+  {zh:'其他学生都回家了。',hint:'the other+复数',ans:'The other students have gone home.'},
+  {zh:'给我另外一个。',hint:'another one',ans:'Give me another one.'}
+];
+
+var quizAnswers={}, quizSubmitted=false;
+
+function show(tab){
+  document.querySelectorAll('.nav button').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('btn-'+tab).classList.add('active');
+  var el=document.getElementById('content');
+  if(tab==='quiz')renderQuiz(el);
+  else if(tab==='cloze')renderCloze(el);
+  else if(tab==='trans')renderTrans(el);
+  else if(tab==='history')renderHistory(el);
 }
 
-function loadHistoryFromSheet(callback) {
-    var url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json';
-    fetch(url)
-        .then(function(r) { return r.text(); })
-        .then(function(text) {
-            var json = JSON.parse(text.replace(/^[^\{]*/, '').replace(/\s*\);\s*$/, ''));
-            var rows = json.table && json.table.rows;
-            if (!rows || rows.length === 0) { callback([]); return; }
-            var deleted = {};
-            var records = [];
-            for (var i = 0; i < rows.length; i++) {
-                var c = rows[i].c;
-                if (!c) continue;
-                var v = function(idx) { return c[idx] && c[idx].v != null ? String(c[idx].v) : ''; };
-                // Sheet columns: 0=Timestamp, 1=type, 2=day, 3=score, 4=total, 5=date, 6=time, 7=wrong, 8=del, 9=rid
-                var rid = v(9);
-                if (v(8) === '1') { if (rid) deleted[rid] = true; continue; }
-                var wrongRaw = v(7);
-                var wrongList = [];
-                try { wrongList = JSON.parse(wrongRaw); } catch(e) {}
-                records.push({ type: v(1), day: parseInt(v(2)) || 1, score: parseInt(v(3)) || 0,
-                    total: parseInt(v(4)) || 0, date: v(5), time: v(6), wrongList: wrongList, rid: rid });
-            }
-            records = records.filter(function(r) { return !deleted[r.rid]; });
-            callback(records);
-        })
-        .catch(function() { callback([]); });
+function renderQuiz(el){
+  var html='<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2"><b>语法规则：</b> another=泛指另一个 other=其他的 the other=两者中另一个 others=其他的</div>';
+  for(var i=0;i<QUESTIONS.length;i++){
+    var q=QUESTIONS[i];
+    html+='<div class="card"><div class="q-stem"><b>Q'+(i+1)+'.</b> '+q.q+'</div><div class="opt-grid">';
+    for(var j=0;j<q.a.length;j++){
+      var cls='opt';
+      if(quizSubmitted){if(j===q.ans)cls+=' correct';else if(quizAnswers[i]===j)cls+=' wrong';}
+      else if(quizAnswers[i]===j)cls+=' selected';
+      html+='<div class="'+cls+'" onclick="pickQ('+i+','+j+')">'+(65+j)+'. '+q.a[j]+'</div>';
+    }
+    html+='</div></div>';
+  }
+  if(!quizSubmitted)html+='<button class="submit-btn" onclick="submitQuiz()">提交</button>';
+  el.innerHTML=html;
 }
 
-// ==================== DAY DATA ====================
-var ALL_DAYS = {
-    1: {
-        title: 'few/a few/little/a little',
-        topic: 'few/a few/little/a little - �����벻��������',
-        rule: 'few / a few �� ���ڿ������ʸ���\na little / little �� ���ڲ���������\n\na few = һЩ���϶����壩\nfew = ����û�У��񶨺��壩\na little = һ��㣨�϶����壩\nlittle = ����û�У��񶨺��壩\n\n? a few books, few people\n? a little water, little time',
-        questions: [
-            {
-                stem: 'I have _____ friends here, so I never feel lonely.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 1,
-                exp: 'friends�ǿ������ʣ������ǿ϶����м������ѣ����Բ��¶�������a few'
-            },
-            {
-                stem: 'She has _____ money left. She can\'t buy anything.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 2,
-                exp: 'money�ǲ��������ʣ������Ƿ񶨣�����û��Ǯ������little'
-            },
-            {
-                stem: 'There are _____ cookies on the plate �� help yourself!',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 1,
-                exp: 'cookies�ǿ������ʣ������ǿ϶�����һЩ���ɣ�������ȡ������a few'
-            },
-            {
-                stem: 'Can I have _____ sugar in my tea, please?',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 3,
-                exp: 'sugar�ǲ��������ʣ������ǿ϶�����һ���ǣ�����a little'
-            },
-            {
-                stem: 'There are _____ students in the class today. Most are absent.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 0,
-                exp: 'students�ǿ������ʣ������Ƿ񶨣�����û��ѧ���������ȱϯ������few'
-            },
-            {
-                stem: 'I have _____ time before class. Let\'s talk quickly.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 3,
-                exp: 'time�ǲ��������ʣ������ǿ϶�����һ��ʱ������ģ�����a little'
-            }
-        ],
-        cloze: {
-            passage: 'Tom has _____ money in his wallet, so he can buy a snack. But he has _____ time because class starts soon. He sees _____ friends outside the shop. There is _____ milk left at home, so he also buys some. He has _____ choices �� he picks chocolate milk.',
-            blanks: [
-                { answer: 'a little', hint: 'Ǯ������������һ�� �� �϶���' },
-                { answer: 'little', hint: 'ʱ�䣨������������û�� �� �񶨣�' },
-                { answer: 'a few', hint: '���ѣ��������м��� �� �϶���' },
-                { answer: 'little', hint: 'ţ�̣�������������û�� �� �񶨣�' },
-                { answer: 'a few', hint: 'ѡ�񣨿������м��� �� �϶���' }
-            ]
-        },
-        translate: [
-            {
-                zh: '����һ��ʱ�䣬���ǿ������ġ�',
-                zhHint: 'ʱ���ǲ��������ʣ��϶����壬��a little',
-                answer: 'I have a little time so we can chat',
-                accept: ['i have a little time so we can chat', 'i have a little time we can chat']
-            },
-            {
-                zh: '�������м����顣',
-                zhHint: '���ǿ������ʣ��϶����壬��a few',
-                answer: 'there are a few books on the shelf',
-                accept: ['there are a few books on the shelf']
-            },
-            {
-                zh: '������û�����ѣ��������е��¶���',
-                zhHint: '�����ǿ������ʣ��񶨺��壬��few',
-                answer: 'she has few friends so she feels lonely',
-                accept: ['she has few friends so she feels lonely', 'she has few friends and she feels lonely']
-            }
-        ]
-    },
-    2: {day2����, 3: {day3����}
-        title: 'few/a few/little/a little �ۺ���ϰ',
-        topic: 'few/a few/little/a little - �ۺ���ϰ',
-        rule: '��ϰ:\nfew + �������ʸ��� = ����û�У��񶨣�\na few + �������ʸ��� = һЩ���϶���\nlittle + ���������� = ����û�У��񶨣�\na little + ���������� = һ�㣨�϶���\n\n����: ��ǰ����ӵ���˼���ж��ǿ϶����Ƿ񶨣�',
-        questions: [
-            {
-                stem: 'There is _____ juice in the bottle. Do you want some?',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 3,
-                exp: 'juice�ǲ��������ʣ�"����Ҫ��"˵���ǿ϶����壬��a little'
-            },
-            {
-                stem: 'He spoke _____ words and then left the room.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 1,
-                exp: 'words�ǿ������ʣ�"˵�˼��仰"�ǿ϶����壬��a few'
-            },
-            {
-                stem: 'There is _____ hope. I\'m afraid we cannot fix it.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 2,
-                exp: 'hope�ǲ��������ʣ�"�����޷��޺�"˵���Ƿ񶨺��壬��little'
-            },
-            {
-                stem: 'She has _____ experience, but she is willing to learn.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 2,
-                exp: 'experience�ǲ��������ʣ�"����Ը��ѧ"��ʾ���鲻�࣬��little'
-            },
-            {
-                stem: 'I ate _____ biscuits and drank some tea.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 1,
-                exp: 'biscuits�ǿ������ʣ�"���˼������"�ǿ϶����壬��a few'
-            },
-            {
-                stem: '_____ people know the answer. It\'s a very difficult question.',
-                opts: ['Few', 'A few', 'Little', 'A little'],
-                ans: 0,
-                exp: 'people�ǿ������ʣ�"���Ǹ�����"˵������û����֪������Few'
-            }
-        ],
-        cloze: {
-            passage: 'Yesterday I went to the supermarket. I had _____ money, just enough for basic things. I bought _____ apples and _____ rice. There were _____ people in the store �� it was almost empty. I had _____ energy left when I got home, so I went straight to bed.',
-            blanks: [
-                { answer: 'a little', hint: 'Ǯ������������һ�� �� �϶���' },
-                { answer: 'a few', hint: 'ƻ�����������м��� �� �϶���' },
-                { answer: 'a little', hint: '�ף�����������һ�� �� �϶���' },
-                { answer: 'few', hint: '�ˣ�����������û�� �� �񶨣��ӽ��յ���' },
-                { answer: 'little', hint: '������������������û�� �� �񶨣�' }
-            ]
-        },
-        translate: [
-            {
-                zh: '�����Ｘ��û��ʳ���ˡ�',
-                zhHint: 'ʳ��food�ǲ��������ʣ��񶨺��壬��little',
-                answer: 'there is little food in the fridge',
-                accept: ['there is little food in the fridge', 'there is little food in the refrigerator']
-            },
-            {
-                zh: '������һ��ʱ�������������⡣',
-                zhHint: 'ʱ���ǲ��������ʣ��϶����壬��a little',
-                answer: 'he spent a little time solving the problem',
-                accept: ['he spent a little time solving the problem', 'he spent a little time to solve the problem']
-            },
-            {
-                zh: 'ֻ�м����������μ����ɶԡ�',
-                zhHint: '����children�ǿ������ʣ��񶨺��壬��few',
-                answer: 'few children came to the party',
-                accept: ['few children came to the party', 'only a few children came to the party']
-            }
-        ]
-    }
-};
+function pickQ(i,j){if(quizSubmitted)return;quizAnswers[i]=j;show('quiz');}
 
-// ==================== AUTO DAY CALCULATION ====================
-function getCurrentDay() {
-    var urlDay = new URLSearchParams(window.location.search).get('day');
-    if (urlDay) return parseInt(urlDay);
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    var start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
-    var diff = Math.floor((today - start) / 86400000);
-    return Math.max(1, diff + 1);
+function submitQuiz(){
+  var score=0, wrongs=[];
+  for(var i=0;i<QUESTIONS.length;i++){
+    if(quizAnswers[i]===QUESTIONS[i].ans)score++;else wrongs.push(i+1);
+  }
+  quizSubmitted=true;
+  var pct=score/QUESTIONS.length;
+  var cls=pct>=0.8?'good':pct>=0.5?'ok':'bad';
+  var banner='<div class="result-banner '+cls+'">得分: '+score+'/'+QUESTIONS.length+'</div>';
+  document.getElementById('content').insertAdjacentHTML('afterbegin',banner);
+  saveRecord('quiz',score,QUESTIONS.length,wrongs);
+  show('quiz');
 }
 
-var DAY = getCurrentDay();
-var DATA = ALL_DAYS[DAY] || null;
-
-// ==================== HEADER ====================
-document.getElementById('dayInfo').textContent = 'Day ' + DAY + '  \u2022  ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-document.getElementById('topicInfo').textContent = DATA ? DATA.topic : 'No content for today';
-
-// ==================== STATE ====================
-var quizAnswers = {};
-var quizSubmitted = false;
-
-// ==================== SHOW TAB ====================
-function show(tab) {
-    document.querySelectorAll('.nav button').forEach(function(b) { b.classList.remove('active'); });
-    document.getElementById('btn-' + tab).classList.add('active');
-    var el = document.getElementById('content');
-    if (tab === 'days') {
-        renderDays(el);
-        return;
-    }
-    if (tab === 'listening') {
-        renderListening(el);
-        return;
-    }
-    if (tab === 'writing') {
-        renderWriting(el);
-        return;
-    }
-    if (!DATA) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">??</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
-        return;
-    }
-    if (tab === 'quiz') renderQuiz(el);
-    else if (tab === 'cloze') renderCloze(el);
-    else if (tab === 'trans') renderTranslate(el);
-    else if (tab === 'history') renderHistory(el);
+function renderCloze(el){
+  var html='<div class="card"><p>完形填空：用适当形式填空</p>';
+  var p=['One is broken','I want to buy','Some are Lily'];
+  for(var i=0;i<CLOZE.length;i++){
+    html+='<div>'+p[i]+' <input class="cloze-input" id="c'+i+'" placeholder="?"> '+CLOZE[i].hint+'</div>';
+  }
+  html+='<button class="submit-btn" onclick="submitCloze()">提交</button></div>';
+  el.innerHTML=html;
 }
 
-// ==================== QUIZ TAB ====================
-function renderQuiz(el) {
-    var qs = DATA.questions;
-    var html = '';
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>?? �﷨����</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
-    for (var i = 0; i < qs.length; i++) {
-        var q = qs[i];
-        html += '<div class="card"><div class="q-stem"><b>��' + (i+1) + '��.</b> ' + q.stem + '</div>';
-        html += '<div class="opt-grid">';
-        for (var j = 0; j < q.opts.length; j++) {
-            var cls = 'opt';
-            if (quizSubmitted) {
-                if (j === q.ans) cls += ' correct';
-                else if (quizAnswers[i] === j) cls += ' wrong';
-            } else if (quizAnswers[i] === j) {
-                cls += ' selected';
-            }
-            html += '<div class="' + cls + '" data-q="' + i + '" data-o="' + j + '" onclick="pickQuiz(' + i + ',' + j + ')">' + String.fromCharCode(65+j) + '. ' + q.opts[j] + '</div>';
-        }
-        html += '</div>';
-        html += '<div class="explanation' + (quizSubmitted ? ' show' : '') + '" id="exp' + i + '">' + q.exp + '</div>';
-        html += '</div>';
-    }
-    if (!quizSubmitted) {
-        html += '<button class="submit-btn" onclick="submitQuiz()">�ύ��</button>';
-    }
-    el.innerHTML = html;
+function submitCloze(){
+  var score=0;
+  for(var i=0;i<CLOZE.length;i++){
+    var v=document.getElementById('c'+i).value.trim().toLowerCase();
+    if(v===CLOZE[i].a.toLowerCase())score++;
+  }
+  var cls=score>=2?'good':'ok';
+  document.getElementById('content').insertAdjacentHTML('afterbegin','<div class="result-banner '+cls+'">得分: '+score+'/'+CLOZE.length+'</div>');
+  saveRecord('cloze',score,CLOZE.length,[]);
 }
 
-function pickQuiz(qi, oi) {
-    if (quizSubmitted) return;
-    quizAnswers[qi] = oi;
-    show('quiz');
+function renderTrans(el){
+  var html='<div class="card">';
+  for(var i=0;i<TRANS.length;i++){
+    html+='<div><b>'+(i+1)+'. '+TRANS[i].zh+'</b><p style="color:#888;font-size:.85rem">'+TRANS[i].hint+'</p><textarea id="t'+i+'" rows="2"></textarea></div>';
+  }
+  html+='<button class="submit-btn" onclick="submitTrans()">提交</button></div>';
+  el.innerHTML=html;
 }
 
-function submitQuiz() {
-    if (!DATA) return;
-    var qs = DATA.questions;
-    var unanswered = 0;
-    for (var i = 0; i < qs.length; i++) {
-        if (quizAnswers[i] === undefined) unanswered++;
-    }
-    if (unanswered > 0 && !confirm('���� ' + unanswered + ' ����δ����ȷ��Ҫ�ύ��')) return;
-
-    quizSubmitted = true;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < qs.length; i++) {
-        if (quizAnswers[i] === qs[i].ans) {
-            score++;
-        } else {
-            wrongList.push({
-                n: i + 1,
-                ans: quizAnswers[i] !== undefined ? String.fromCharCode(65 + quizAnswers[i]) + '. ' + qs[i].opts[quizAnswers[i]] : 'no answer',
-                correct: String.fromCharCode(65 + qs[i].ans) + '. ' + qs[i].opts[qs[i].ans],
-                hint: qs[i].exp
-            });
-        }
-    }
-    var total = qs.length;
-    saveRecord('quiz', score, total, wrongList);
-    show('quiz');
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = '<div class="result-banner ' + cls + '">ѡ����÷�: ' + score + ' / ' + total + (pct === 1 ? ' ?? ȫ��!' : '') + '</div>';
-    document.getElementById('content').insertAdjacentHTML('afterbegin', banner);
+function submitTrans(){
+  saveRecord('translate',0,TRANS.length,[]);
+  document.getElementById('content').insertAdjacentHTML('afterbegin','<div class="result-banner ok">已提交</div>');
 }
 
-// ==================== CLOZE TAB ====================
-function renderCloze(el) {
-    var cs = DATA.cloze;
-    if (!cs || !cs.passage || !cs.blanks || cs.blanks.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">??</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
-        return;
-    }
-    var html = '';
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>?? �������</b><p style="margin-top:6px;font-size:.9rem;color:#555">�Ķ����ģ���д�ʵ��ĵ���</p></div>';
-    html += '<div class="card">';
-    html += '<div class="cloze-passage" style="font-size:1.05rem;line-height:2">';
-    var parts = cs.passage.split('_____');
-    for (var i = 0; i < parts.length; i++) {
-        html += '<span>' + parts[i] + '</span>';
-        if (i < cs.blanks.length) {
-            html += '<input type="text" class="cloze-input" id="cloze' + i + '" placeholder="?" autocomplete="off" spellcheck="false">';
-        }
-    }
-    html += '</div>';
-    html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
-    html += '<b style="font-size:.9rem;color:#666">?? ��ʾ:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
-    for (var i = 0; i < cs.blanks.length; i++) {
-        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>��' + (i+1) + '��:</b> ' + cs.blanks[i].hint + '</div>';
-    }
-    html += '</div></div></div>';
-    html += '<button class="submit-btn" onclick="submitCloze()">�ύ��</button>';
-    el.innerHTML = html;
+function saveRecord(type,score,total,wrongs){
+  var now=new Date();
+  var record={type:type,day:DAY,score:score,total:total,date:now.toLocaleDateString(),time:now.getHours()+':'+now.getMinutes(),wrongList:wrongs};
+  var h=JSON.parse(localStorage.getItem('chunchunHistory')||'[]');
+  h.unshift(record);
+  localStorage.setItem('chunchunHistory',JSON.stringify(h.slice(0,50)));
+  var body=new URLSearchParams();
+  body.append('date',record.date);
+  body.append('answers',JSON.stringify(record));
+  body.append('score',score+'/'+total);
+  fetch(FORM_URL,{method:'POST',mode:'no-cors',body:body}).catch(function(){});
 }
 
-function submitCloze() {
-    if (!DATA || !DATA.cloze || !DATA.cloze.blanks) return;
-    var cs = DATA.cloze;
-    var blanks = cs.blanks;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < blanks.length; i++) {
-        var input = document.getElementById('cloze' + i);
-        var userAns = input.value.trim().toLowerCase();
-        var correct = blanks[i].answer.toLowerCase();
-        if (userAns === correct) {
-            score++;
-            input.classList.add('correct');
-        } else {
-            input.classList.add('wrong');
-            wrongList.push({
-                n: i + 1,
-                ans: input.value.trim() || 'no answer',
-                correct: blanks[i].answer,
-                hint: blanks[i].hint
-            });
-        }
-    }
-    var total = blanks.length;
-    saveRecord('cloze', score, total, wrongList);
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var btns = document.querySelectorAll('.submit-btn');
-    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
-    var banner = document.createElement('div');
-    banner.className = 'result-banner ' + cls;
-    banner.textContent = '������յ÷�: ' + score + ' / ' + total + (pct === 1 ? ' ?? ȫ��!' : '');
-    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
+function renderHistory(el){
+  var h=JSON.parse(localStorage.getItem('chunchunHistory')||'[]');
+  if(h.length===0){el.innerHTML='<div class="empty-state">暂无历史记录</div>';return;}
+  var html='';
+  for(var i=0;i<h.length;i++){
+    html+='<div class="history-item"><b>'+h[i].type+'</b> '+h[i].score+'/'+h[i].total+' <span style="color:#888">'+h[i].date+'</span></div>';
+  }
+  el.innerHTML=html;
 }
 
-// ==================== TRANSLATE TAB ====================
-function renderTranslate(el) {
-    var ts = DATA.translate;
-    if (!ts || ts.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">??</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
-        return;
-    }
-    var html = '';
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>?? ����Ӣ</b><p style="margin-top:6px;font-size:.9rem;color:#555">�����ķ����Ӣ�ģ�ע��ƴд���﷨��</p></div>';
-    for (var i = 0; i < ts.length; i++) {
-        var t = ts[i];
-        html += '<div class="card">';
-        html += '<div class="trans-zh"><b>��' + (i+1) + '��</b> ' + t.zh + '</div>';
-        html += '<div class="trans-hint">?? ' + t.zhHint + '</div>';
-        html += '<textarea id="trans' + i + '" rows="2" placeholder="������дӢ�ķ���..."></textarea>';
-        html += '</div>';
-    }
-    html += '<button class="submit-btn" onclick="submitTrans()">�ύ��</button>';
-    el.innerHTML = html;
-}
-
-function submitTrans() {
-    if (!DATA) return;
-    var ts = DATA.translate;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < ts.length; i++) {
-        var input = document.getElementById('trans' + i);
-        var userAns = input.value.trim().toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
-        var matched = false;
-        var acceptList = ts[i].accept || [ts[i].answer];
-        for (var a = 0; a < acceptList.length; a++) {
-            var expected = acceptList[a].toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
-            if (userAns === expected) { matched = true; break; }
-        }
-        if (matched) {
-            score++;
-            input.style.borderColor = '#2E7D32';
-            input.style.color = '#2E7D32';
-        } else {
-            input.style.borderColor = '#d32f2f';
-            input.style.color = '#d32f2f';
-            var corrDiv = document.createElement('div');
-            corrDiv.style.cssText = 'font-size:.88rem;color:#2E7D32;margin-top:4px;padding:6px 10px;background:#e8f5e9;border-radius:6px';
-            corrDiv.textContent = '? Answer: ' + ts[i].answer;
-            input.parentElement.appendChild(corrDiv);
-            wrongList.push({
-                n: i + 1,
-                ans: input.value.trim() || 'no answer',
-                correct: ts[i].answer,
-                hint: ts[i].zhHint
-            });
-        }
-    }
-    var total = ts.length;
-    saveRecord('translate', score, total, wrongList);
-    var btns = document.querySelectorAll('.submit-btn');
-    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = document.createElement('div');
-    banner.className = 'result-banner ' + cls;
-    banner.textContent = '������÷�: ' + score + ' / ' + total + (pct === 1 ? ' ?? ȫ��!' : '');
-    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
-}
-
-// ==================== DAYS TAB ====================
-function renderDays(el) {
-    var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>?? ��ʷ��Ŀ</b><p style="margin-top:6px;font-size:.9rem;color:#555">������ڲ鿴��ʷ��ϰ</p></div>';
-    html += '<div class="card"><div class="opt-grid">';
-    for (var i = 1; i <= 30; i++) {
-        var isCurrent = i === DAY;
-        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ?' : '') + '</a>';
-    }
-    html += '</div></div>';
-    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">�� ���ؽ���</a>';
-    el.innerHTML = html;
-}
-
-// ==================== LISTENING TAB ====================
-function renderListening(el) {
-    var html = '<div class="empty-state"><div class="icon">??</div><p>������ϰ�����Ƴ���<br>�����ڴ�...</p></div>';
-    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>?? ����˵��:</b>';
-    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>����ƵƬ��</li>';
-    html += '<li>�ش���������</li>';
-    html += '<li>�����������</li>';
-    html += '</ul></div>';
-    el.innerHTML = html;
-}
-
-// ==================== WRITING TAB ====================
-function renderWriting(el) {
-    var html = '<div class="empty-state"><div class="icon">??</div><p>������ϰ�����Ƴ���<br>�����ڴ�...</p></div>';
-    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>?? ����˵��:</b>';
-    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>���ݸ�����Ŀд����</li>';
-    html += '<li>��ȡAI���ķ���</li>';
-    html += '<li>����д������</li>';
-    html += '</ul></div>';
-    el.innerHTML = html;
-}
-
-// ==================== HISTORY TAB ====================
-function renderHistory(el) {
-    var history = loadHistory();
-    if (history.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">??</div><p>������ϰ��¼��<br>�����ϰ�󼴿��ڴ˲鿴��ʷ��¼��</p></div>';
-        return;
-    }
-    var html = '';
-    for (var i = 0; i < history.length; i++) {
-        var h = history[i];
-        var pct = h.total > 0 ? h.score / h.total : 0;
-        var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
-        var isPerfect = pct === 1;
-        
-        html += '<div class="history-item">';
-        var typeName = h.type === 'quiz' ? 'ѡ����' : h.type === 'cloze' ? '�������' : '������';
-        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' ??' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">ɾ��</button></div>';
-        
-        if (h.wrongList && h.wrongList.length > 0) {
-            html += '<div class="h-wrong">';
-            html += '<b style="color:#c62828;font-size:.9rem">? ����:</b>';
-            for (var j = 0; j < h.wrongList.length; j++) {
-                var w = h.wrongList[j];
-                html += '<div class="h-wrong-item" style="margin-top:8px">';
-                html += '<div><b>��' + w.n + '��:</b> ' + escHtml(w.ans) + ' �� <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
-                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">?? ' + escHtml(w.hint) + '</div>';
-                html += '</div>';
-            }
-            html += '</div>';
-        } else {
-            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">? ̫���ˣ�ȫ����ȷ��</div>';
-        }
-        html += '</div>';
-    }
-    html += '<button class="clear-btn" onclick="if(confirm(\'ȷ��Ҫ���������ʷ��¼��\')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">���������ʷ��¼</button>';
-    el.innerHTML = html;
-}
-
-function deleteRecord(index) {
-    if (!confirm('ȷ��Ҫɾ��������¼��')) return;
-    var history = loadHistory();
-    submitToSheet(history[index], true);
-    history.splice(index, 1);
-    localStorage.setItem('chunchunHistory', JSON.stringify(history));
-    show('history');
-}
-
-// ==================== HISTORY STORAGE ====================
-function loadHistory() {
-    try {
-        var data = localStorage.getItem('chunchunHistory');
-        return data ? JSON.parse(data) : [];
-    } catch(e) { return []; }
-}
-
-function saveRecord(type, score, total, wrongList) {
-    var now = new Date();
-    var record = {
-        type: type,
-        day: DAY,
-        score: score,
-        total: total,
-        date: now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate(),
-        time: pad(now.getHours()) + ':' + pad(now.getMinutes()),
-        wrongList: wrongList,
-        rid: type + '|' + DAY + '|' + now.getTime()
-    };
-    var history = loadHistory();
-    history.unshift(record);
-    if (history.length > 50) history = history.slice(0, 50);
-    localStorage.setItem('chunchunHistory', JSON.stringify(history));
-    submitToSheet(record, false);
-}
-
-// ==================== UTILS ====================
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-function escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-// ==================== INIT ====================
 show('quiz');
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
