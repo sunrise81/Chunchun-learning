@@ -188,7 +188,15 @@ var ALL_DAYS = {
                 { answer: 'a few', hint: '选择（可数，有几个 → 肯定）' }
             ]
         },
-        translate: [
+        translate: [,
+    3: {
+        title: "other/another/the other/others",
+        topic: "other",
+        rule: "another",
+        questions: [],
+        cloze: {},
+        translate: []
+    }
             {
                 zh: '我有一点时间，我们可以聊聊。',
                 zhHint: '时间是不可数名词，肯定含义，用a little',
@@ -261,7 +269,15 @@ var ALL_DAYS = {
                 { answer: 'little', hint: '精力（不可数，几乎没有 → 否定）' }
             ]
         },
-        translate: [
+        translate: [,
+    3: {
+        title: "other/another/the other/others",
+        topic: "other",
+        rule: "another",
+        questions: [],
+        cloze: {},
+        translate: []
+    }
             {
                 zh: '冰箱里几乎没有食物了。',
                 zhHint: '食物food是不可数名词，否定含义，用little',
@@ -280,31 +296,6 @@ var ALL_DAYS = {
                 answer: 'few children came to the party',
                 accept: ['few children came to the party', 'only a few children came to the party']
             }
-        ],
-    3: {
-        title: "other/another/the other/others 辨析",
-        topic: "other类代词辨析",
-        rule: "another=泛指另一个 后接可数名词单数 | other=其他的 后接可数名词复数 | the other=两者中的另一个 或全部剩余 | others=其他的人/物 作代词不加名词",
-        questions: [
-            {stem:"This is my book. _____ book is on the desk.",opts:["Another","Other","The other","Others"],ans:2,exp:"两本书另一本用the other"},
-            {stem:"Some students are playing, _____ are watching.",opts:["the other","others","another","other"],ans:1,exp:"others=其他的人"},
-            {stem:"I dont like this pen. Give me _____ one.",opts:["the other","others","another","other"],ans:2,exp:"another=再拿一个"},
-            {stem:"40 students, 20 are boys, _____ are girls.",opts:["the other","others","another","other"],ans:0,exp:"the other=剩余全部"},
-            {stem:"Two apples, one red, _____ is green.",opts:["the other","others","another","other"],ans:0,exp:"两者中的另一个"},
-            {stem:"_____ students study hard.",opts:["Other","Others","Another","The other"],ans:0,exp:"Other+复数名词"}
-        ],
-        cloze: {
-            passage: "I have three pencils. One is broken, _____ works well. I want to buy _____ one. Some are mine, _____ are Lily's.",
-            blanks: [
-                {answer:"another",hint:"三者中任意另一个"},
-                {answer:"another",hint:"泛指再一个"},
-                {answer:"others",hint:"其余的"}
-            ]
-        },
-        translate: [
-            {zh:"另一个人是我的朋友。",zhHint:"another+单数",answer:"Another person is my friend."},
-            {zh:"其他学生都回家了。",zhHint:"the other+复数",answer:"The other students have gone home."},
-            {zh:"给我另外一个。",zhHint:"another one",answer:"Give me another one."}
         ]
     }
 };
@@ -317,8 +308,11 @@ function getCurrentDay() {
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
     var diff = Math.floor((today - start) / 86400000);
-    return Math.max(1, diff + 1);\n}\n\nvar DAY = getCurrentDay();
-var DAY = getCurrentDay();\nvar DATA = ALL_DAYS[DAY] || null;
+    return Math.max(1, diff + 1);
+}
+
+var DAY = getCurrentDay();
+var DATA = ALL_DAYS[DAY] || null;
 
 // ==================== HEADER ====================
 document.getElementById('dayInfo').textContent = 'Day ' + DAY + '  \u2022  ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
@@ -680,10 +674,6 @@ show('quiz');
 </script>
 </body>
 </html>
-
-
-
-
 
 
 
