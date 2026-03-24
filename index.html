@@ -1,587 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>English Practice</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#f0f2f5;color:#222}
-.header{text-align:center;padding:16px 0 8px}
-.header h1{font-size:1.6rem;color:#1a1a2e}
-.header .day-info{font-size:.95rem;color:#666;margin-top:4px}
-.header .topic{font-size:1rem;color:#4A90E2;font-weight:600;margin-top:6px}
-.nav{display:flex;gap:6px;margin:12px 0 16px;flex-wrap:wrap}
-.nav button{flex:1;min-width:calc(33% - 6px);padding:10px 4px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
-.nav button.active{background:#2E7D32}
-.nav button:active{opacity:.85}
-.card{background:#fff;padding:16px;border-radius:10px;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.card b{color:#333}
-.q-stem{font-size:1.05rem;line-height:1.6;margin-bottom:4px}
-.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.opt{padding:10px 12px;border:2px solid #e0e0e0;border-radius:6px;cursor:pointer;font-size:.95rem;transition:all .15s}
-.opt:hover{background:#e8f4ff;border-color:#90caf9}
-.opt.selected{border-color:#4A90E2;background:#e3f0ff;font-weight:600}
-.opt.correct{border-color:#2E7D32;background:#e8f5e9;color:#2E7D32}
-.opt.wrong{border-color:#d32f2f;background:#ffebee;color:#d32f2f}
-input[type=text],textarea{width:100%;padding:10px 12px;margin:6px 0;border:2px solid #4A90E2;border-radius:6px;font-size:1rem;box-sizing:border-box}
-textarea{resize:vertical;min-height:60px}
-.submit-btn{width:100%;padding:14px;background:#4A90E2;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;margin-top:16px;cursor:pointer;transition:background .2s}
-.submit-btn:hover{background:#357ABD}
-.submit-btn:active{background:#2E6DAA}
-.result-banner{text-align:center;padding:20px;border-radius:10px;margin:12px 0;font-size:1.1rem;font-weight:700}
-.result-banner.good{background:#e8f5e9;color:#2E7D32;border:2px solid #a5d6a7}
-.result-banner.ok{background:#fff3e0;color:#e65100;border:2px solid #ffcc80}
-.result-banner.bad{background:#ffebee;color:#c62828;border:2px solid #ef9a9a}
-.explanation{font-size:.88rem;color:#666;margin-top:6px;padding:8px 10px;background:#f9f9f9;border-radius:6px;display:none}
-.explanation.show{display:block}
-.cloze-sentence{font-size:1.05rem;line-height:1.8}
-.cloze-passage{font-size:1.05rem;line-height:2}
-.cloze-hint{font-size:.85rem;color:#888;margin-top:2px}
-.cloze-input{display:inline-block;width:100px;padding:6px 10px;margin:0 4px;border:none;border-bottom:2px solid #4A90E2;background:transparent;font-size:1rem;text-align:center;outline:none}
-.cloze-input:focus{border-bottom-color:#2E7D32}
-.cloze-input.correct{border-bottom-color:#2E7D32;color:#2E7D32;font-weight:700}
-.cloze-input.wrong{border-bottom-color:#d32f2f;color:#d32f2f}
-.trans-zh{font-size:1.1rem;color:#333;margin-bottom:6px}
-.trans-hint{font-size:.85rem;color:#999;margin-bottom:4px}
-.history-item{background:#fff;padding:14px;border-radius:10px;margin:10px 0;border-left:4px solid #4A90E2;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.history-item .h-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.history-item .h-type{font-weight:700;color:#4A90E2;text-transform:uppercase;font-size:.9rem}
-.history-item .h-score{font-weight:700;font-size:1.1rem}
-.history-item .h-score.perfect{color:#2E7D32}
-.history-item .h-score.partial{color:#e65100}
-.history-item .h-time{font-size:.82rem;color:#999}
-.history-item .h-wrong{margin-top:8px;padding:10px;background:#ffebee;border-radius:6px;font-size:.9rem}
-.history-item .h-wrong-item{margin:4px 0;color:#c62828}
-.history-item .h-wrong-item .h-correct{color:#2E7D32;font-weight:600}
-.clear-btn{display:block;margin:20px auto 0;padding:8px 20px;background:#eee;color:#999;border:none;border-radius:6px;font-size:.85rem;cursor:pointer}
-.clear-btn:hover{background:#ddd;color:#666}
-.empty-state{text-align:center;padding:40px 20px;color:#999}
-.empty-state .icon{font-size:2.5rem;margin-bottom:10px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绾函鑻辫缁冧範 - Day 7</title>
+    <style>
+        body { font-family: 'Microsoft YaHei', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        h1 { color: #333; text-align: center; }
+        .day { color: #666; text-align: center; font-size: 14px; }
+        .question { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .question-num { color: #2196F3; font-weight: bold; }
+        .hint { color: #FF9800; font-size: 14px; margin-top: 5px; }
+        .options { margin: 10px 0; }
+        .options label { display: block; margin: 5px 0; cursor: pointer; }
+        input[type="text"] { padding: 8px; width: 200px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 5px 10px 0; }
+        button:hover { background: #45a049; }
+        .result { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .correct { background: #C8E6C9; color: #2E7D32; }
+        .wrong { background: #FFCDD2; color: #C62828; }
+        .history-btn { background: #2196F3; }
+    </style>
 </head>
 <body>
-
-<div class="header">
-    <h1>English Practice</h1>
-    <div class="day-info" id="dayInfo"></div>
-    <div class="topic" id="topicInfo"></div>
-</div>
-
-<div class="nav" style="flex-wrap:wrap">
-    <button id="btn-quiz" onclick="show('quiz')">选择题</button>
-    <button id="btn-cloze" onclick="show('cloze')">完形填空</button>
-    <button id="btn-trans" onclick="show('trans')">翻译题</button>
-    <button id="btn-history" onclick="show('history')">历史记录</button>
-    <button id="btn-listening" onclick="show('listening')">听力</button>
-    <button id="btn-writing" onclick="show('writing')">作文</button>
-    <button id="btn-days" onclick="show('days')">历史题目</button>
-</div>
-
-<div id="content"></div>
-
-<script>
-// ==================== CONFIG ====================
-var START_DATE = new Date('2026-03-23');
-
-// ==================== DAY DATA ====================
-var ALL_DAYS = {
-    1: {
-        title: 'Few / Little',
-        topic: 'Quantifiers: few, a few, little, a little',
-        rule: 'few / a few + 可数名词 (friends, books, cars)\nlittle / a little + 不可数名词 (water, time, money)\nfew / little = 几乎没有（否定）\na few / a little = 有一些（肯定）',
-        questions: [
-            {
-                stem: 'There are _____ apples left. We need to buy more.',
-                opts: ['few', 'little', 'a few', 'a little'],
-                ans: 0,
-                exp: '"few" = almost none, with countable noun "apples". We need more, so negative meaning.'
-            },
-            {
-                stem: 'I have _____ time before the bus comes. Let me grab a coffee.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 3,
-                exp: '"a little" = some, with uncountable noun "time". Positive — enough time for coffee.'
-            },
-            {
-                stem: 'She made _____ mistakes on the test. Great job!',
-                opts: ['few', 'little', 'a few', 'a little'],
-                ans: 0,
-                exp: '"few" = almost no mistakes, with countable noun "mistakes". Positive result.'
-            },
-            {
-                stem: 'There is _____ milk in the fridge. We should buy some.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 2,
-                exp: '"little" = almost none, with uncountable noun "milk". Negative — not enough.'
-            },
-            {
-                stem: 'Could you give me _____ water, please?',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 3,
-                exp: '"a little" = some, with uncountable noun "water". Polite request.'
-            },
-            {
-                stem: 'He has _____ friends in the new school, so he feels lonely.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 0,
-                exp: '"few" = almost none, with countable noun "friends". Negative — feels lonely.'
-            },
-            {
-                stem: 'I picked up _____ shells on the beach yesterday.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 1,
-                exp: '"a few" = some, with countable noun "shells". Positive — collected some shells.'
-            },
-            {
-                stem: 'We have very _____ information about the accident.',
-                opts: ['few', 'a few', 'little', 'a little'],
-                ans: 2,
-                exp: '"little" = almost none, with uncountable noun "information". Negative.'
-            }
-        ],
-        cloze: {
-            passage: 'Tom and Mary are good friends. Tom has _____ friends at school, but he feels happy because Mary is always there for him. Mary has _____ knowledge about history, and she often shares interesting stories with Tom. Yesterday, they went to the beach together. Tom found _____ shells, and Mary collected _____ postcards. They had _____ water left, so they bought some from the shop. It was _____ fun day!',
-            blanks: [
-                { answer: 'few', hint: 'countable, negative (almost none)' },
-                { answer: 'little', hint: 'uncountable, negative (almost none)' },
-                { answer: 'a few', hint: 'countable, positive (some shells)' },
-                { answer: 'a few', hint: 'countable, positive (some postcards)' },
-                { answer: 'little', hint: 'uncountable, negative (almost none)' },
-                { answer: 'a', hint: 'fun is uncountable, use a + adjective'}
-            ]
-        },
-        translate: [
-            {
-                zh: '教室里几乎没有学生。',
-                zhHint: 'few + 可数名词（表否定）',
-                answer: 'there are few students in the classroom',
-                accept: ['there are few students in the classroom']
-            },
-            {
-                zh: '我有一些钱，可以买一个冰淇淋。',
-                zhHint: 'a little + 不可数名词（表肯定）',
-                answer: 'i have a little money i can buy an ice cream',
-                accept: ['i have a little money i can buy an ice cream', 'i have a little money. i can buy an ice cream']
-            },
-            {
-                zh: '她在学校有几个好朋友。',
-                zhHint: 'a few + 可数名词（表肯定）',
-                answer: 'she has a few good friends at school',
-                accept: ['she has a few good friends at school']
-            }
-        ]
-    }
-};
-
-// ==================== AUTO DAY CALCULATION ====================
-function getCurrentDay() {
-    var urlDay = new URLSearchParams(window.location.search).get('day');
-    if (urlDay) return parseInt(urlDay);
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    var start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
-    var diff = Math.floor((today - start) / 86400000);
-    return Math.max(1, diff + 1);
-}
-
-var DAY = getCurrentDay();
-var DATA = ALL_DAYS[DAY] || null;
-
-// ==================== HEADER ====================
-document.getElementById('dayInfo').textContent = 'Day ' + DAY + '  \u2022  ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-document.getElementById('topicInfo').textContent = DATA ? DATA.topic : 'No content for today';
-
-// ==================== STATE ====================
-var quizAnswers = {};
-var quizSubmitted = false;
-
-// ==================== SHOW TAB ====================
-function show(tab) {
-    document.querySelectorAll('.nav button').forEach(function(b) { b.classList.remove('active'); });
-    document.getElementById('btn-' + tab).classList.add('active');
-    var el = document.getElementById('content');
-    if (tab === 'days') {
-        renderDays(el);
-        return;
-    }
-    if (tab === 'listening') {
-        renderListening(el);
-        return;
-    }
-    if (tab === 'writing') {
-        renderWriting(el);
-        return;
-    }
-    if (!DATA) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>No exercises available for Day ' + DAY + ' yet.<br>Check back tomorrow!</p></div>';
-        return;
-    }
-    if (tab === 'quiz') renderQuiz(el);
-    else if (tab === 'cloze') renderCloze(el);
-    else if (tab === 'trans') renderTranslate(el);
-    else if (tab === 'history') renderHistory(el);
-}
-
-// ==================== QUIZ TAB ====================
-function renderQuiz(el) {
-    var qs = DATA.questions;
-    var html = '';
-    // Rule card
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📖 语法规则</b><pre style="margin-top:8px;font-family:inherit;white-space:pre-wrap;font-size:.9rem;color:#444">' + DATA.rule + '</pre></div>';
-    for (var i = 0; i < qs.length; i++) {
-        var q = qs[i];
-        html += '<div class="card"><div class="q-stem"><b>第' + (i+1) + '题.</b> ' + q.stem + '</div>';
-        html += '<div class="opt-grid">';
-        for (var j = 0; j < q.opts.length; j++) {
-            var cls = 'opt';
-            if (quizSubmitted) {
-                if (j === q.ans) cls += ' correct';
-                else if (quizAnswers[i] === j) cls += ' wrong';
-            } else if (quizAnswers[i] === j) {
-                cls += ' selected';
-            }
-            html += '<div class="' + cls + '" data-q="' + i + '" data-o="' + j + '" onclick="pickQuiz(' + i + ',' + j + ')">' + String.fromCharCode(65+j) + '. ' + q.opts[j] + '</div>';
-        }
-        html += '</div>';
-        html += '<div class="explanation' + (quizSubmitted ? ' show' : '') + '" id="exp' + i + '">' + q.exp + '</div>';
-        html += '</div>';
-    }
-    if (!quizSubmitted) {
-        html += '<button class="submit-btn" onclick="submitQuiz()">提交答案</button>';
-    }
-    el.innerHTML = html;
-}
-
-function pickQuiz(qi, oi) {
-    if (quizSubmitted) return;
-    quizAnswers[qi] = oi;
-    show('quiz');
-}
-
-function submitQuiz() {
-    if (!DATA) return;
-    var qs = DATA.questions;
-    var unanswered = 0;
-    for (var i = 0; i < qs.length; i++) {
-        if (quizAnswers[i] === undefined) unanswered++;
-    }
-    if (unanswered > 0 && !confirm('还有 ' + unanswered + ' 道题未作答，确定要提交吗？')) return;
-
-    quizSubmitted = true;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < qs.length; i++) {
-        if (quizAnswers[i] === qs[i].ans) {
-            score++;
-        } else {
-            wrongList.push({
-                n: i + 1,
-                ans: quizAnswers[i] !== undefined ? String.fromCharCode(65 + quizAnswers[i]) + '. ' + qs[i].opts[quizAnswers[i]] : 'no answer',
-                correct: String.fromCharCode(65 + qs[i].ans) + '. ' + qs[i].opts[qs[i].ans],
-                hint: qs[i].exp
-            });
-        }
-    }
-    var total = qs.length;
-    saveRecord('quiz', score, total, wrongList);
-    show('quiz');
-    // Show banner
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = '<div class="result-banner ' + cls + '">选择题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '') + '</div>';
-    document.getElementById('content').insertAdjacentHTML('afterbegin', banner);
-}
-
-// ==================== CLOZE TAB ====================
-function renderCloze(el) {
-    var cs = DATA.cloze;
-    if (!cs || !cs.passage || !cs.blanks || cs.blanks.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>No cloze exercise for Day ' + DAY + ' yet.</p></div>';
-        return;
-    }
-    var html = '';
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📝 完形填空</b><p style="margin-top:6px;font-size:.9rem;color:#555">阅读短文，填写适当的单词</p></div>';
-    
-    // Render passage with blanks
-    html += '<div class="card">';
-    html += '<div class="cloze-passage" style="font-size:1.05rem;line-height:2">';
-    var parts = cs.passage.split('_____');
-    for (var i = 0; i < parts.length; i++) {
-        html += '<span>' + parts[i] + '</span>';
-        if (i < cs.blanks.length) {
-            html += '<input type="text" class="cloze-input" id="cloze' + i + '" placeholder="?" autocomplete="off" spellcheck="false">';
-        }
-    }
-    html += '</div>';
-    
-    // Show hints
-    html += '<div class="cloze-hints" style="margin-top:20px;padding-top:16px;border-top:1px dashed #ddd">';
-    html += '<b style="font-size:.9rem;color:#666">💡 提示:</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">';
-    for (var i = 0; i < cs.blanks.length; i++) {
-        html += '<div style="font-size:.85rem;color:#888;padding:6px 10px;background:#f5f5f5;border-radius:4px"><b>第' + (i+1) + '空:</b> ' + cs.blanks[i].hint + '</div>';
-    }
-    html += '</div></div>';
-    html += '</div>';
-    html += '<button class="submit-btn" onclick="submitCloze()">提交答案</button>';
-    el.innerHTML = html;
-}
-
-function submitCloze() {
-    if (!DATA || !DATA.cloze || !DATA.cloze.blanks) return;
-    var cs = DATA.cloze;
-    var blanks = cs.blanks;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < blanks.length; i++) {
-        var input = document.getElementById('cloze' + i);
-        var userAns = input.value.trim().toLowerCase();
-        var correct = blanks[i].answer.toLowerCase();
-        if (userAns === correct) {
-            score++;
-            input.classList.add('correct');
-        } else {
-            input.classList.add('wrong');
-            wrongList.push({
-                n: i + 1,
-                ans: input.value.trim() || 'no answer',
-                correct: blanks[i].answer,
-                hint: blanks[i].hint
-            });
-        }
-    }
-    var total = blanks.length;
-    saveRecord('cloze', score, total, wrongList);
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var btns = document.querySelectorAll('.submit-btn');
-    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
-    var banner = document.createElement('div');
-    banner.className = 'result-banner ' + cls;
-    banner.textContent = '完形填空得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
-    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
-}
-
-// ==================== TRANSLATE TAB ====================
-function renderTranslate(el) {
-    var ts = DATA.translate;
-    if (!ts || ts.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">🔤</div><p>No translation exercise for Day ' + DAY + ' yet.</p></div>';
-        return;
-    }
-    var html = '';
-    html += '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>🔤 中译英</b><p style="margin-top:6px;font-size:.9rem;color:#555">将中文翻译成英文，注意拼写和语法！</p></div>';
-    for (var i = 0; i < ts.length; i++) {
-        var t = ts[i];
-        html += '<div class="card">';
-        html += '<div class="trans-zh"><b>第' + (i+1) + '题</b> ' + t.zh + '</div>';
-        html += '<div class="trans-hint">💡 ' + t.zhHint + '</div>';
-        html += '<textarea id="trans' + i + '" rows="2" placeholder="在这里写英文翻译..."></textarea>';
-        html += '</div>';
-    }
-    html += '<button class="submit-btn" onclick="submitTrans()">提交答案</button>';
-    el.innerHTML = html;
-}
-
-function submitTrans() {
-    if (!DATA) return;
-    var ts = DATA.translate;
-    var score = 0;
-    var wrongList = [];
-    for (var i = 0; i < ts.length; i++) {
-        var input = document.getElementById('trans' + i);
-        var userAns = input.value.trim().toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
-        var matched = false;
-        var acceptList = ts[i].accept || [ts[i].answer];
-        for (var a = 0; a < acceptList.length; a++) {
-            var expected = acceptList[a].toLowerCase().replace(/[.,!?;:'"]/g, '').replace(/\s+/g, ' ');
-            if (userAns === expected) { matched = true; break; }
-        }
-        if (matched) {
-            score++;
-            input.style.borderColor = '#2E7D32';
-            input.style.color = '#2E7D32';
-        } else {
-            input.style.borderColor = '#d32f2f';
-            input.style.color = '#d32f2f';
-            // Show correct answer in English
-            var corrDiv = document.createElement('div');
-            corrDiv.style.cssText = 'font-size:.88rem;color:#2E7D32;margin-top:4px;padding:6px 10px;background:#e8f5e9;border-radius:6px';
-            corrDiv.textContent = '✓ Answer: ' + ts[i].answer;
-            input.parentElement.appendChild(corrDiv);
-            wrongList.push({
-                n: i + 1,
-                ans: input.value.trim() || 'no answer',
-                correct: ts[i].answer,
-                hint: ts[i].zhHint
-            });
-        }
-    }
-    var total = ts.length;
-    saveRecord('translate', score, total, wrongList);
-    var btns = document.querySelectorAll('.submit-btn');
-    for (var b = 0; b < btns.length; b++) btns[b].style.display = 'none';
-    var pct = score / total;
-    var cls = pct >= 0.8 ? 'good' : pct >= 0.5 ? 'ok' : 'bad';
-    var banner = document.createElement('div');
-    banner.className = 'result-banner ' + cls;
-    banner.textContent = '翻译题得分: ' + score + ' / ' + total + (pct === 1 ? ' 🎉 全对!' : '');
-    document.getElementById('content').insertAdjacentElement('afterbegin', banner);
-}
-
-// ==================== DAYS TAB ====================
-function renderDays(el) {
-    var html = '<div class="card" style="background:#e3f2fd;border-left:4px solid #4A90E2">';
-    html += '<b>📅 历史题目</b><p style="margin-top:6px;font-size:.9rem;color:#555">点击日期查看历史练习</p></div>';
-    html += '<div class="card"><div class="opt-grid">';
-    // Generate day buttons (1-30)
-    for (var i = 1; i <= 30; i++) {
-        var isCurrent = i === DAY;
-        html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ✓' : '') + '</a>';
-    }
-    html += '</div></div>';
-    // Add back to today button
-    html += '<a href="?" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">← 返回今天</a>';
-    el.innerHTML = html;
-}
-
-// ==================== LISTENING TAB ====================
-function renderListening(el) {
-    var html = '<div class="empty-state"><div class="icon">🎧</div><p>听力练习即将推出！<br>敬请期待...</p></div>';
-    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>📝 功能说明:</b>';
-    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>听音频片段</li>';
-    html += '<li>回答听力问题</li>';
-    html += '<li>提高听力技能</li>';
-    html += '</ul></div>';
-    el.innerHTML = html;
-}
-
-// ==================== WRITING TAB ====================
-function renderWriting(el) {
-    var html = '<div class="empty-state"><div class="icon">✍️</div><p>作文练习即将推出！<br>敬请期待...</p></div>';
-    html += '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800;margin-top:16px">';
-    html += '<b>📝 功能说明:</b>';
-    html += '<ul style="margin-top:8px;padding-left:20px;color:#555;font-size:.95rem">';
-    html += '<li>根据给定题目写作文</li>';
-    html += '<li>获取AI批改反馈</li>';
-    html += '<li>提升写作能力</li>';
-    html += '</ul></div>';
-    el.innerHTML = html;
-}
-
-// ==================== HISTORY TAB ====================
-function renderHistory(el) {
-    var history = loadHistory();
-    if (history.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
-        return;
-    }
-    var html = '';
-    for (var i = 0; i < history.length; i++) {
-        var h = history[i];
-        var pct = h.total > 0 ? h.score / h.total : 0;
-        var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
-        var isPerfect = pct === 1;
+    <h1>馃摎 绾函鑻辫缁冧範</h1>
+    <p class="day">Day 7 - past continuous vs simple past</p>
+    <div id="questions"></div>
+    <button onclick="submitAnswers()">鎻愪氦绛旀</button>
+    <button onclick="showHistory()" class="history-btn">鍘嗗彶璁板綍</button>
+    <div id="result"></div>
+    <div id="history" style="display:none;"></div>
+    <script>
+        const dayNum = 7;
+        const questions = [
+    {"type":"fill","num":1","question":"Yesterday he _____ (go) to school.","answer":"went","hint":"go-went"},
+    {"type":"fill","num":2","question":"She _____ (hurt) her leg yesterday.","answer":"hurt","hint":"hurt-hurt"},
+    {"type":"fill","num":3","question":"They _____ (eat) breakfast at 7am.","answer":"ate","hint":"eat-ate"},
+    {"type":"choice","num":4","question":"He _____ when I called him.","options":["is sleeping","was sleeping","were sleeping","are sleeping"],"answer":"was sleeping","hint":"past continuous"},
+    {"type":"choice","num":5","question":"She _____ to the park yesterday.","options":["goes","went","going","gone"],"answer":"went","hint":"simple past"}
+];
         
-        html += '<div class="history-item">';
-        var typeName = h.type === 'quiz' ? '选择题' : h.type === 'cloze' ? '完形填空' : '翻译题';
-        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">删除</button></div>';
-        
-        if (h.wrongList && h.wrongList.length > 0) {
-            html += '<div class="h-wrong">';
-            html += '<b style="color:#c62828;font-size:.9rem">❌ 错题:</b>';
-            for (var j = 0; j < h.wrongList.length; j++) {
-                var w = h.wrongList[j];
-                html += '<div class="h-wrong-item" style="margin-top:8px">';
-                html += '<div><b>第' + w.n + '题:</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
-                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
-                html += '</div>';
-            }
-            html += '</div>';
-        } else {
-            // All correct
-            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ 太棒了！全部正确！</div>';
+        function renderQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = questions.map((q, i) => {
+                if (q.type === 'choice') {
+                    const opts = q.options.map((o, j) => 
+                        <label><input type="radio" name="q" value=""> . </label>
+                    ).join('');
+                    return <div class="question"><span class="question-num">.</span> <div class="options"></div><div class="hint">馃挕 </div></div>;
+                } else {
+                    return <div class="question"><span class="question-num">.</span> <br><input type="text" name="q" placeholder="璇峰～鍐欑瓟妗?><div class="hint">馃挕 </div></div>;
+                }
+            }).join('');
         }
-        html += '</div>';
-    }
-    html += '<button class="clear-btn" onclick="if(confirm(\'确定要清空所有历史记录吗？\')){localStorage.removeItem(\'chunchunHistory\');submitDeleteToForm(\'all\');show(\'history\')}">清空所有历史记录</button>';
-    el.innerHTML = html;
-}
-
-function deleteRecord(index) {
-    if (!confirm('确定要删除这条记录吗？')) return;
-    var history = loadHistory();
-    var deleted = history.splice(index, 1);
-    localStorage.setItem('chunchunHistory', JSON.stringify(history));
-    // Submit deletion to Google Form
-    if (deleted.length > 0) {
-        submitDeleteToForm(deleted[0]);
-    }
-    show('history');
-}
-
-function submitDeleteToForm(record) {
-    try {
-        var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-        var msg = record === 'all' ? 'ALL RECORDS DELETED' : 'DELETED: ' + record.type + ' - ' + record.date + ' ' + record.time;
-        var img = new Image();
-        img.src = formUrl + '?entry.705164145=' + encodeURIComponent(new Date().toISOString()) +
-            '&entry.9424799=' + encodeURIComponent(msg) +
-            '&entry.1864991047=' + encodeURIComponent('DELETED');
-    } catch(e) {}
-}
-
-// ==================== HISTORY STORAGE ====================
-function loadHistory() {
-    try {
-        var data = localStorage.getItem('chunchunHistory');
-        return data ? JSON.parse(data) : [];
-    } catch(e) { return []; }
-}
-
-function saveRecord(type, score, total, wrongList) {
-    var now = new Date();
-    var record = {
-        type: type,
-        day: DAY,
-        score: score,
-        total: total,
-        date: now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate(),
-        time: pad(now.getHours()) + ':' + pad(now.getMinutes()),
-        wrongList: wrongList
-    };
-    var history = loadHistory();
-    history.unshift(record);
-    // Keep max 50 records
-    if (history.length > 50) history = history.slice(0, 50);
-    localStorage.setItem('chunchunHistory', JSON.stringify(history));
-    // Also submit to Google Form
-    submitToForm(record);
-}
-
-function submitToForm(record) {
-    try {
-        var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
-        var ansStr = record.type + ':' + JSON.stringify(record.wrongList);
-        var img = new Image();
-        img.src = formUrl + '?entry.705164145=' + encodeURIComponent(record.date + ' ' + record.time) +
-            '&entry.9424799=' + encodeURIComponent(ansStr) +
-            '&entry.1864991047=' + encodeURIComponent(record.score + '/' + record.total);
-    } catch(e) {}
-}
-
-// ==================== UTILS ====================
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-function escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-// ==================== INIT ====================
-show('quiz');
-</script>
+        
+        function submitAnswers() {
+            const answers = {};
+            questions.forEach(q => {
+                if (q.type === 'choice') {
+                    const selected = document.querySelector(input[name="q"]:checked);
+                    answers[q.num] = selected ? selected.value : '';
+                } else {
+                    const input = document.querySelector(input[name="q"]);
+                    answers[q.num] = input ? input.value.trim() : '';
+                }
+            });
+            
+            let score = 0;
+            let wrongList = [];
+            let resultHtml = '<h3>绛旈缁撴灉锛?/h3>';
+            
+            questions.forEach(q => {
+                const userAns = answers[q.num];
+                const correct = q.answer;
+                const isCorrect = userAns.toLowerCase() === correct.toLowerCase();
+                
+                if (isCorrect) {
+                    score++;
+                    resultHtml += <div class="result correct">鉁?绗?{q.num}棰橈細姝ｇ‘</div>;
+                } else {
+                    wrongList.push(q.num);
+                    resultHtml += <div class="result wrong">鉂?绗?{q.num}棰橈細閿欒 | 姝ｇ‘绛旀锛?{correct}</div>;
+                }
+            });
+            
+            const total = questions.length;
+            const percent = Math.round(score / total * 100);
+            resultHtml = <h2>寰楀垎锛?{score}/ (%)</h2> + resultHtml;
+            
+            document.getElementById('result').innerHTML = resultHtml;
+            
+            const history = JSON.parse(localStorage.getItem('chunchun_history') || '[]');
+            history.push({ date: new Date().toISOString(), day: dayNum, score: score, total: total, wrongList: wrongList });
+            localStorage.setItem('chunchun_history', JSON.stringify(history));
+        }
+        
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem('chunchun_history') || '[]');
+            const container = document.getElementById('history');
+            container.style.display = 'block';
+            container.innerHTML = '<h3>鍘嗗彶璁板綍</h3>' + history.map(h => 
+                <div class="result"> | Day  | /</div>
+            ).join('');
+        }
+        
+        renderQuestions();
+    </script>
 </body>
 </html>
