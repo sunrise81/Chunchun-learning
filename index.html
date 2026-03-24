@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>绾函鑻辫缁冧範 - Day 7</title>
+    <title>绾函鑻辫缁冧範 - Day 2</title>
     <style>
         body { font-family: 'Microsoft YaHei', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
         h1 { color: #333; text-align: center; }
@@ -24,20 +24,20 @@
 </head>
 <body>
     <h1>馃摎 绾函鑻辫缁冧範</h1>
-    <p class="day">Day 7 - past continuous vs simple past</p>
+    <p class="day">Day 2 - few/a few/little/a little practice</p>
     <div id="questions"></div>
     <button onclick="submitAnswers()">鎻愪氦绛旀</button>
     <button onclick="showHistory()" class="history-btn">鍘嗗彶璁板綍</button>
     <div id="result"></div>
     <div id="history" style="display:none;"></div>
     <script>
-        const dayNum = 7;
+        const dayNum = 2;
         const questions = [
-    {"type":"fill","num":1","question":"Yesterday he _____ (go) to school.","answer":"went","hint":"go-went"},
-    {"type":"fill","num":2","question":"She _____ (hurt) her leg yesterday.","answer":"hurt","hint":"hurt-hurt"},
-    {"type":"fill","num":3","question":"They _____ (eat) breakfast at 7am.","answer":"ate","hint":"eat-ate"},
-    {"type":"choice","num":4","question":"He _____ when I called him.","options":["is sleeping","was sleeping","were sleeping","are sleeping"],"answer":"was sleeping","hint":"past continuous"},
-    {"type":"choice","num":5","question":"She _____ to the park yesterday.","options":["goes","went","going","gone"],"answer":"went","hint":"simple past"}
+    {"type":"choice","num":1,"question":"There is _____ water in the bottle.","options":["few","a few","little","a little"],"answer":"little","hint":"water is uncountable"},
+    {"type":"choice","num":2,"question":"I have _____ friends here.","options":["few","a few","little","a little"],"answer":"a few","hint":"friends is countable"},
+    {"type":"choice","num":3","question":"Would you like _____ milk?","options":["few","a few","little","a little"],"answer":"a little","hint":"milk is uncountable"},
+    {"type":"fill","num":4","question":"There are _____ students in the classroom. (almost none)","answer":"few","hint":"countable negative"},
+    {"type":"fill","num":5","question":"He has _____ books. He is rich. (some)","answer":"a few","hint":"countable positive"}
 ];
         
         function renderQuestions() {
