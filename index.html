@@ -1,1 +1,768 @@
- <!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>鑻辫缁冧範 路 绗?澶?路 few / a few / little / a little</title> <style> *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }  :root { --g1: #1b5e20; --g2: #2e7d32; --g3: #388e3c; --g4: #43a047; --g5: #66bb6a; --g6: #a5d6a7; --g7: #e8f5e9; --g8: #f1f8f1; --correct: #1b5e20; --wrong: #b71c1c; --warn: #e65100; --white: #ffffff; --shadow: 0 4px 16px rgba(27,94,32,0.13); }  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); min-height: 100vh; padding: 20px 16px 40px; color: #1a2e1a; }  /* 鈹€鈹€ Header 鈹€鈹€ */ .header { text-align: center; margin-bottom: 28px; } .header .badge { display: inline-block; background: var(--g2); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 2px; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px; } .header h1 { font-size: 22px; color: var(--g1); font-weight: 800; } .header .subtitle { margin-top: 6px; font-size: 13px; color: var(--g3); } .header .topic-box { margin: 14px auto 0; max-width: 500px; background: var(--white); border-left: 5px solid var(--g4); border-radius: 10px; padding: 12px 18px; text-align: left; box-shadow: var(--shadow); } .header .topic-box h2 { font-size: 13px; color: var(--g2); margin-bottom: 6px; } .header .topic-box .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; } .header .topic-box .rule { font-size: 12px; color: #2e4a2e; } .header .topic-box .rule span { font-weight: 700; color: var(--g3); }  /* 鈹€鈹€ Progress bar 鈹€鈹€ */ .progress-wrap { max-width: 640px; margin: 0 auto 22px; } .progress-bar-bg { background: var(--g6); border-radius: 99px; height: 10px; overflow: hidden; } .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--g3), var(--g5)); border-radius: 99px; transition: width 0.5s ease; width: 0%; } .progress-label { font-size: 12px; color: var(--g2); text-align: right; margin-top: 4px; }  /* 鈹€鈹€ Question card 鈹€鈹€ */ .questions { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }  .q-card { background: var(--white); border-radius: 16px; padding: 20px 22px 18px; box-shadow: var(--shadow); border-top: 4px solid var(--g5); transition: border-color 0.3s; } .q-card.correct-card { border-top-color: var(--correct); } .q-card.wrong-card   { border-top-color: var(--wrong); }  .q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; } .q-num { width: 28px; height: 28px; border-radius: 50%; background: var(--g7); color: var(--g2); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; } .q-type { font-size: 11px; background: var(--g7); color: var(--g3); border-radius: 6px; padding: 2px 8px; font-weight: 600; } .q-score-badge { margin-left: auto; font-size: 11px; background: var(--g6); color: var(--g1); border-radius: 6px; padding: 2px 8px; font-weight: 700; }  .q-text { font-size: 15px; font-weight: 600; color: #1a2e1a; line-height: 1.7; margin-bottom: 14px; } .q-text .blank { display: inline-block; min-width: 80px; border-bottom: 2px solid var(--g4); text-align: center; color: var(--g2); font-weight: 700; padding: 0 4px; }  /* Choice options */ .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .opt-btn { background: var(--g8); border: 2px solid var(--g6); border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; cursor: pointer; transition: all 0.18s; text-align: left; color: #1a2e1a; font-weight: 500; } .opt-btn:hover:not(:disabled) { background: var(--g6); border-color: var(--g4); } .opt-btn.selected { background: var(--g4); border-color: var(--g2); color: #fff; } .opt-btn.correct-opt { background: #c8e6c9; border-color: var(--correct); color: var(--correct); font-weight: 700; } .opt-btn.wrong-opt   { background: #ffcdd2; border-color: var(--wrong); color: var(--wrong); font-weight: 700; } .opt-btn:disabled { cursor: default; }  /* Fill input */ .fill-wrap { display: flex; gap: 10px; align-items: center; } .fill-input { flex: 1; border: 2px solid var(--g5); border-radius: 10px; padding: 10px 14px; font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; background: var(--g8); color: #1a2e1a; } .fill-input:focus { border-color: var(--g3); background: #fff; } .fill-input.correct-input { border-color: var(--correct); background: #c8e6c9; } .fill-input.wrong-input   { border-color: var(--wrong); background: #ffcdd2; } .fill-input:disabled { cursor: default; }  /* Hint */ .hint-row { margin-top: 12px; } .hint-btn { background: none; border: 1.5px solid var(--g5); border-radius: 8px; padding: 4px 12px; font-size: 12px; color: var(--g3); cursor: pointer; font-family: inherit; transition: all 0.15s; } .hint-btn:hover { background: var(--g7); } .hint-box { display: none; margin-top: 8px; background: var(--g7); border-left: 3px solid var(--g4); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #2e4a2e; line-height: 1.6; } .hint-box.show { display: block; } .hint-box .en { font-style: italic; color: var(--g2); }  /* Result */ .result-row { margin-top: 10px; display: none; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; } .result-row.show { display: flex; } .result-icon { font-size: 18px; } .result-text.correct-text { color: var(--correct); } .result-text.wrong-text   { color: var(--wrong); } .answer-reveal { font-size: 12px; color: var(--g2); margin-left: 4px; }  /* Buttons */ .actions { max-width: 640px; margin: 24px auto 0; display: flex; flex-direction: column; gap: 10px; } .btn-primary { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--g2), var(--g4)); color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(46,125,50,0.35); transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 1px; } .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,125,50,0.4); } .btn-primary:disabled { opacity: 0.5; cursor: default; transform: none; } .btn-secondary { width: 100%; padding: 12px; background: var(--white); color: var(--g2); border: 2px solid var(--g5); border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; letter-spacing: 1px; } .btn-secondary:hover { background: var(--g7); }  /* Score panel */ .score-panel { display: none; max-width: 640px; margin: 24px auto 0; background: var(--white); border-radius: 20px; padding: 28px 24px; text-align: center; box-shadow: 0 6px 30px rgba(27,94,32,0.18); border-top: 5px solid var(--g4); } .score-panel.show { display: block; } .score-emoji { font-size: 52px; } .score-num { font-size: 40px; font-weight: 900; color: var(--g1); margin: 8px 0 4px; } .score-label { font-size: 15px; color: var(--g3); margin-bottom: 14px; } .score-msg { font-size: 14px; color: #2e4a2e; background: var(--g7); border-radius: 10px; padding: 10px 16px; } .star-row { font-size: 28px; margin: 10px 0; letter-spacing: 4px; }  /* Saved indicator */ .saved-note { text-align: center; font-size: 11px; color: var(--g4); margin-top: 8px; }  @media (max-width: 400px) { .options { grid-template-columns: 1fr; } .header h1 { font-size: 19px; } } </style> </head> <body>  <div class="header"> <div class="badge">馃搮 绗?1 澶?/div> <h1>鑻辫璇硶涓撻」缁冧範</h1> <p class="subtitle">灏忓鑻辫 路 鏁伴噺璇嶄笓椤?/p> <div class="topic-box"> <h2>馃摎 浠婃棩鐭ヨ瘑鐐?/h2> <div class="rules"> <div class="rule"><span>a few</span> + 鍙暟鍚嶈瘝锛堟湁涓€浜涳級</div> <div class="rule"><span>few</span> + 鍙暟鍚嶈瘝锛堝嚑涔庢病鏈夛級</div> <div class="rule"><span>a little</span> + 涓嶅彲鏁板悕璇嶏紙鏈変竴浜涳級</div> <div class="rule"><span>little</span> + 涓嶅彲鏁板悕璇嶏紙鍑犱箮娌℃湁锛?/div> </div> </div> </div>  <div class="progress-wrap"> <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div> <div class="progress-label" id="progressLabel">宸插畬鎴?0 / 8 棰?/div> </div>  <div class="questions" id="questionsContainer"></div>  <div class="actions"> <button class="btn-primary" id="submitBtn" onclick="submitAll()">鎻愪氦绛旀 鉁?/button> <button class="btn-secondary" id="resetBtn" onclick="resetAll()" style="display:none">閲嶆柊缁冧範 馃攧</button> </div>  <div class="score-panel" id="scorePanel"> <div class="score-emoji" id="scoreEmoji"></div> <div class="star-row" id="starRow"></div> <div class="score-num" id="scoreNum"></div> <div class="score-label" id="scoreLabel"></div> <div class="score-msg" id="scoreMsg"></div> </div> <p class="saved-note" id="savedNote" style="display:none">鉁?鏈鎴愮哗宸茶嚜鍔ㄤ繚瀛?/p>  <script> const STORAGE_KEY = 'eng_day1_v1';  const questions = [ { id: 'q1', type: 'choice', text: '鎴戝湪杩欎釜鍩庡競鏈塤__鏈嬪弸锛屾垜浠粡甯镐竴璧风帺銆?br><small style="color:#555">I have ___ friends in this city and we often play together.</small>', blank: '___', options: ['few', 'a few', 'little', 'a little'], answer: 'a few', hint: { zh: '"鏈嬪弸" friends 鏄彲鏁板悕璇嶏紙鑳芥暟鍑哄嚑涓級銆傚彞瀛愭槸姝ｉ潰鎰忔€濓紙鏈変竴浜涳級锛屾墍浠ョ敤 <b>a few</b>銆?, rule: 'a few + 鍙暟鍚嶈瘝 = 鏈変竴浜涳紙姝ｉ潰锛? } }, { id: 'q2', type: 'choice', text: '鍐扮閲屽彧鏈塤__鐗涘ザ锛屽鍠濅竴鏉€?br><small style="color:#555">There is ___ milk in the fridge, enough for one cup.</small>', blank: '___', options: ['few', 'a few', 'little', 'a little'], answer: 'a little', hint: { zh: '"鐗涘ザ" milk 鏄笉鍙暟鍚嶈瘝锛堜笉鑳芥暟涓暟锛夈€傚彞瀛愭槸姝ｉ潰鎰忔€濓紙杩樻湁涓€浜涳級锛屾墍浠ョ敤 <b>a little</b>銆?, rule: 'a little + 涓嶅彲鏁板悕璇?= 鏈変竴浜涳紙姝ｉ潰锛? } }, { id: 'q3', type: 'choice', text: '濂瑰嚑涔庢病鏈夐挶锛屾墍浠ヤ拱涓嶈捣閭ｆ湰涔︺€?br><small style="color:#555">She has ___ money, so she cannot buy the book.</small>', blank: '___', options: ['few', 'a few', 'little', 'a little'], answer: 'little', hint: { zh: '"閽? money 鏄笉鍙暟鍚嶈瘝銆傚彞瀛愭槸璐熼潰鎰忔€濓紙鍑犱箮娌℃湁锛夛紝鎵€浠ョ敤 <b>little</b>锛堟病鏈?a锛夈€?, rule: 'little + 涓嶅彲鏁板悕璇?= 鍑犱箮娌℃湁锛堣礋闈級' } }, { id: 'q4', type: 'choice', text: '鍥犱负涓嬮洩锛屼粖澶╁嚑涔庢病鏈夊鐢熸潵涓婂銆?br><small style="color:#555">___ students came to school today because of the heavy snow.</small>', blank: '___锛堝彞棣栵級', options: ['Few', 'A few', 'Little', 'A little'], answer: 'Few', hint: { zh: '"瀛︾敓" students 鏄彲鏁板悕璇嶏紙澶嶆暟锛夈€傚彞瀛愭槸璐熼潰鎰忔€濓紙鍑犱箮娌℃潵锛夛紝鎵€浠ョ敤 <b>Few</b>锛堝彞棣栧ぇ鍐欙紝娌℃湁 a锛夈€?, rule: 'few + 鍙暟鍚嶈瘝澶嶆暟 = 鍑犱箮娌℃湁锛堣礋闈級' } }, { id: 'q5', type: 'fill', text: '璇风粰鎴慱__姘达紝鎴戞湁鐐规复浜嗐€?br><small style="color:#555">Can I have ___ water, please? I\'m a bit thirsty.</small>', answer: 'a little', hint: { zh: '"姘? water 鏄笉鍙暟鍚嶈瘝锛屼笖鏄姹傦紙姝ｉ潰锛氭兂瑕佷竴浜涳級锛岀敤 <b>a little</b>銆?, rule: 'a little + 涓嶅彲鏁板悕璇?= 鏈変竴浜涳紙姝ｉ潰锛? } }, { id: 'q6', type: 'choice', text: '浠栧嚑涔庢病鏈夋椂闂村畬鎴愯繖浠借瘯鍗枫€?br><small style="color:#555">He has ___ time to finish the exam paper.</small>', blank: '___', options: ['few', 'a few', 'little', 'a little'], answer: 'little', hint: { zh: '"鏃堕棿" time 鏄笉鍙暟鍚嶈瘝銆傚彞瀛愭槸璐熼潰鎰忔€濓紙鏃堕棿涓嶅锛夛紝鎵€浠ョ敤 <b>little</b>銆?, rule: 'little + 涓嶅彲鏁板悕璇?= 鍑犱箮娌℃湁锛堣礋闈級' } }, { id: 'q7', type: 'fill', text: '鍋氳繖涓泲绯曢渶瑕乢__楦¤泲锛屽ぇ姒備笁鍥涗釜灏卞浜嗐€?br><small style="color:#555">I need ___ eggs to make this cake, about three or four.</small>', answer: 'a few', hint: { zh: '"楦¤泲" eggs 鏄彲鏁板悕璇嶏紙澶嶆暟锛夈€傚彞瀛愭槸姝ｉ潰鎰忔€濓紙闇€瑕佷竴浜涳級锛岀敤 <b>a few</b>銆?, rule: 'a few + 鍙暟鍚嶈瘝澶嶆暟 = 鏈変竴浜涳紙姝ｉ潰锛? } }, { id: 'q8', type: 'choice', text: '绯栧嚑涔庣敤瀹屼簡锛屾垜浠渶瑕佸幓涔版洿澶氥€?br><small style="color:#555">There is ___ sugar left. We need to buy more.</small>', blank: '___', options: ['few', 'a few', 'little', 'a little'], answer: 'little', hint: { zh: '"绯? sugar 鏄笉鍙暟鍚嶈瘝銆?闇€瑕佸幓涔版洿澶?璇存槑鍑犱箮娌℃湁浜嗭紙璐熼潰锛夛紝鐢?<b>little</b>銆?, rule: 'little + 涓嶅彲鏁板悕璇?= 鍑犱箮娌℃湁锛堣礋闈級' } } ];  let userAnswers = {}; let submitted = false;  function buildUI() { const container = document.getElementById('questionsContainer'); container.innerHTML = '';  questions.forEach((q, idx) => { const card = document.createElement('div'); card.className = 'q-card'; card.id = 'card_' + q.id;  const typeLabel = q.type === 'choice' ? '閫夋嫨棰? : '濉┖棰?; const savedAns = userAnswers[q.id] || '';  let inputHTML = ''; if (q.type === 'choice') { inputHTML = `<div class="options" id="opts_${q.id}">` + q.options.map(o => `<button class="opt-btn${savedAns === o ? ' selected' : ''}" id="opt_${q.id}_${o.replace(/\s/g,'_')}" onclick="selectOption('${q.id}','${o}')">${o}</button>` ).join('') + `</div>`; } else { inputHTML = `<div class="fill-wrap"> <input class="fill-input" id="fill_${q.id}" type="text" placeholder="鍦ㄦ杈撳叆绛旀鈥? value="${savedAns}" oninput="saveFill('${q.id}',this.value)" autocomplete="off" spellcheck="false"> </div>`; }  card.innerHTML = ` <div class="q-meta"> <div class="q-num">${idx + 1}</div> <div class="q-type">${typeLabel}</div> <div class="q-score-badge">2 鍒?/div> </div> <div class="q-text">${q.text}</div> ${inputHTML} <div class="hint-row"> <button class="hint-btn" onclick="toggleHint('hint_${q.id}',this)">馃挕 鏌ョ湅鎻愮ず</button> <div class="hint-box" id="hint_${q.id}"> ${q.hint.zh}<br> <span class="en">馃搶 瑙勫垯锛?{q.hint.rule}</span> </div> </div> <div class="result-row" id="result_${q.id}"> <span class="result-icon" id="icon_${q.id}"></span> <span class="result-text" id="rtext_${q.id}"></span> <span class="answer-reveal" id="reveal_${q.id}"></span> </div>`;  container.appendChild(card); });  updateProgress(); }  function selectOption(qid, val) { if (submitted) return; userAnswers[qid] = val; saveProgress(); // Update UI const q = questions.find(x => x.id === qid); q.options.forEach(o => { const btn = document.getElementById('opt_' + qid + '_' + o.replace(/\s/g,'_')); if (btn) btn.className = 'opt-btn' + (o === val ? ' selected' : ''); }); updateProgress(); }  function saveFill(qid, val) { userAnswers[qid] = val.trim(); saveProgress(); updateProgress(); }  function toggleHint(hintId, btn) { const box = document.getElementById(hintId); const showing = box.classList.toggle('show'); btn.textContent = showing ? '馃挕 闅愯棌鎻愮ず' : '馃挕 鏌ョ湅鎻愮ず'; }  function updateProgress() { const answered = questions.filter(q => { const a = userAnswers[q.id]; return a && a.trim() !== ''; }).length; const total = questions.length; const pct = Math.round(answered / total * 100); document.getElementById('progressFill').style.width = pct + '%'; document.getElementById('progressLabel').textContent = `宸插畬鎴?${answered} / ${total} 棰榒; }  function submitAll() { // Check unanswered const unanswered = questions.filter(q => !userAnswers[q.id] || userAnswers[q.id].trim() === ''); if (unanswered.length > 0) { alert(`杩樻湁 ${unanswered.length} 棰樻湭浣滅瓟锛岃瀹屾垚鍚庡啀鎻愪氦锛乣); return; }  submitted = true; let score = 0;  questions.forEach(q => { const ua = (userAnswers[q.id] || '').trim().toLowerCase(); const ca = q.answer.toLowerCase(); const isCorrect = ua === ca; if (isCorrect) score += 2;  const card = document.getElementById('card_' + q.id); const resultRow = document.getElementById('result_' + q.id); const icon = document.getElementById('icon_' + q.id); const rtext = document.getElementById('rtext_' + q.id); const reveal = document.getElementById('reveal_' + q.id);  card.classList.add(isCorrect ? 'correct-card' : 'wrong-card'); resultRow.classList.add('show'); icon.textContent = isCorrect ? '鉁? : '鉂?; rtext.textContent = isCorrect ? '鍥炵瓟姝ｇ‘锛? : '鍥炵瓟閿欒銆?; rtext.className = 'result-text ' + (isCorrect ? 'correct-text' : 'wrong-text'); if (!isCorrect) reveal.textContent = `姝ｇ‘绛旀锛?{q.answer}`;  // Disable inputs if (q.type === 'choice') { const opts = document.querySelectorAll(`#opts_${q.id} .opt-btn`); opts.forEach(btn => { btn.disabled = true; const bval = btn.textContent.trim().toLowerCase(); if (bval === ca) btn.classList.add('correct-opt'); else if (bval === ua && !isCorrect) btn.classList.add('wrong-opt'); else btn.className = 'opt-btn'; }); } else { const inp = document.getElementById('fill_' + q.id); inp.disabled = true; inp.classList.add(isCorrect ? 'correct-input' : 'wrong-input'); }  // Show hints automatically for wrong answers if (!isCorrect) { const hintBox = document.getElementById('hint_' + q.id); if (hintBox) hintBox.classList.add('show'); } });  showScore(score); document.getElementById('submitBtn').style.display = 'none'; document.getElementById('resetBtn').style.display = 'block';  // Save result const record = { date: new Date().toLocaleDateString('zh-CN'), score, total: questions.length * 2, answers: userAnswers }; localStorage.setItem(STORAGE_KEY, JSON.stringify(record)); document.getElementById('savedNote').style.display = 'block'; }  function showScore(score) { const total = questions.length * 2; const pct = score / total; let emoji, stars, msg;  if (pct === 1)      { emoji = '馃弳'; stars = '猸愨瓙猸愨瓙猸?; msg = '澶浜嗭紒鍏ㄩ儴绛斿锛屼綘鏄娉曞皬杈句汉锛佺户缁繚鎸侊紒'; } else if (pct >= 0.8) { emoji = '馃帀'; stars = '猸愨瓙猸愨瓙'; msg = '闈炲父濂斤紒鍙樊涓€鐐圭偣灏辨弧鍒嗕簡锛屽啀鍔犳妸鍔诧紒'; } else if (pct >= 0.6) { emoji = '馃槉'; stars = '猸愨瓙猸?; msg = '涓嶉敊鍝︼紒缁х画澶嶄範 few / a few / little / a little 鐨勫尯鍒惂锛?; } else if (pct >= 0.4) { emoji = '馃摉'; stars = '猸愨瓙'; msg = '闇€瑕佸缁冧範锛侀噸鐐硅浣忥細鍙暟鐢?few/a few锛屼笉鍙暟鐢?little/a little銆?; } else                  { emoji = '馃挭'; stars = '猸?; msg = '鍔犳补锛佸缓璁噸鏂伴槄璇荤煡璇嗙偣锛屽啀鍋氫竴娆＄粌涔狅紒'; }  document.getElementById('scoreEmoji').textContent = emoji; document.getElementById('starRow').textContent = stars; document.getElementById('scoreNum').textContent = `${score} / ${total} 鍒哷; document.getElementById('scoreLabel').textContent = `绛斿 ${score/2} 棰橈紝鍏?${questions.length} 棰榒; document.getElementById('scoreMsg').textContent = msg; document.getElementById('scorePanel').classList.add('show'); document.getElementById('scorePanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }  function resetAll() { if (!confirm('纭畾瑕侀噸鏂板紑濮嬬粌涔犲悧锛熸湰娆℃垚缁╁皢琚竻绌恒€?)) return; userAnswers = {}; submitted = false; localStorage.removeItem(STORAGE_KEY); document.getElementById('scorePanel').classList.remove('show'); document.getElementById('submitBtn').style.display = 'block'; document.getElementById('resetBtn').style.display = 'none'; document.getElementById('savedNote').style.display = 'none'; buildUI(); window.scrollTo({ top: 0, behavior: 'smooth' }); }  function saveProgress() { if (!submitted) { localStorage.setItem(STORAGE_KEY + '_draft', JSON.stringify(userAnswers)); } }  function loadProgress() { try { const done = localStorage.getItem(STORAGE_KEY); if (done) { const rec = JSON.parse(done); userAnswers = rec.answers || {}; return; } const draft = localStorage.getItem(STORAGE_KEY + '_draft'); if (draft) { userAnswers = JSON.parse(draft); } } catch(e) { userAnswers = {}; } }  // Init loadProgress(); buildUI(); </script> </body> </html> 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小升初英语练习 - Day 2: few/a few/little/a little</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .question-card {
+            position: relative;
+        }
+
+        .question-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .question-type {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #1b5e20;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .fill-blank .question-type {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            color: #333;
+            margin: 20px 0;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            border-color: #2e7d32;
+            background: #f1f8e9;
+        }
+
+        .option.selected {
+            border-color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .option-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-marker {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .option.correct .option-marker {
+            background: #4caf50;
+            color: white;
+        }
+
+        .option.wrong .option-marker {
+            background: #f44336;
+            color: white;
+        }
+
+        .fill-blank-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        .fill-blank-input:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .fill-blank-input.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .fill-blank-input.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .hint-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff8e1;
+            border: 1px solid #ffc107;
+            color: #f57c00;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        .hint-btn:hover {
+            background: #fff3cd;
+        }
+
+        .hint-content {
+            display: none;
+            background: #fff8e1;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 12px;
+            color: #e65100;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .hint-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(27, 94, 32, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-card {
+            display: none;
+        }
+
+        .result-card.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .score-number {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 1.3em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .score-message {
+            font-size: 1.1em;
+            margin-top: 15px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .score-message.excellent {
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        .score-message.good {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .score-message.keep-trying {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .knowledge-card {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .knowledge-card h3 {
+            color: #1b5e20;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .knowledge-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        .knowledge-table th {
+            background: #2e7d32;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .knowledge-table td {
+            padding: 10px 15px;
+            border: 1px solid #c8e6c9;
+            text-align: center;
+        }
+
+        .knowledge-table tr:nth-child(even) td {
+            background: #f1f8e9;
+        }
+
+        .knowledge-table .key-word {
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .history-card {
+            margin-top: 30px;
+        }
+
+        .history-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .history-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .history-score {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .clear-history {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 15px;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2e7d32, #66bb6a);
+            transition: width 0.3s ease;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .legend-color.correct { background: #4caf50; }
+        .legend-color.wrong   { background: #f44336; }
+        .legend-color.hint    { background: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#x1F4DA; 小升初英语练习</h1>
+            <p>Day 2：few / a few / little / a little（巩固练习）</p>
+        </div>
+
+        <!-- 知识点速记 -->
+        <div class="card">
+            <div class="knowledge-card">
+                <h3>&#x1F4D6; 知识点速记</h3>
+                <table class="knowledge-table">
+                    <tr>
+                        <th>词语</th>
+                        <th>修饰名词类型</th>
+                        <th>含义</th>
+                        <th>记忆口诀</th>
+                    </tr>
+                    <tr>
+                        <td class="key-word">few</td>
+                        <td>可数名词（复数）</td>
+                        <td>几乎没有（否定）</td>
+                        <td>few = 很少，令人担心</td>
+                    </tr>
+                    <tr>
+                        <td class="key-word">a few</td>
+                        <td>可数名词（复数）</td>
+                        <td>有一些（肯定）</td>
+                        <td>a few = 有几个，还不错</td>
+                    </tr>
+                    <tr>
+                        <td class="key-word">little</td>
+                        <td>不可数名词</td>
+                        <td>几乎没有（否定）</td>
+                        <td>little = 太少了，不够用</td>
+                    </tr>
+                    <tr>
+                        <td class="key-word">a little</td>
+                        <td>不可数名词</td>
+                        <td>有一点（肯定）</td>
+                        <td>a little = 有一点，够用了</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color correct"></div>
+                    <span>回答正确</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color wrong"></div>
+                    <span>回答错误</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color hint"></div>
+                    <span>点击查看提示</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">提交答案</button>
+
+        <div class="card result-card" id="resultCard">
+            <div class="score-display">
+                <div class="score-number" id="scoreNumber">0/8</div>
+                <div class="score-label">你的得分</div>
+                <div class="score-message" id="scoreMessage"></div>
+            </div>
+        </div>
+
+        <div class="card history-card">
+            <div class="history-title">&#x1F4CB; 练习历史记录</div>
+            <div class="history-list" id="historyList"></div>
+            <button class="clear-history" onclick="clearHistory()">清除历史记录</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'englishPracticeDay2History_v1';
+
+        const questions = [
+            {
+                type: "choice",
+                question: "Tom only has _____ money in his pocket. He can't buy that toy.",
+                options: ["few", "a few", "little", "a little"],
+                correct: "little",
+                hint: "money（钱）是不可数名词，用 little 或 a little。句子说「他买不起那个玩具」，说明钱很少，表示否定（几乎没有），用 little。"
+            },
+            {
+                type: "choice",
+                question: "There are _____ chairs in the room. Everyone can sit down.",
+                options: ["few", "a few", "little", "a little"],
+                correct: "a few",
+                hint: "chairs（椅子）是可数名词复数，用 few 或 a few。句子说「每个人都能坐下」，说明椅子足够，表示肯定（有一些），用 a few。"
+            },
+            {
+                type: "choice",
+                question: "She has _____ friends here. She feels very lonely.",
+                options: ["few", "a few", "little", "a little"],
+                correct: "few",
+                hint: "friends（朋友）是可数名词复数，用 few 或 a few。句子说她「感到很孤独」，说明朋友极少，表示否定（几乎没有），用 few。"
+            },
+            {
+                type: "choice",
+                question: "Can I have _____ sugar in my tea? Just a tiny bit.",
+                options: ["few", "a few", "little", "a little"],
+                correct: "a little",
+                hint: "sugar（糖）是不可数名词，用 little 或 a little。说话人想要「一点点」糖，表示肯定（需要一点），用 a little。"
+            },
+            {
+                type: "choice",
+                question: "_____ children know how to cook. They always need help in the kitchen.",
+                options: ["Few", "A few", "Little", "A little"],
+                correct: "Few",
+                hint: "children（孩子）是可数名词复数，用 few 或 a few。句子说他们「总是需要帮助」，说明会做饭的孩子极少，表示否定（几乎没有），用 Few（句首大写）。"
+            },
+            {
+                type: "fill",
+                question: "I can speak _____ Japanese. I learned it for two months. （一点，不可数）",
+                correct: "a little",
+                hint: "Japanese（日语）是语言，属于不可数名词。括号提示「一点」且表示肯定（会说一点），填 a little。"
+            },
+            {
+                type: "fill",
+                question: "There are _____ eggs left in the fridge. We should go shopping. （几乎没有，可数）",
+                correct: "few",
+                hint: "eggs（鸡蛋）是可数名词复数。括号提示「几乎没有」且需要去购物，表示否定，填 few。"
+            },
+            {
+                type: "fill",
+                question: "I have read _____ books about science this year. They are very interesting. （几本，可数，肯定）",
+                correct: "a few",
+                hint: "books（书）是可数名词复数。括号提示「几本」且表示肯定（有几本，很有趣），填 a few。"
+            }
+        ];
+
+        let userAnswers = {};
+        let submitted = false;
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'card question-card' + (q.type === 'fill' ? ' fill-blank' : '');
+
+                let html = `
+                    <div class="question-number">第 ${index + 1} 题</div>
+                    <span class="question-type">${q.type === 'choice' ? '选择题' : '填空题'}</span>
+                    <div class="question-text">${q.question}</div>
+                `;
+
+                if (q.type === 'choice') {
+                    html += `<div class="options" id="options-${index}">`;
+                    q.options.forEach((option, optIndex) => {
+                        const letter = String.fromCharCode(65 + optIndex);
+                        html += `
+                            <div class="option" onclick="selectOption(${index}, '${option}', this)">
+                                <div class="option-marker">${letter}</div>
+                                <span>${option}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `
+                        <input type="text" class="fill-blank-input" id="fill-${index}"
+                               placeholder="请填写答案（few / a few / little / a little）..."
+                               oninput="saveFillAnswer(${index}, this.value)">
+                    `;
+                }
+
+                html += `
+                    <button class="hint-btn" id="hintBtn-${index}" onclick="toggleHint(${index})">
+                        &#x1F4A1; 查看提示
+                    </button>
+                    <div class="hint-content" id="hint-${index}">
+                        ${q.hint}
+                    </div>
+                `;
+
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+
+            loadHistoryDisplay();
+        }
+
+        function selectOption(qIndex, option, element) {
+            if (submitted) return;
+            const options = document.querySelectorAll(`#options-${qIndex} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            userAnswers[qIndex] = option;
+        }
+
+        function saveFillAnswer(qIndex, value) {
+            if (submitted) return;
+            userAnswers[qIndex] = value.trim().toLowerCase();
+        }
+
+        function toggleHint(index) {
+            const hint = document.getElementById(`hint-${index}`);
+            hint.classList.toggle('show');
+        }
+
+        function submitAnswers() {
+            if (submitted) return;
+
+            let correctCount = 0;
+
+            questions.forEach((q, index) => {
+                const userAnswer = (userAnswers[index] || '').toLowerCase();
+                const correctLower = q.correct.toLowerCase();
+                const isCorrect = userAnswer === correctLower;
+
+                if (isCorrect) correctCount++;
+
+                if (q.type === 'choice') {
+                    const options = document.querySelectorAll(`#options-${index} .option`);
+                    options.forEach(opt => {
+                        const optText = opt.querySelector('span').textContent;
+                        if (optText.toLowerCase() === correctLower) {
+                            opt.classList.add('correct');
+                        } else if (opt.classList.contains('selected') && !isCorrect) {
+                            opt.classList.add('wrong');
+                        }
+                        opt.style.pointerEvents = 'none';
+                    });
+                } else {
+                    const input = document.getElementById(`fill-${index}`);
+                    input.classList.add(isCorrect ? 'correct' : 'wrong');
+                    input.disabled = true;
+                    if (!isCorrect) {
+                        const displayVal = input.value.trim() || '（未作答）';
+                        input.value = displayVal + '  ✗ 正确答案：' + q.correct;
+                    }
+                }
+
+                if (!isCorrect) {
+                    document.getElementById(`hint-${index}`).classList.add('show');
+                }
+            });
+
+            document.querySelectorAll('.hint-btn').forEach(btn => btn.disabled = true);
+
+            const total = questions.length;
+            document.getElementById('scoreNumber').textContent = `${correctCount}/${total}`;
+
+            const msgEl = document.getElementById('scoreMessage');
+            const pct = correctCount / total;
+            if (pct >= 0.875) {
+                msgEl.textContent = '太棒了！你掌握得非常好！继续保持！';
+                msgEl.className = 'score-message excellent';
+            } else if (pct >= 0.625) {
+                msgEl.textContent = '不错！再仔细看看错题的提示，你会更好！';
+                msgEl.className = 'score-message good';
+            } else {
+                msgEl.textContent = '继续加油！多看上面的知识点表格，再试一次吧！';
+                msgEl.className = 'score-message keep-trying';
+            }
+
+            document.getElementById('resultCard').classList.add('show');
+            document.getElementById('submitBtn').disabled = true;
+
+            const progress = (correctCount / total) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            saveToHistory(correctCount, total);
+            submitted = true;
+
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function saveToHistory(score, total) {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const now = new Date().toLocaleString('zh-CN');
+            history.unshift({ date: now, score: score, total: total });
+            if (history.length > 10) history.pop();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            loadHistoryDisplay();
+        }
+
+        function loadHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const list = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">暂无练习记录</p>';
+                return;
+            }
+
+            list.innerHTML = history.map(item => {
+                const pct = item.score / item.total;
+                const color = pct >= 0.875 ? '#2e7d32' : pct >= 0.625 ? '#f57c00' : '#c62828';
+                return `
+                    <div class="history-item">
+                        <span class="history-date">${item.date}</span>
+                        <span class="history-score" style="color:${color}">${item.score}/${item.total}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearHistory() {
+            if (confirm('确定要清除所有历史记录吗？')) {
+                localStorage.removeItem(STORAGE_KEY);
+                loadHistoryDisplay();
+            }
+        }
+
+        renderQuestions();
+    </script>
+</body>
+</html>
