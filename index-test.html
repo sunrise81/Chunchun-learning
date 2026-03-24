@@ -320,7 +320,8 @@ function getCurrentDay() {
     return Math.max(1, diff + 1);
 }
 
-var DAY = getCurrentDay();\nvar DATA = ALL_DAYS[DAY] || null;[DAY] || null;
+var DAY = getCurrentDay();
+var DATA = ALL_DAYS[DAY] || null;
 
 // ==================== HEADER ====================
 document.getElementById('dayInfo').textContent = 'Day ' + DAY + '  \u2022  ' + new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
@@ -682,8 +683,6 @@ show('quiz');
 </script>
 </body>
 </html>
-
-
 
 
 
