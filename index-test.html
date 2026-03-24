@@ -317,10 +317,7 @@ function getCurrentDay() {
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
     var diff = Math.floor((today - start) / 86400000);
-    return Math.max(1, diff + 1);
-}
-
-var DAY = getCurrentDay();
+    return Math.max(1, diff + 1);\n}\n\nvar DAY = getCurrentDay();
 var DAY = getCurrentDay();\nvar DATA = ALL_DAYS[DAY] || null;
 
 // ==================== HEADER ====================
@@ -683,6 +680,9 @@ show('quiz');
 </script>
 </body>
 </html>
+
+
+
 
 
 
