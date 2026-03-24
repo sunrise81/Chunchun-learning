@@ -85,20 +85,10 @@ textarea{resize:vertical;min-height:60px}
 var START_DATE = new Date('2026-03-23');
 
 // ==================== GOOGLE SHEET SYNC ====================
-var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdFpVVqYzHXucoNf6URb4ZnSy4c7nZYk5FvKI6CNsSjPhWUjA/formResponse';
+var FORM_URL = 'https://script.google.com/macros/s/AKfycbzWtC4mccz2RO85GId5hOGOkN9JfmeAUMfTGm9tbLp3OLMqO7O0aJTHP4J5jCfye5qYJw/exec';
 var SHEET_ID = '1mX0UcWweLigk9JTU9l2Poyzsea05PAx0ojof_owYZNg';
 // Replace these with your actual Google Form entry IDs (inspect form source to find them)
-var ENTRY_IDS = {
-    type:   'entry.354534226',
-    day:    'entry.1263703405',
-    score:  'entry.447375533',
-    total:  'entry.XXXX',
-    date:   'entry.1263703405',
-    time:   'entry.447375533',
-    wrong:  'entry.354534226',
-    del:    'entry.1263703405',
-    rid:    'entry.447375533'
-};
+var ENTRY_IDS = { type: "type", day: "day", score: "score", total: "total", date: "date", time: "time", wrong: "wrong", del: "del", rid: "rid" };
 
 function submitToSheet(record, isDelete) {
     var rid = record.rid || (record.type + '|' + record.day + '|' + record.date + '|' + record.time);
@@ -668,5 +658,9 @@ show('quiz');
 </script>
 </body>
 </html>
+
+
+
+
 
 
