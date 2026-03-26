@@ -1,0 +1,53 @@
+{
+  "4": {
+    "title": "other pronouns",
+    "topic": "other pronouns - other类代词",
+    "rule": "other/the others/others/the other - 区分用法",
+    "questions": [
+      {"stem": "I don't like this book. Can you show me _____ one?", "opts": ["another", "other", "others", "the other"], "ans": 0, "exp": "another=再一个"},
+      {"stem": "Two of them are here, _____ are in the room.", "opts": ["another", "other", "others", "the other"], "ans": 2, "exp": "others=其他人"},
+      {"stem": "I have three books. One is here, _____ two are there.", "opts": ["another", "other", "others", "the other"], "ans": 3, "exp": "the other two=另外两个"},
+      {"stem": "Some students are singing, _____ are dancing.", "opts": ["another", "other", "others", "the other"], "ans": 1, "exp": "others=其他人"},
+      {"stem": "This pencil is broken. Do you have _____?", "opts": ["another", "other", "others", "the other"], "ans": 0, "exp": "another=另一支"},
+      {"stem": "There are 20 students in the class. 10 are boys, _____ are girls.", "opts": ["another", "other", "others", "the other"], "ans": 3, "exp": "the other=剩余部分"}
+    ],
+    "cloze": {
+      "passage": "I have two pencils. One is broken, _____ works well. Some people are here, _____ are outside.",
+      "blanks": [
+        {"answer": "another", "hint": "另一个"},
+        {"answer": "others", "hint": "其他人"}
+      ]
+    },
+    "translate": [
+      {"zh": "请给我另一个。", "zhHint": "another", "answer": "Please give me another one."},
+      {"zh": "其他人呢？", "zhHint": "others", "answer": "What about the others?"},
+      {"zh": "另一个学生回家了。", "zhHint": "the other", "answer": "The other student went home."}
+    ]
+  },
+  "5": {
+    "title": "irregular verbs past tense",
+    "topic": "irregular verbs - 不规则动词过去式",
+    "rule": "go-went, eat-ate, see-saw, buy-bought, write-wrote, tell-told",
+    "questions": [
+      {"stem": "Yesterday I _____ to school.", "opts": ["go", "went", "goes", "going"], "ans": 1, "exp": "go-went"},
+      {"stem": "She _____ an apple just now.", "opts": ["eat", "ate", "eats", "eating"], "ans": 1, "exp": "eat-ate"},
+      {"stem": "They _____ a movie last night.", "opts": ["see", "saw", "seen", "seeing"], "ans": 1, "exp": "see-saw"},
+      {"stem": "He _____ a new bike yesterday.", "opts": ["buy", "bought", "buys", "buying"], "ans": 1, "exp": "buy-bought"},
+      {"stem": "I _____ a letter to my friend.", "opts": ["write", "wrote", "written", "writing"], "ans": 1, "exp": "write-wrote"},
+      {"stem": "She _____ me a story last week.", "opts": ["tell", "told", "tells", "telling"], "ans": 1, "exp": "tell-told"}
+    ],
+    "cloze": {
+      "passage": "Yesterday I _____ (go) to the park. I _____ (see) many birds. I _____ (buy) some bread.",
+      "blanks": [
+        {"answer": "went", "hint": "go的过去式"},
+        {"answer": "saw", "hint": "see的过去式"},
+        {"answer": "bought", "hint": "buy的过去式"}
+      ]
+    },
+    "translate": [
+      {"zh": "昨天我去了学校。", "zhHint": "went", "answer": "I went to school yesterday."},
+      {"zh": "她昨天吃了苹果。", "zhHint": "ate", "answer": "She ate an apple yesterday."},
+      {"zh": "他买了新书。", "zhHint": "bought", "answer": "He bought a new book."}
+    ]
+  }
+}
