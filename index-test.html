@@ -307,7 +307,110 @@ var ALL_DAYS = {
             {zh:"其他学生都回家了。",zhHint:"the other+复数",answer:"The other students have gone home."},
             {zh:"给我另外一个。",zhHint:"another one",answer:"Give me another one."}
         ]
-    }
+    },
+    4:         {
+            "title": "other pronouns",
+            "topic": "other pronouns - other类代词",
+            "rule": "other/the others/others/the other - 区分用法",
+            "questions": [
+                {
+                    "stem": "I don't like this book. Can you show me _____ one?",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 0,
+                    "exp": "another=再一个"
+                },
+                {
+                    "stem": "Two of them are here, _____ are in the room.",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 2,
+                    "exp": "others=其他人"
+                },
+                {
+                    "stem": "I have three books. One is here, _____ two are there.",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 3,
+                    "exp": "the other two=另外两个"
+                },
+                {
+                    "stem": "Some students are singing, _____ are dancing.",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 1,
+                    "exp": "others=其他人"
+                },
+                {
+                    "stem": "This pencil is broken. Do you have _____?",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 0,
+                    "exp": "another=另一支"
+                },
+                {
+                    "stem": "There are 20 students in the class. 10 are boys, _____ are girls.",
+                    "opts": [
+                        "another",
+                        "other",
+                        "others",
+                        "the other"
+                    ],
+                    "ans": 3,
+                    "exp": "the other=剩余部分"
+                }
+            ],
+            "cloze": {
+                "passage": "I have two pencils. One is broken, _____ works well. Some people are here, _____ are outside.",
+                "blanks": [
+                    {
+                        "answer": "another",
+                        "hint": "另一个"
+                    },
+                    {
+                        "answer": "others",
+                        "hint": "其他人"
+                    }
+                ]
+            },
+            "translate": [
+                {
+                    "zh": "请给我另一个。",
+                    "zhHint": "another",
+                    "answer": "Please give me another one."
+                },
+                {
+                    "zh": "其他人呢？",
+                    "zhHint": "others",
+                    "answer": "What about the others?"
+                },
+                {
+                    "zh": "另一个学生回家了。",
+                    "zhHint": "the other",
+                    "answer": "The other student went home."
+                }
+            ]
+        },
 };
 
 // ==================== AUTO DAY CALCULATION ====================
@@ -684,6 +787,7 @@ show('quiz');
 </script>
 </body>
 </html>
+
 
 
 
