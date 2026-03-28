@@ -73,6 +73,7 @@ textarea{resize:vertical;min-height:60px}
     <button id="btn-cloze" onclick="show('cloze')">完形填空</button>
     <button id="btn-trans" onclick="show('trans')">翻译题</button>
     <button id="btn-history" onclick="show('history')">历史记录</button>
+    <button id="btn-review" onclick="show('review')">错题复习</button>
     <button id="btn-listening" onclick="show('listening')">听力</button>
     <button id="btn-writing" onclick="show('writing')">作文</button>
     <button id="btn-days" onclick="show('days')">历史题目</button>
@@ -432,6 +433,7 @@ function show(tab) {
     else if (tab === 'cloze') renderCloze(el);
     else if (tab === 'trans') renderTranslate(el);
     else if (tab === 'history') renderHistory(el);
+    else if (tab === 'review') renderReview(el);
 }
 
 // ==================== QUIZ TAB ====================
@@ -721,6 +723,116 @@ function deleteRecord(index) {
     history.splice(index, 1);
     localStorage.setItem('chunchunHistory', JSON.stringify(history));
     show('history');
+}
+
+// ==================== REVIEW TAB (错题复习 + 记忆曲线) ====================
+function getAllWrongItems() {
+    var history = loadHistory();
+    var items = [];
+    for (var i = 0; i < history.length; i++) {
+        var h = history[i];
+        if (h.wrongList && h.wrongList.length > 0) {
+            for (var j = 0; j < h.wrongList.length; j++) {
+                var w = h.wrongList[j];
+                items.push({
+                    day: h.day,
+                    type: h.type,
+                    date: h.date,
+                    n: w.n,
+                    ans: w.ans,
+                    correct: w.correct,
+                    hint: w.hint,
+                    // 用于记忆曲线：记录错误时间和下次复习时间
+                    wrongTime: new Date(h.date + ' ' + h.time).getTime()
+                });
+            }
+        }
+    }
+    // 按日期排序
+    items.sort(function(a, b) { return a.wrongTime - b.wrongTime; });
+    return items;
+}
+
+function getNextReviewDate(wrongTime) {
+    // 艾宾浩斯遗忘曲线复习计划
+    // 1天后、3天后、7天后、14天后、30天后复习
+    var intervals = [1, 3, 7, 14, 30]; // 天数
+    var now = Date.now();
+    var wrongDate = new Date(wrongTime);
+    
+    for (var i = 0; i < intervals.length; i++) {
+        var reviewTime = wrongDate.getTime() + intervals[i] * 24 * 60 * 60 * 1000;
+        if (reviewTime > now) {
+            return {
+                daysAway: Math.ceil((reviewTime - now) / (24 * 60 * 60 * 1000)),
+                date: new Date(reviewTime).toLocaleDateString('zh-CN', {month:'short', day:'numeric'})
+            };
+        }
+    }
+    // 已完成所有复习
+    return { daysAway: 0, date: '已掌握' };
+}
+
+function renderReview(el) {
+    var items = getAllWrongItems();
+    
+    if (items.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
+        return;
+    }
+    
+    // 按下次复习时间排序，需要复习的排前面
+    items.sort(function(a, b) {
+        var revA = getNextReviewDate(a.wrongTime);
+        var revB = getNextReviewDate(b.wrongTime);
+        return revA.daysAway - revB.daysAway;
+    });
+    
+    var html = '<div class="card" style="background:#fff3e0;border-left:4px solid #ff9800">';
+    html += '<b>📖 错题复习 - 记忆曲线</b>';
+    html += '<p style="margin-top:6px;font-size:.9rem;color:#666">根据艾宾浩斯遗忘曲线安排复习，系统会自动提醒何时复习哦！</p>';
+    html += '</div>';
+    
+    // 统计
+    var needReview = 0;
+    var mastered = 0;
+    for (var i = 0; i < items.length; i++) {
+        var rev = getNextReviewDate(items[i].wrongTime);
+        if (rev.daysAway === 0) mastered++;
+        else if (rev.daysAway <= 7) needReview++;
+    }
+    html += '<div class="card" style="display:flex;gap:10px;justify-content:space-around;text-align:center">';
+    html += '<div style="flex:1"><div style="font-size:1.5rem;font-weight:bold;color:#d32f2f">' + needReview + '</div><div style="font-size:.8rem;color:#666">本周待复习</div></div>';
+    html += '<div style="flex:1"><div style="font-size:1.5rem;font-weight:bold;color:#2E7D32">' + mastered + '</div><div style="font-size:.8rem;color:#666">已掌握</div></div>';
+    html += '<div style="flex:1"><div style="font-size:1.5rem;font-weight:bold;color:#4A90E2">' + items.length + '</div><div style="font-size:.8rem;color:#666">总错题数</div></div>';
+    html += '</div>';
+    
+    // 错题列表
+    html += '<div style="margin-top:16px">';
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var rev = getNextReviewDate(item.wrongTime);
+        var typeName = item.type === 'quiz' ? '选择题' : item.type === 'cloze' ? '完形' : '翻译';
+        var isUrgent = rev.daysAway <= 3 && rev.daysAway > 0;
+        var isMastered = rev.daysAway === 0;
+        
+        html += '<div class="card" style="border-left:4px solid ' + (isUrgent ? '#d32f2f' : isMastered ? '#2E7D32' : '#4A90E2') + '">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+        html += '<span style="font-weight:bold;color:#333">' + typeName + ' - Day ' + item.day + ' 第' + item.n + '题</span>';
+        if (!isMastered) {
+            html += '<span style="padding:2px 8px;background:' + (isUrgent ? '#ffebee' : '#e3f2fd') + ';color:' + (isUrgent ? '#d32f2f' : '#4A90E2') + ';border-radius:10px;font-size:.8rem">' + rev.date + '复习</span>';
+        } else {
+            html += '<span style="padding:2px 8px;background:#e8f5e9;color:#2E7D32;border-radius:10px;font-size:.8rem">已掌握</span>';
+        }
+        html += '</div>';
+        html += '<div style="margin-top:8px;font-size:.95rem"><span style="color:#d32f2f">❌ ' + escHtml(item.ans) + '</span> → <span style="color:#2E7D32;font-weight:bold">' + escHtml(item.correct) + '</span></div>';
+        if (item.hint) html += '<div style="margin-top:4px;font-size:.85rem;color:#888">💡 ' + escHtml(item.hint) + '</div>';
+        html += '<div style="margin-top:4px;font-size:.8rem;color:#999">错题日期: ' + item.date + '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+    
+    el.innerHTML = html;
 }
 
 // ==================== HISTORY STORAGE ====================
