@@ -380,6 +380,25 @@ function getFirstPracticeDate() {
     return null;
 }
 
+// 异步获取首次做题日期（合并本地和远程）
+function getFirstPracticeDateAsync(callback) {
+    var localHistory = loadHistory();
+    if (localHistory.length > 0) {
+        localHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        callback(new Date(localHistory[0].date));
+        return;
+    }
+    // 本地没有，从远程获取
+    loadHistoryFromSheet(function(remoteHistory) {
+        if (remoteHistory.length > 0) {
+            remoteHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            callback(new Date(remoteHistory[0].date));
+        } else {
+            callback(null);
+        }
+    });
+}
+
 function getCurrentDay() {
     var urlDay = new URLSearchParams(window.location.search).get('day');
     if (urlDay) return parseInt(urlDay);
@@ -679,41 +698,68 @@ function renderWriting(el) {
 
 // ==================== HISTORY TAB ====================
 function renderHistory(el) {
-    var history = loadHistory();
-    if (history.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
-        return;
-    }
-    var html = '';
-    for (var i = 0; i < history.length; i++) {
-        var h = history[i];
-        var pct = h.total > 0 ? h.score / h.total : 0;
-        var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
-        var isPerfect = pct === 1;
+    el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>正在加载历史记录...</p></div>';
+    
+    // 从 localStorage 获取本地记录
+    var localHistory = loadHistory();
+    
+    // 从 Google Sheet 加载远程记录并合并
+    loadHistoryFromSheet(function(remoteHistory) {
+        // 合并本地和远程记录（去重）
+        var allHistory = localHistory.concat(remoteHistory);
+        var seen = {};
+        var merged = [];
+        for (var i = 0; i < allHistory.length; i++) {
+            var r = allHistory[i];
+            if (!r.rid || !seen[r.rid]) {
+                if (r.rid) seen[r.rid] = true;
+                merged.push(r);
+            }
+        }
         
-        html += '<div class="history-item">';
-        var typeName = h.type === 'quiz' ? '选择题' : h.type === 'cloze' ? '完形填空' : '翻译题';
-        html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
-        html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">删除</button></div>';
+        // 按日期时间排序（新的在前）
+        merged.sort(function(a, b) {
+            var dateA = new Date(a.date + ' ' + a.time);
+            var dateB = new Date(b.date + ' ' + b.time);
+            return dateB - dateA;
+        });
         
-        if (h.wrongList && h.wrongList.length > 0) {
-            html += '<div class="h-wrong">';
-            html += '<b style="color:#c62828;font-size:.9rem">❌ 错题:</b>';
-            for (var j = 0; j < h.wrongList.length; j++) {
-                var w = h.wrongList[j];
-                html += '<div class="h-wrong-item" style="margin-top:8px">';
-                html += '<div><b>第' + w.n + '题:</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
-                if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
+        if (merged.length === 0) {
+            el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
+            return;
+        }
+        
+        var html = '';
+        for (var i = 0; i < merged.length; i++) {
+            var h = merged[i];
+            var pct = h.total > 0 ? h.score / h.total : 0;
+            var scoreCls = pct >= 0.8 ? 'perfect' : 'partial';
+            var isPerfect = pct === 1;
+            
+            html += '<div class="history-item">';
+            var typeName = h.type === 'quiz' ? '选择题' : h.type === 'cloze' ? '完形填空' : '翻译题';
+            html += '<div class="h-header"><span class="h-type">' + typeName + ' - Day ' + h.day + '</span><span class="h-score ' + scoreCls + '">' + h.score + '/' + h.total + (isPerfect ? ' 🎉' : '') + '</span></div>';
+            html += '<div class="h-time">' + h.date + ' ' + h.time + ' <button onclick="deleteRecord(' + i + ')" style="margin-left:10px;padding:2px 8px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;border-radius:4px;font-size:.75rem;cursor:pointer">删除</button></div>';
+            
+            if (h.wrongList && h.wrongList.length > 0) {
+                html += '<div class="h-wrong">';
+                html += '<b style="color:#c62828;font-size:.9rem">❌ 错题:</b>';
+                for (var j = 0; j < h.wrongList.length; j++) {
+                    var w = h.wrongList[j];
+                    html += '<div class="h-wrong-item" style="margin-top:8px">';
+                    html += '<div><b>第' + w.n + '题:</b> ' + escHtml(w.ans) + ' → <span class="h-correct">' + escHtml(w.correct) + '</span></div>';
+                    if (w.hint) html += '<div style="color:#888;font-size:.82rem;margin-top:2px">💡 ' + escHtml(w.hint) + '</div>';
+                    html += '</div>';
+                }
                 html += '</div>';
+            } else {
+                html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ 太棒了！全部正确！</div>';
             }
             html += '</div>';
-        } else {
-            html += '<div style="color:#2E7D32;font-size:.95rem;margin-top:8px;padding:8px;background:#e8f5e9;border-radius:6px">✅ 太棒了！全部正确！</div>';
         }
-        html += '</div>';
-    }
-    html += '<button class="clear-btn" onclick="if(confirm(\'确定要清空所有历史记录吗？\')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">清空所有历史记录</button>';
-    el.innerHTML = html;
+        html += '<button class="clear-btn" onclick="if(confirm(\'确定要清空所有历史记录吗？\')){localStorage.removeItem(\'chunchunHistory\');show(\'history\')}">清空所有历史记录</button>';
+        el.innerHTML = html;
+    });
 }
 
 function deleteRecord(index) {
@@ -774,12 +820,48 @@ function getNextReviewDate(wrongTime) {
 }
 
 function renderReview(el) {
-    var items = getAllWrongItems();
+    el.innerHTML = '<div class="empty-state"><div class="icon">📖</div><p>正在加载错题数据...</p></div>';
     
-    if (items.length === 0) {
-        el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
-        return;
-    }
+    var localHistory = loadHistory();
+    
+    loadHistoryFromSheet(function(remoteHistory) {
+        // 合并本地和远程记录
+        var allHistory = localHistory.concat(remoteHistory);
+        var seen = {};
+        var merged = [];
+        for (var i = 0; i < allHistory.length; i++) {
+            var r = allHistory[i];
+            if (!r.rid || !seen[r.rid]) {
+                if (r.rid) seen[r.rid] = true;
+                merged.push(r);
+            }
+        }
+        
+        // 收集所有错题
+        var items = [];
+        for (var i = 0; i < merged.length; i++) {
+            var h = merged[i];
+            if (h.wrongList && h.wrongList.length > 0) {
+                for (var j = 0; j < h.wrongList.length; j++) {
+                    var w = h.wrongList[j];
+                    items.push({
+                        day: h.day,
+                        type: h.type,
+                        date: h.date,
+                        n: w.n,
+                        ans: w.ans,
+                        correct: w.correct,
+                        hint: w.hint,
+                        wrongTime: new Date(h.date + ' ' + h.time).getTime()
+                    });
+                }
+            }
+        }
+        
+        if (items.length === 0) {
+            el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
+            return;
+        }
     
     // 按下次复习时间排序，需要复习的排前面
     items.sort(function(a, b) {
