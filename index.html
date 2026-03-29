@@ -108,9 +108,13 @@ function submitToSheet(record, isDelete) {
 
 function loadHistoryFromSheet(callback) {
     var url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json';
+    var timedOut = false;
+    // 5秒超时
+    setTimeout(function() { timedOut = true; }, 5000);
     fetch(url)
         .then(function(r) { return r.text(); })
         .then(function(text) {
+            if (timedOut) return;
             var json = JSON.parse(text.replace(/^[^\{]*/, '').replace(/\s*\);\s*$/, ''));
             var rows = json.table && json.table.rows;
             if (!rows || rows.length === 0) { callback([]); return; }
@@ -378,6 +382,37 @@ function getFirstPracticeDate() {
         }
     } catch(e) {}
     return null;
+}
+
+// 异步获取首次做题日期（合并本地和远程）
+function getFirstPracticeDateAsync(callback) {
+    var localHistory = loadHistory();
+    if (localHistory.length > 0) {
+        localHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+        callback(new Date(localHistory[0].date));
+        return;
+    }
+    
+    // 本地没有，从远程获取
+    // 5秒超时
+    var timedOut = false;
+    setTimeout(function() {
+        if (!timedOut) {
+            timedOut = true;
+            callback(new Date('2026-03-23')); // 超时后用默认值
+        }
+    }, 5000);
+    
+    loadHistoryFromSheet(function(remoteHistory) {
+        if (timedOut) return;
+        timedOut = true;
+        if (remoteHistory.length > 0) {
+            remoteHistory.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            callback(new Date(remoteHistory[0].date));
+        } else {
+            callback(new Date('2026-03-23')); // 没有数据时用默认值
+        }
+    });
 }
 
 function getCurrentDay() {
@@ -679,11 +714,58 @@ function renderWriting(el) {
 
 // ==================== HISTORY TAB ====================
 function renderHistory(el) {
-    var history = loadHistory();
+    el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>正在加载历史记录...</p></div>';
+    
+    // 从 localStorage 获取本地记录
+    var localHistory = loadHistory();
+    
+    // 5秒超时：超时后只用本地数据渲染
+    var timedOut = false;
+    setTimeout(function() {
+        if (timedOut) return;
+        timedOut = true;
+        // 超时后只用本地数据显示
+        if (localHistory.length === 0) {
+            el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
+            return;
+        }
+        renderHistoryList(localHistory, el);
+    }, 5000);
+    
+    // 从 Google Sheet 加载远程记录并合并
+    loadHistoryFromSheet(function(remoteHistory) {
+        if (timedOut) return;  // 已超时，不再处理
+        timedOut = true;
+        
+        // 合并本地和远程记录（去重）
+        var allHistory = localHistory.concat(remoteHistory);
+        var seen = {};
+        var merged = [];
+        for (var i = 0; i < allHistory.length; i++) {
+            var r = allHistory[i];
+            if (!r.rid || !seen[r.rid]) {
+                if (r.rid) seen[r.rid] = true;
+                merged.push(r);
+            }
+        }
+        
+        // 按日期时间排序（新的在前）
+        merged.sort(function(a, b) {
+            var dateA = new Date(a.date + ' ' + a.time);
+            var dateB = new Date(b.date + ' ' + b.time);
+            return dateB - dateA;
+        });
+        
+        renderHistoryList(merged, el);
+    });
+}
+
+function renderHistoryList(history, el) {
     if (history.length === 0) {
         el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>暂无练习记录。<br>完成练习后即可在此查看历史记录！</p></div>';
         return;
     }
+    
     var html = '';
     for (var i = 0; i < history.length; i++) {
         var h = history[i];
@@ -774,8 +856,101 @@ function getNextReviewDate(wrongTime) {
 }
 
 function renderReview(el) {
-    var items = getAllWrongItems();
+    el.innerHTML = '<div class="empty-state"><div class="icon">📖</div><p>正在加载错题数据...</p></div>';
     
+    var localHistory = loadHistory();
+    
+    // 5秒超时：超时后只用本地数据渲染
+    var timedOut = false;
+    setTimeout(function() {
+        if (timedOut) return;
+        timedOut = true;
+        // 超时后只用本地数据显示
+        var items = getAllWrongItemsLocal(localHistory);
+        if (items.length === 0) {
+            el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
+            return;
+        }
+        renderReviewList(items, el);
+    }, 5000);
+    
+    loadHistoryFromSheet(function(remoteHistory) {
+        if (timedOut) return;  // 已超时，不再处理
+        timedOut = true;
+        
+        // 合并本地和远程记录
+        var allHistory = localHistory.concat(remoteHistory);
+        var seen = {};
+        var merged = [];
+        for (var i = 0; i < allHistory.length; i++) {
+            var r = allHistory[i];
+            if (!r.rid || !seen[r.rid]) {
+                if (r.rid) seen[r.rid] = true;
+                merged.push(r);
+            }
+        }
+        
+        // 收集所有错题
+        var items = [];
+        for (var i = 0; i < merged.length; i++) {
+            var h = merged[i];
+            if (h.wrongList && h.wrongList.length > 0) {
+                for (var j = 0; j < h.wrongList.length; j++) {
+                    var w = h.wrongList[j];
+                    items.push({
+                        day: h.day,
+                        type: h.type,
+                        date: h.date,
+                        n: w.n,
+                        ans: w.ans,
+                        correct: w.correct,
+                        hint: w.hint,
+                        wrongTime: new Date(h.date + ' ' + h.time).getTime()
+                    });
+                }
+            }
+        }
+        
+        if (items.length === 0) {
+            el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
+            return;
+        }
+    
+    // 按下次复习时间排序，需要复习的排前面
+    items.sort(function(a, b) {
+        var revA = getNextReviewDate(a.wrongTime);
+        var revB = getNextReviewDate(b.wrongTime);
+        return revA.daysAway - revB.daysAway;
+    });
+    
+    renderReviewList(items, el);
+    });
+}
+
+function getAllWrongItemsLocal(history) {
+    var items = [];
+    for (var i = 0; i < history.length; i++) {
+        var h = history[i];
+        if (h.wrongList && h.wrongList.length > 0) {
+            for (var j = 0; j < h.wrongList.length; j++) {
+                var w = h.wrongList[j];
+                items.push({
+                    day: h.day,
+                    type: h.type,
+                    date: h.date,
+                    n: w.n,
+                    ans: w.ans,
+                    correct: w.correct,
+                    hint: w.hint,
+                    wrongTime: new Date(h.date + ' ' + h.time).getTime()
+                });
+            }
+        }
+    }
+    return items;
+}
+
+function renderReviewList(items, el) {
     if (items.length === 0) {
         el.innerHTML = '<div class="empty-state"><div class="icon">🎉</div><p>太棒了！暂无错题，全部掌握啦！</p></div>';
         return;
