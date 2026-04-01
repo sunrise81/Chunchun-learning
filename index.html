@@ -2041,7 +2041,7 @@ function renderDays(el) {
     for (var i = 1; i <= 30; i++) {
 
 
-        var isCurrent = i === DAY;
+        var isCurrent = parseInt(i) === DAY;
 
 
         html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ✓' : '') + '</a>';
