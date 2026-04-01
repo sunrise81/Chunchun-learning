@@ -424,6 +424,13 @@ function getCurrentDay() {
 }
 
 var DAY = getCurrentDay();
+// Cap to available days (1-7 for now)
+if (!ALL_DAYS[DAY]) {
+    // Find the highest available day
+    var maxDay = 0;
+    for (var d in ALL_DAYS) { if (d > maxDay) maxDay = d; }
+    DAY = maxDay;
+}
 var DATA = ALL_DAYS[DAY] || null;
 
 // ==================== HEADER ====================
