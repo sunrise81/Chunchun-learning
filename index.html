@@ -678,7 +678,7 @@ function renderDays(el) {
     html += '<b>📅 历史题目</b><p style="margin-top:6px;font-size:.9rem;color:#555">点击日期查看历史练习</p></div>';
     html += '<div class="card"><div class="opt-grid">';
     for (var i = 1; i <= 30; i++) {
-        var isCurrent = i === DAY;
+        var isCurrent = parseInt(i) === DAY;
         html += '<a href="?day=' + i + '" class="opt' + (isCurrent ? ' selected' : '') + '" style="text-decoration:none;display:block;text-align:center;padding:12px;">Day ' + i + (isCurrent ? ' ✓' : '') + '</a>';
     }
     html += '</div></div>';
